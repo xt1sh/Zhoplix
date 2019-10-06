@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29326.143
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zhoplix", "Zhoplix\Zhoplix.csproj", "{7FEE485A-F01E-4F72-9EAC-41B371E11C81}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7FEE485A-F01E-4F72-9EAC-41B371E11C81}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7FEE485A-F01E-4F72-9EAC-41B371E11C81}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7FEE485A-F01E-4F72-9EAC-41B371E11C81}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7FEE485A-F01E-4F72-9EAC-41B371E11C81}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C3B03BD6-7EEA-4C23-A826-B4F1285B1B96}
+	EndGlobalSection
+EndGlobal
