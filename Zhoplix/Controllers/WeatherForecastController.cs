@@ -8,7 +8,7 @@ using Microsoft.Extensions.Logging;
 namespace Zhoplix.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("[controller]/[action]")]
     public class WeatherForecastController : ControllerBase
     {
         private static readonly string[] Summaries = new[]
@@ -17,7 +17,6 @@ namespace Zhoplix.Controllers
         };
 
         private readonly ILogger<WeatherForecastController> _logger;
-        private readonly ILogger<WeatherForecast> logger;
 
         public WeatherForecastController(ILogger<WeatherForecastController> logger)
         {
