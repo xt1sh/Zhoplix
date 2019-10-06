@@ -17,6 +17,7 @@ namespace Zhoplix.Controllers
         };
 
         private readonly ILogger<WeatherForecastController> _logger;
+        private readonly ILogger<WeatherForecast> logger;
 
         public WeatherForecastController(ILogger<WeatherForecastController> logger)
         {
