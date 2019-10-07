@@ -21,23 +21,16 @@ namespace Zhoplix.Services
         public async Task<T> GetObjectByIdAsync(int id) =>
             await _context.FindAsync<T>(id);
 
-        public async Task AddObjectAsync(object model)
+        public async Task AddObjectAsync(T model)
         {
-            try
-            {
-                await _context.AddAsync(model);
-            }
-            catch (Exception e)
-            {
-                _logger.LogError($"Error while creating entity {model}: {e.Message}");
-            }
+            await _context.AddAsync(model);
+            await SaveAllAsync();
         }
 
-        public async Task<bool> SaveAllAsync()
+        private async Task SaveAllAsync()
         {
-            var res = await _context.SaveChangesAsync();
-
-            return res > 0;
+            if (await _context.SaveChangesAsync() == 0)
+                _logger.LogError($"Error while saving db");
         }
     }
 }
