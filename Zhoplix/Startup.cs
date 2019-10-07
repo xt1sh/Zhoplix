@@ -15,6 +15,9 @@ using Microsoft.EntityFrameworkCore;
 using Zhoplix.Models.Identity;
 using Zhoplix.Services.TokenHandler;
 using TokenHandler = Zhoplix.Services.TokenHandler.TokenHandler;
+using Zhoplix.Services;
+using System;
+using Zhoplix.Models;
 
 namespace Zhoplix
 {
@@ -40,7 +43,7 @@ namespace Zhoplix
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddDefaultIdentity<User>()
+            services.AddIdentity<User, IdentityRole>()
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
@@ -79,6 +82,10 @@ namespace Zhoplix
                         ValidAudience = JwtConfiguration.ValidateAudience ? JwtConfiguration.Audience : null
                     };
                 });
+
+            services.AddTransient<IRepository<Title>, Repository<Title>>();
+            services.AddTransient<IRepository<Season>, Repository<Season>>();
+            services.AddTransient<IRepository<Episode>, Repository<Episode>>();
 
             services.AddSwaggerGen(c =>
             {

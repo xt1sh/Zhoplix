@@ -24,8 +24,8 @@ namespace Zhoplix.Controllers
 
         public AuthenticationController(UserManager<User> userManager,
             IMapper mapper,
-            ITokenHandler tokenHandler,
-            RoleManager<User> roleManager)
+            ITokenHandler tokenHandler
+            )
         {
             _userManager = userManager;
             _mapper = mapper;
