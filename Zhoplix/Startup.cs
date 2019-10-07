@@ -1,3 +1,4 @@
+using System;
 using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -8,26 +9,37 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Zhoplix.Configurations;
 using Microsoft.OpenApi.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Zhoplix.Models.Identity;
+using Zhoplix.Services.TokenHandler;
+using TokenHandler = Zhoplix.Services.TokenHandler.TokenHandler;
 using Zhoplix.Services;
 using System;
 using Zhoplix.Models;
-using Microsoft.AspNetCore.Identity;
 
 namespace Zhoplix
 {
     public class Startup
     {
-        public readonly JwtConfiguration JwtConfiguration;
+        private readonly JwtConfiguration JwtConfiguration;
 
-        public Startup(IConfiguration configuration)
+        private readonly PasswordConfiguration PasswordConfiguration;
+        private readonly ILogger<Startup> _logger;
+
+
+        public Startup(IConfiguration configuration, ILogger<Startup> logger)
         {
             Configuration = configuration;
             JwtConfiguration = Configuration.GetSection("Bearer").Get<JwtConfiguration>();
+            PasswordConfiguration = Configuration.GetSection("Password").Get<PasswordConfiguration>();
+            _logger = logger;
         }
+
 
         public IConfiguration Configuration { get; }
 
@@ -38,11 +50,26 @@ namespace Zhoplix
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddIdentity<User, IdentityRole<int>>()
+            services.AddDefaultIdentity<User>()
+                .AddRoles<IdentityRole<int>>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
-
+            
+            services.Configure<PasswordConfiguration>(Configuration.GetSection("Password"));
             services.Configure<JwtConfiguration>(Configuration.GetSection("Bearer"));
+
+            services.Configure<IdentityOptions>(options =>
+            {
+                options.Password.RequireNonAlphanumeric = PasswordConfiguration.RequireNonAlphanumeric;
+                options.Password.RequireDigit = PasswordConfiguration.RequireDigit;
+                options.Password.RequireLowercase = PasswordConfiguration.RequireLowercase;
+                options.Password.RequireUppercase = PasswordConfiguration.RequireUppercase;
+                options.Password.RequiredLength = PasswordConfiguration.RequiredLength;
+                options.Password.RequiredUniqueChars = PasswordConfiguration.RequiredUniqueChars;
+
+                options.User.RequireUniqueEmail = true;
+
+            });
 
             services.AddAuthentication(x =>
                 {
@@ -75,6 +102,8 @@ namespace Zhoplix
 
             services.AddAutoMapper(typeof(Startup));
 
+            services.AddSingleton<ITokenHandler, TokenHandler>();
+
             services.AddCors(options =>
             {
                 options.AddPolicy("EnableCORS", builder =>
@@ -92,7 +121,7 @@ namespace Zhoplix
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IServiceProvider serviceProvider)
         {
             if (env.IsDevelopment())
             {
@@ -136,6 +165,26 @@ namespace Zhoplix
                     spa.UseProxyToSpaDevelopmentServer("http://localhost:4200");
                 }
             });
+            SeedRoles(serviceProvider);
         }
+
+        private void SeedRoles(IServiceProvider serviceProvider)
+        {
+            var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole<int>>>();
+
+            string[] roleNames = new[] {"Admin", "Moderator", "Member"};
+
+            foreach (var roleName in roleNames)
+            {
+                var isRoleExist = roleManager.RoleExistsAsync(roleName);
+                isRoleExist.Wait();
+                if (!isRoleExist.Result)
+                {
+                    var roleResult = roleManager.CreateAsync(new IdentityRole<int>(roleName)).Result;
+                    _logger.LogInformation($"Create {roleName}: {roleResult.Succeeded}");
+                }
+            }
+        }
+
     }
 }
