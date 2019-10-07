@@ -1,21 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Zhoplix.Models
+namespace Zhoplix.ViewModels.Title
 {
-    public class Title
+    public class TitleViewModel
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public List<Season> Seasons { get; set; }
-        public List<UserTitle> UserTitles { get; set; }
         public string Description { get; set; }
-        [Range(0, 10)]
         public float Rating { get; set; }
-        [Range(0, 18)]
         public int AgeRestriction { get; set; }
     }
 }
