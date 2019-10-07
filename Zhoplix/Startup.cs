@@ -1,3 +1,4 @@
+using System;
 using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -8,10 +9,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Zhoplix.Configurations;
 using Microsoft.OpenApi.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Zhoplix.Models.Identity;
 using Zhoplix.Services.TokenHandler;
 using TokenHandler = Zhoplix.Services.TokenHandler.TokenHandler;
@@ -49,7 +52,7 @@ namespace Zhoplix
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddDefaultIdentity<User>()
+            services.AddIdentity<User, IdentityRole<int>>()
                 .AddRoles<IdentityRole<int>>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
@@ -164,7 +167,26 @@ namespace Zhoplix
                     spa.UseProxyToSpaDevelopmentServer("http://localhost:4200");
                 }
             });
+
             SeedRoles(serviceProvider);
+        }
+
+        private void SeedRoles(IServiceProvider serviceProvider)
+        {
+            var RoleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole<int>>>();
+            string[] roleNames = {"Admin", "Moderator", "Member"};
+
+            foreach (var roleName in roleNames)
+            {
+                var isRoleExis = RoleManager.RoleExistsAsync(roleName);
+                if (!isRoleExis.Result)
+                {
+                    var roleResult = RoleManager.CreateAsync(new IdentityRole<int>(roleName));
+                    roleResult.Wait();
+                    _logger.LogInformation($"Create {roleName}: {roleResult.Result}");
+                }
+            }
+
         }
 
         private void SeedRoles(IServiceProvider serviceProvider)
