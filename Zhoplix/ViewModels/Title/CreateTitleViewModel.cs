@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Zhoplix.Models;
+using Zhoplix.ViewModels.Season;
 
 namespace Zhoplix.ViewModels.Title
 {
@@ -11,5 +13,6 @@ namespace Zhoplix.ViewModels.Title
         public string Description { get; set; }
         public float Rating { get; set; }
         public int AgeRestriction { get; set; }
+        public List<CreateSeasonViewModel> Seasons { get; set; }
     }
 }
