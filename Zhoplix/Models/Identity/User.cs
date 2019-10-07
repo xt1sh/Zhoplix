@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Zhoplix.Models.Identity
 {
-    public class User : IdentityUser
+    public class User : IdentityUser<int>
     {
-        public List<Title> TitlesWatching { get; set; }
+        public List<UserTitle> UserTitles { get; set; }
         public List<UserEpisode> UserEpisodes { get; set; }
     }
 }

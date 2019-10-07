@@ -16,6 +16,7 @@ namespace Zhoplix.Profiles
         {
             CreateMap<RegistrationViewModel, User>().ReverseMap();
             CreateMap<Title, TitleViewModel>().ReverseMap();
+            CreateMap<Title, CreateTitleViewModel>().ReverseMap();
         }
     }
 }

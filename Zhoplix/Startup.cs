@@ -43,9 +43,9 @@ namespace Zhoplix
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddIdentity<User, IdentityRole>()
-                .AddRoles<IdentityRole>()
-                .AddEntityFrameworkStores<ApplicationDbContext>();
+            services.AddIdentity<User, IdentityRole<int>>()
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddDefaultTokenProviders();
 
             services.Configure<PasswordConfiguration>(Configuration.GetSection("Password"));
             services.Configure<JwtConfiguration>(Configuration.GetSection("Bearer"));
