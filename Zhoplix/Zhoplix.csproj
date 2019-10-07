@@ -43,7 +43,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Controllers\" />
+    <Folder Include="ViewModels\" />
     <Folder Include="Migrations\" />
+    <Folder Include="Services\Repository\" />
+    <Folder Include="ViewModels\Title\" />
   </ItemGroup>
 
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">
