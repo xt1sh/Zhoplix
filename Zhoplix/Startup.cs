@@ -46,7 +46,7 @@ namespace Zhoplix
             services.AddIdentity<User, IdentityRole<int>>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
-
+            
             services.Configure<PasswordConfiguration>(Configuration.GetSection("Password"));
             services.Configure<JwtConfiguration>(Configuration.GetSection("Bearer"));
 
