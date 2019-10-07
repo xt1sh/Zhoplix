@@ -1,3 +1,4 @@
+using System;
 using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -8,15 +9,16 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Zhoplix.Configurations;
 using Microsoft.OpenApi.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Zhoplix.Models.Identity;
 using Zhoplix.Services.TokenHandler;
 using TokenHandler = Zhoplix.Services.TokenHandler.TokenHandler;
 using Zhoplix.Services;
-using System;
 using Zhoplix.Models;
 
 namespace Zhoplix
@@ -27,11 +29,15 @@ namespace Zhoplix
 
         public readonly PasswordConfiguration PasswordConfiguration;
 
-        public Startup(IConfiguration configuration)
+        private readonly ILogger<Startup> _logger;
+
+        
+        public Startup(IConfiguration configuration, ILogger<Startup> logger)
         {
             Configuration = configuration;
             JwtConfiguration = Configuration.GetSection("Bearer").Get<JwtConfiguration>();
             PasswordConfiguration = Configuration.GetSection("Password").Get<PasswordConfiguration>();
+            _logger = logger;
         }
 
         public IConfiguration Configuration { get; }
@@ -44,6 +50,7 @@ namespace Zhoplix
                     Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddIdentity<User, IdentityRole<int>>()
+                .AddRoles<IdentityRole<int>>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
             
@@ -113,7 +120,7 @@ namespace Zhoplix
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IServiceProvider serviceProvider)
         {
             if (env.IsDevelopment())
             {
@@ -157,6 +164,26 @@ namespace Zhoplix
                     spa.UseProxyToSpaDevelopmentServer("http://localhost:4200");
                 }
             });
+
+            SeedRoles(serviceProvider);
+        }
+
+        private void SeedRoles(IServiceProvider serviceProvider)
+        {
+            var RoleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole<int>>>();
+            string[] roleNames = {"Admin", "Moderator", "Member"};
+
+            foreach (var roleName in roleNames)
+            {
+                var isRoleExis = RoleManager.RoleExistsAsync(roleName);
+                if (!isRoleExis.Result)
+                {
+                    var roleResult = RoleManager.CreateAsync(new IdentityRole<int>(roleName));
+                    roleResult.Wait();
+                    _logger.LogInformation($"Create {roleName}: {roleResult.Result}");
+                }
+            }
+
         }
     }
 }
