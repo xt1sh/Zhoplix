@@ -15,6 +15,7 @@ using Zhoplix.Models.Identity;
 using Zhoplix.Services;
 using System;
 using Zhoplix.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace Zhoplix
 {
@@ -37,8 +38,9 @@ namespace Zhoplix
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddDefaultIdentity<User>()
-                .AddEntityFrameworkStores<ApplicationDbContext>();
+            services.AddIdentity<User, IdentityRole<int>>()
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddDefaultTokenProviders();
 
             services.Configure<JwtConfiguration>(Configuration.GetSection("Bearer"));
 

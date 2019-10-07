@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Zhoplix.ViewModels
+namespace Zhoplix.ViewModels.Title
 {
-    public class TitleViewModel
+    public class CreateTitleViewModel
     {
         public string Name { get; set; }
         public string Description { get; set; }

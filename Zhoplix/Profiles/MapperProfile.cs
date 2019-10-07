@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Zhoplix.Models;
 using Zhoplix.ViewModels;
+using Zhoplix.ViewModels.Title;
 
 namespace Zhoplix.Profiles
 {
@@ -12,6 +13,7 @@ namespace Zhoplix.Profiles
     {
         public MapperProfile()
         {
+            CreateMap<Title, CreateTitleViewModel>().ReverseMap();
             CreateMap<Title, TitleViewModel>().ReverseMap();
         }
     }
