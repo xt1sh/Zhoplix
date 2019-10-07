@@ -22,7 +22,6 @@ using Zhoplix.Services;
 using System;
 using Microsoft.Extensions.Logging;
 using Zhoplix.Models;
-using Microsoft.AspNetCore.Identity;
 
 namespace Zhoplix
 {
@@ -206,6 +205,5 @@ namespace Zhoplix
                 }
             }
         }
-
     }
 }
