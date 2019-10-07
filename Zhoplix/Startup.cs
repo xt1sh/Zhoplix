@@ -1,3 +1,4 @@
+using System;
 using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -8,16 +9,17 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Zhoplix.Configurations;
 using Microsoft.OpenApi.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Zhoplix.Models.Identity;
 using Zhoplix.Services.TokenHandler;
 using TokenHandler = Zhoplix.Services.TokenHandler.TokenHandler;
 using Zhoplix.Services;
 using System;
-using Microsoft.Extensions.Logging;
 using Zhoplix.Models;
 
 namespace Zhoplix
@@ -52,7 +54,7 @@ namespace Zhoplix
                 .AddRoles<IdentityRole<int>>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
-
+            
             services.Configure<PasswordConfiguration>(Configuration.GetSection("Password"));
             services.Configure<JwtConfiguration>(Configuration.GetSection("Bearer"));
 
