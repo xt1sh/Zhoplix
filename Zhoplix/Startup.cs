@@ -19,8 +19,6 @@ using Zhoplix.Models.Identity;
 using Zhoplix.Services.TokenHandler;
 using TokenHandler = Zhoplix.Services.TokenHandler.TokenHandler;
 using Zhoplix.Services;
-using System;
-using Microsoft.Extensions.Logging;
 using Zhoplix.Models;
 
 namespace Zhoplix
@@ -51,7 +49,7 @@ namespace Zhoplix
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddIdentity<User, IdentityRole<int>>()
+            services.AddDefaultIdentity<User>()
                 .AddRoles<IdentityRole<int>>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
@@ -168,24 +166,6 @@ namespace Zhoplix
             });
 
             SeedRoles(serviceProvider);
-        }
-
-        private void SeedRoles(IServiceProvider serviceProvider)
-        {
-            var RoleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole<int>>>();
-            string[] roleNames = {"Admin", "Moderator", "Member"};
-
-            foreach (var roleName in roleNames)
-            {
-                var isRoleExis = RoleManager.RoleExistsAsync(roleName);
-                if (!isRoleExis.Result)
-                {
-                    var roleResult = RoleManager.CreateAsync(new IdentityRole<int>(roleName));
-                    roleResult.Wait();
-                    _logger.LogInformation($"Create {roleName}: {roleResult.Result}");
-                }
-            }
-
         }
 
         private void SeedRoles(IServiceProvider serviceProvider)
