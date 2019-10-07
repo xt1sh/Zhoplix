@@ -17,6 +17,7 @@ using Zhoplix.Services.TokenHandler;
 using TokenHandler = Zhoplix.Services.TokenHandler.TokenHandler;
 using Zhoplix.Services;
 using System;
+using Microsoft.Extensions.Logging;
 using Zhoplix.Models;
 using Microsoft.AspNetCore.Identity;
 
@@ -24,16 +25,20 @@ namespace Zhoplix
 {
     public class Startup
     {
-        public readonly JwtConfiguration JwtConfiguration;
+        private readonly JwtConfiguration JwtConfiguration;
 
-        public readonly PasswordConfiguration PasswordConfiguration;
+        private readonly PasswordConfiguration PasswordConfiguration;
+        private readonly ILogger<Startup> _logger;
 
-        public Startup(IConfiguration configuration)
+
+        public Startup(IConfiguration configuration, ILogger<Startup> logger)
         {
             Configuration = configuration;
             JwtConfiguration = Configuration.GetSection("Bearer").Get<JwtConfiguration>();
             PasswordConfiguration = Configuration.GetSection("Password").Get<PasswordConfiguration>();
+            _logger = logger;
         }
+
 
         public IConfiguration Configuration { get; }
 
@@ -44,7 +49,8 @@ namespace Zhoplix
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddIdentity<User, IdentityRole<int>>()
+            services.AddDefaultIdentity<User>()
+                .AddRoles<IdentityRole<int>>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
@@ -114,7 +120,7 @@ namespace Zhoplix
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IServiceProvider serviceProvider)
         {
             if (env.IsDevelopment())
             {
@@ -158,6 +164,26 @@ namespace Zhoplix
                     spa.UseProxyToSpaDevelopmentServer("http://localhost:4200");
                 }
             });
+            SeedRoles(serviceProvider);
         }
+
+        private void SeedRoles(IServiceProvider serviceProvider)
+        {
+            var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole<int>>>();
+
+            string[] roleNames = new[] {"Admin", "Moderator", "Member"};
+
+            foreach (var roleName in roleNames)
+            {
+                var isRoleExist = roleManager.RoleExistsAsync(roleName);
+                isRoleExist.Wait();
+                if (!isRoleExist.Result)
+                {
+                    var roleResult = roleManager.CreateAsync(new IdentityRole<int>(roleName)).Result;
+                    _logger.LogInformation($"Create {roleName}: {roleResult.Succeeded}");
+                }
+            }
+        }
+
     }
 }

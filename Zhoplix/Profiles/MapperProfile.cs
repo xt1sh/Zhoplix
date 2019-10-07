@@ -10,6 +10,8 @@ using Zhoplix.ViewModels.Season;
 using Zhoplix.ViewModels.Title;
 using Zhoplix.Models.Identity;
 using Zhoplix.ViewModels;
+using Zhoplix.ViewModels.Title;
+using TitleViewModel = Zhoplix.ViewModels.TitleViewModel;
 
 namespace Zhoplix.Profiles
 {
