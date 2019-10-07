@@ -3,6 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Zhoplix.Models.Identity;
+using Zhoplix.ViewModels;
 
 namespace Zhoplix.Profiles
 {
@@ -10,7 +12,7 @@ namespace Zhoplix.Profiles
     {
         public MapperProfile()
         {
-
+            CreateMap<RegistrationViewModel, User>().ReverseMap();
         }
     }
 }

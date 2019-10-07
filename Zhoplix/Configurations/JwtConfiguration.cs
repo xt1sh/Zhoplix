@@ -16,5 +16,12 @@ namespace Zhoplix.Configurations
         public bool ValidateIssuer { get; set; }
 
         public bool ValidateAudience { get; set; }
+
+        public double AccessExpirationTime { get; set; }
+
+        public double RefreshExpirationTime { get; set; }
+
+
+
     }
 }

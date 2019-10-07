@@ -8,10 +8,13 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Microsoft.AspNetCore.Identity;
 using Zhoplix.Configurations;
 using Microsoft.OpenApi.Models;
 using Microsoft.EntityFrameworkCore;
 using Zhoplix.Models.Identity;
+using Zhoplix.Services.TokenHandler;
+using TokenHandler = Zhoplix.Services.TokenHandler.TokenHandler;
 
 namespace Zhoplix
 {
@@ -19,10 +22,13 @@ namespace Zhoplix
     {
         public readonly JwtConfiguration JwtConfiguration;
 
+        public readonly PasswordConfiguration PasswordConfiguration;
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
             JwtConfiguration = Configuration.GetSection("Bearer").Get<JwtConfiguration>();
+            PasswordConfiguration = Configuration.GetSection("Password").Get<PasswordConfiguration>();
         }
 
         public IConfiguration Configuration { get; }
@@ -35,9 +41,24 @@ namespace Zhoplix
                     Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddDefaultIdentity<User>()
+                .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
+            services.Configure<PasswordConfiguration>(Configuration.GetSection("Password"));
             services.Configure<JwtConfiguration>(Configuration.GetSection("Bearer"));
+
+            services.Configure<IdentityOptions>(options =>
+            {
+                options.Password.RequireNonAlphanumeric = PasswordConfiguration.RequireNonAlphanumeric;
+                options.Password.RequireDigit = PasswordConfiguration.RequireDigit;
+                options.Password.RequireLowercase = PasswordConfiguration.RequireLowercase;
+                options.Password.RequireUppercase = PasswordConfiguration.RequireUppercase;
+                options.Password.RequiredLength = PasswordConfiguration.RequiredLength;
+                options.Password.RequiredUniqueChars = PasswordConfiguration.RequiredUniqueChars;
+
+                options.User.RequireUniqueEmail = true;
+
+            });
 
             services.AddAuthentication(x =>
                 {
@@ -65,6 +86,8 @@ namespace Zhoplix
             });
 
             services.AddAutoMapper(typeof(Startup));
+
+            services.AddSingleton<ITokenHandler, TokenHandler>();
 
             services.AddCors(options =>
             {
