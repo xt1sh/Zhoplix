@@ -5,6 +5,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Zhoplix.Models;
 using Zhoplix.ViewModels;
+using Zhoplix.ViewModels.Episode;
+using Zhoplix.ViewModels.Season;
 using Zhoplix.ViewModels.Title;
 
 namespace Zhoplix.Profiles
@@ -13,8 +15,20 @@ namespace Zhoplix.Profiles
     {
         public MapperProfile()
         {
-            CreateMap<Title, CreateTitleViewModel>().ReverseMap();
+            // CreateViewModels
+            CreateMap<CreateTitleViewModel, Title>()
+                .ForMember(dest => dest.Seasons, opt => opt.Ignore()).ReverseMap();
+            CreateMap<CreateSeasonViewModel, Season>()
+                .ForMember(dest => dest.Episodes, opt => opt.Ignore()).ReverseMap();
+            CreateMap<CreateEpisodeViewModel, Episode>().ReverseMap();
+            CreateMap<List<CreateSeasonViewModel>, List<Season>>().ReverseMap();
+            CreateMap<List<CreateEpisodeViewModel>, List<Episode>>().ReverseMap();
+
+            // ViewModels
             CreateMap<Title, TitleViewModel>().ReverseMap();
+
+            // ChangeViewModels
+
         }
     }
 }

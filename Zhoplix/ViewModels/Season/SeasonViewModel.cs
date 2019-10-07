@@ -1,16 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
+using Zhoplix.ViewModels.Episode;
 
-namespace Zhoplix.Models
+namespace Zhoplix.ViewModels.Season
 {
-    public class Season
+    public class SeasonViewModel
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public Title Title { get; set; }
-        public List<Episode> Episodes { get; set; }
+        public List<EpisodeViewModel> Episodes { get; set; }
     }
 }
