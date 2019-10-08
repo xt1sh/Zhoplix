@@ -45,7 +45,6 @@
 
   <ItemGroup>
     <Folder Include="Controllers\" />
-    <Folder Include="ViewModels\" />
     <Folder Include="Services\Repository\" />
     <Folder Include="ViewModels\Title\" />
   </ItemGroup>
