@@ -8,6 +8,7 @@ import { Component } from '@angular/core';
 export class NavMenuComponent {
   zhoplixLogoSrc = 'Logos/zhoplix_empty.png';
   isExpanded = false;
+  toShow: boolean;
 
   collapse() {
     this.isExpanded = false;
