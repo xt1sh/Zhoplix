@@ -11,8 +11,7 @@ namespace Zhoplix.ViewModels.Title
     {
         public string Name { get; set; }
         public string Description { get; set; }
-        public float Rating { get; set; }
-        public int AgeRestriction { get; set; }
+            public int AgeRestriction { get; set; }
         public List<CreateSeasonViewModel> Seasons { get; set; }
     }
 }

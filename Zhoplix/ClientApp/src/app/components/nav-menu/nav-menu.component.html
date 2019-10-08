@@ -1,4 +1,4 @@
-<header>
+<header *ngIf="toShow">
   <nav
     class="navbar navbar-main navbar-expand-sm navbar-toggleable-sm mb-3"
   >
@@ -22,7 +22,7 @@
     >
       <ul class="navbar-nav flex-grow">
         <li class="nav-item" [routerLinkActive]="['link-active']">
-          <a class="nav-link" [routerLink]="['/admin']">
+          <a class="nav-link" [routerLink]="['admin']">
             Admin
           </a>
         </li>
