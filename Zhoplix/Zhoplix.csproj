@@ -16,6 +16,7 @@
     <PackageReference Include="AutoMapper" Version="9.0.0" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="7.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Cryptography.KeyDerivation" Version="3.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="3.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="3.0.0" />
@@ -45,7 +46,6 @@
   <ItemGroup>
     <Folder Include="Controllers\" />
     <Folder Include="ViewModels\" />
-    <Folder Include="Migrations\" />
     <Folder Include="Services\Repository\" />
     <Folder Include="ViewModels\Title\" />
   </ItemGroup>
