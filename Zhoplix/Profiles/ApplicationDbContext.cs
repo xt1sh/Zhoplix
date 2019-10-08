@@ -21,8 +21,6 @@ namespace Zhoplix
         {
             base.OnModelCreating(builder);
 
-            //builder.Entity<User>().Property(e => e.Id).HasColumnType("int");
-
             builder.Entity<UserEpisode>()
                 .HasKey(bc => new { bc.UserId, bc.EpisodeId });
             builder.Entity<UserEpisode>()

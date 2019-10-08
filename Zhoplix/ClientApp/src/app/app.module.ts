@@ -8,6 +8,7 @@ import { CookieService } from 'ngx-cookie-service';
 import { AppComponent } from './app.component';
 import { NavMenuComponent } from './components/nav-menu/nav-menu.component';
 import { HomeComponent } from './components/home/home.component';
+import { AdminComponent } from './components/admin/admin.component';
 import { LoginComponent } from './components/authentication/login/login.component';
 
 @NgModule({
@@ -26,6 +27,7 @@ import { LoginComponent } from './components/authentication/login/login.componen
     RouterModule.forRoot([
       { path: '', component: HomeComponent, pathMatch: 'full' },
       { path: 'login', component: LoginComponent, pathMatch: 'full'},
+      { path: 'admin', component: AdminComponent}
     ])
   ],
   providers: [CookieService],
