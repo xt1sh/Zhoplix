@@ -12,6 +12,8 @@ using Zhoplix.Configurations;
 using Zhoplix.Models.Identity;
 using Zhoplix.Services.TokenHandler;
 using Zhoplix.ViewModels;
+using Zhoplix.Services;
+using Microsoft.Extensions.Options;
 
 namespace Zhoplix.Controllers
 {
@@ -23,18 +25,21 @@ namespace Zhoplix.Controllers
         private readonly IMapper _mapper;
         private readonly ITokenHandler _tokenHandler;
         private readonly JwtConfiguration _jwtConfig;
+        private readonly IRepository<User> _userRepository;
 
         public AuthenticationController(UserManager<User> userManager,
             IMapper mapper,
             ITokenHandler tokenHandler,
-            JwtConfiguration jwtConfig
+            IOptions<JwtConfiguration> jwtConfig,
+            IRepository<User> userRepository
         )
         {
 
             _userManager = userManager;
             _mapper = mapper;
             _tokenHandler = tokenHandler;
-            _jwtConfig = jwtConfig;
+            _jwtConfig = jwtConfig.Value;
+            _userRepository = userRepository;
         }
 
         public async Task<IActionResult> Registration(RegistrationViewModel model)
@@ -42,21 +47,25 @@ namespace Zhoplix.Controllers
             var user = _mapper.Map<RegistrationViewModel, User>(model);
 
             var result = await _userManager.CreateAsync(user, model.Password);
-
+            
             if (result.Succeeded)
             {
                 await _userManager.AddToRoleAsync(user, "Member");
-                    
-                var authClaims = new List<Claim>
+                
+
+                var authClaims = new[]
                 {
                     new Claim(JwtRegisteredClaimNames.Sub, model.Username),
-                    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                    new Claim(ClaimsIdentity.DefaultRoleClaimType, "Member"),
-
+                    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
                 };
 
-                var accessToken = await _tokenHandler.GenerateAccessTokenAsync(authClaims);
-                var refreshToken = await _tokenHandler.GenerateRefreshTokenAsync();
+
+                    
+                var accessToken = await _tokenHandler.GenerateAccessTokenAsync(new List<Claim>(authClaims), "Member");
+                var refreshToken = await _tokenHandler.GenerateRefreshTokenAsync(new List<Claim>(authClaims));
+
+                user.RefreshToken = refreshToken;
+                await _userRepository.ChangeObjectAsync(user);
 
                 return Ok(new
                 {

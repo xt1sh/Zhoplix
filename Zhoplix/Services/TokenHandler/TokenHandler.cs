@@ -10,6 +10,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Zhoplix.Configurations;
+using System.Security.Cryptography;
+using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 
 namespace Zhoplix.Services.TokenHandler
 {
@@ -25,23 +27,35 @@ namespace Zhoplix.Services.TokenHandler
             _jwtConfiguration = jwtConfiguration.Value;
         }
 
-        public Task<string> GenerateAccessTokenAsync(List<Claim> claims)
+        public Task<string> GenerateAccessTokenAsync(List<Claim> claims, string role)
         {
 
             var key = Encoding.UTF8.GetBytes(_jwtConfiguration.Secret);
 
+            claims.Add(new Claim(ClaimsIdentity.DefaultRoleClaimType, role));
+            claims.Add(new Claim("token_type", "access"));
+            
             var token = new JwtSecurityToken(
                 claims: claims,
                 expires: DateTime.Now.AddSeconds(_jwtConfiguration.AccessExpirationTime),
                 signingCredentials: new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256)
             );
-
+            
             return Task.FromResult(new JwtSecurityTokenHandler().WriteToken(token));
         }
 
-        public Task<string> GenerateRefreshTokenAsync()
+        public Task<string> GenerateRefreshTokenAsync(List<Claim> claims)
         {
-            throw new NotImplementedException();
+            var key = Encoding.UTF8.GetBytes(_jwtConfiguration.Secret);
+            claims.Add(new Claim("token_type", "refresh"));
+            var token = new JwtSecurityToken(
+                claims: claims,
+                expires: DateTime.Now.AddSeconds(_jwtConfiguration.RefreshExpirationTime),
+                signingCredentials: new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256)
+            );
+
+            return Task.FromResult(new JwtSecurityTokenHandler().WriteToken(token));
+
         }
     }
 }
