@@ -8,7 +8,7 @@ namespace Zhoplix.Services.TokenHandler
 {
     public interface ITokenHandler
     {
-        Task<string> GenerateAccessTokenAsync(List<Claim> claims, string role);
+        Task<string> GenerateAccessTokenAsync(List<Claim> claims, IEnumerable<string> roles);
         Task<string> GenerateRefreshTokenAsync(List<Claim> claims);
     }
 }

@@ -27,7 +27,7 @@ namespace Zhoplix.Profiles
             CreateMap<List<CreateEpisodeViewModel>, List<Episode>>().ReverseMap();
 
             // ViewModels
-            CreateMap<Title, ViewModels.TitleViewModel>().ReverseMap();
+            CreateMap<Title, TitleViewModel>().ReverseMap();
 
             // ChangeViewModels
 

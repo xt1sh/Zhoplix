@@ -27,12 +27,13 @@ namespace Zhoplix.Services.TokenHandler
             _jwtConfiguration = jwtConfiguration.Value;
         }
 
-        public Task<string> GenerateAccessTokenAsync(List<Claim> claims, string role)
+        public Task<string> GenerateAccessTokenAsync(List<Claim> claims, IEnumerable<string> roles)
         {
 
             var key = Encoding.UTF8.GetBytes(_jwtConfiguration.Secret);
 
-            claims.Add(new Claim(ClaimsIdentity.DefaultRoleClaimType, role));
+            foreach (var role in roles)
+                claims.Add(new Claim(ClaimsIdentity.DefaultRoleClaimType, role));
             claims.Add(new Claim("token_type", "access"));
             
             var token = new JwtSecurityToken(
