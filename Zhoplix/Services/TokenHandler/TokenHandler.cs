@@ -48,7 +48,9 @@ namespace Zhoplix.Services.TokenHandler
         public Task<string> GenerateRefreshTokenAsync(List<Claim> claims)
         {
             var key = Encoding.UTF8.GetBytes(_jwtConfiguration.Secret);
+
             claims.Add(new Claim("token_type", "refresh"));
+
             var token = new JwtSecurityToken(
                 claims: claims,
                 expires: DateTime.Now.AddSeconds(_jwtConfiguration.RefreshExpirationTime),
