@@ -18,6 +18,11 @@
     position: relative;
 }
 
+.login-form-body {
+    display: flex;
+    flex-direction: column;
+}
+
 h1 {
     font-weight: bold;
     font-size: 32px;
@@ -33,6 +38,11 @@ h1 {
 
 .mat-card-actions {
     padding: 0px 8px 0px;
+}
+
+.mat-card-footer {
+    padding: 0px 16px 0px;
+    color: white;
 }
 
 .login-button {
