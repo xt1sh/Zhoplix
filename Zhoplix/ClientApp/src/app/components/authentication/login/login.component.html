@@ -1,23 +1,23 @@
-<h3>Sign In</h3>
 
-<div class="login-wrapper">
-<div class="login-background">
-  <img src="{{backgroundImgSrc}}" >
-</div>
+
+
 <div class="login-body">
   <div class="container">
+    <h3>Sign In</h3>
     <div class="login-form">
-      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-        <div class="login-field">
-          <input id="login" type="text" formControlName="login">
+      <form class="form" [formGroup]="loginForm" (ngSubmit)="onSubmit()" >
+        <div class="login-form-fields">
+          <div class="login-field">
+            <input id="login" type="text" formControlName="login">
+          </div>
+          <div class="password-field">
+            <input id="password" type="text" formControlName="password">
+          </div>
+          <button class="button" type="submit">Sign In</button>
         </div>
-        <div class="password-field">
-          <input id="password" type="text" formControlName="password">
-        </div>
-      <button class="button" type="submit">Sign In</button>
       </form>
     </div>
   </div>
 </div>
-</div>
+
 
