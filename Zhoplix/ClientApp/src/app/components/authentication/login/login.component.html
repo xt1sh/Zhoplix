@@ -1,27 +1,25 @@
 
 
-
 <div class="login-body">
-  <div class="container">
-    <h3>Sign In</h3>
-    <div class="login-form">
-      <form class="form" [formGroup]="loginForm" (ngSubmit)="onSubmit()" >
-        <div class="login-form-fields">
-          <div class="login-input">
-              <div class="login-field">
-                <input id="login" type="text" formControlName="login">
-              </div>
-          </div>
-          <div class="password-input">
-            <div class="password-field">
-              <input id="password" type="text" formControlName="password">
-            </div>
-          </div>
-          <button class="login-button" type="submit">Sign In</button>
-        </div>
+  <mat-card class="login-body-container" fxFlex="500px" fxFlex.xs="100%">
+      <h1>Sign In</h1>
+      <form [formGroup]="loginForm" autocomplete="off" novalidate (ngSubmit)="onSubmit()" fxLayout="column wrap"
+      fxLayoutAlign="center center" fxLayoutGap="10px">
+      <mat-card-content>
+        <mat-form-field class="login-field">
+          <input matInput class="login-input-field" type="text" placeholder="Email or username" formControlName="login" id="login" >
+          <mat-error *ngIf="loginForm.controls['login'].hasError('required')">Login is required</mat-error>
+        </mat-form-field>
+        <mat-form-field class="password-field">
+          <input matInput type="text" placeholder="Password" formControlName="password">
+          <mat-error *ngIf="loginForm.controls['password'].hasError('required')">Password is required</mat-error>
+        </mat-form-field>
+      </mat-card-content>
+      <mat-card-actions>
+          <button mat-raised-button class="login-button" color="primary">Sign In</button>
+      </mat-card-actions>
       </form>
-    </div>
-  </div>
+    </mat-card>
 </div>
 
 
