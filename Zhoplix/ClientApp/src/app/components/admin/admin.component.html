@@ -1,13 +1,43 @@
 <h1>Create Title</h1>
-<form [formGroup]="createTitleForm" (ngSubmit)="onSubmit()">
-    <div>
-        <input id="name" type="text" formControlName="name">
-    </div>
-    <div>
-        <input id="description" type="text" formControlName="description">
-    </div>
-    <div>
-        <input id="ageRestriction" type="number" formControlName="ageRestriction">
-    </div>
-    <button class="button" type="submit">Create</button>
-</form>
+<div class="formgroup-container">
+  <div class="titleform">
+    <form [formGroup]="createTitleForm">
+        <div>
+          <input id="name" type="text" formControlName="name" placeholder="Name">
+        </div>
+        <div>
+          <input id="description" type="text" formControlName="description" placeholder="Description">
+        </div>
+        <div>
+          <input id="ageRestriction" type="number" formControlName="ageRestriction" placeholder="Age restriction">
+        </div>
+    </form>
+    <br>
+  </div>
+  <div class="seasonsform">
+    <form [formGroup]="seasonForm">
+      <ul formArrayName="seasons">
+        <li *ngFor="let season of seasonForm.controls.seasons.controls; let i=index">
+          <div [formGroupName]="i">
+            <div class="seasonform">
+              <input type="text" formControllerName="seasonName">
+              <button type="button" (click)="createSeason()">Create season</button>
+              <button (click)="deleteSeason(i)">Delete season</button>
+            </div>
+            <div class="episodesform">
+              <ul formArrayName="episodes">
+                <li *ngFor="let episode of getEpisodesArray(i).controls; let j=index">
+                  <div [formGroupName]="j">
+                    <input type="text" formControllerName="episodeName">
+                    <button type="button" (click)="createEpisode(i)">Create episode</button>
+                    <button (click)="deleteEpisode(i, j)">Delete episode</button>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </form>
+  </div>
+</div>
