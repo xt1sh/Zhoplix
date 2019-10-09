@@ -12,8 +12,10 @@ export class LoginComponent implements OnInit {
 
   loginForm = this.formBuilder.group({
     login: [undefined, Validators.required],
-    password: [undefined, Validators.required]
+    password: [undefined, Validators.required],
+    rememberMe: [true]
   });
+
   backgroundImgSrc = 'background/background.jpg';
 
   constructor(private formBuilder: FormBuilder, private auth:AuthenticationService) { }
