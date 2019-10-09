@@ -6,6 +6,6 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
 
-  loginBackgroundSrc = 'background/background.jpeg';
+  loginBackgroundSrc = 'background/background.jpg';
   title = 'app';
 }
