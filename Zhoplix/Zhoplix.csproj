@@ -48,6 +48,7 @@
     <Folder Include="Services\AuthenticationService\Response\" />
     <Folder Include="Services\Repository\" />
     <Folder Include="ViewModels\Title\" />
+    <Folder Include="wwwroot\background\" />
   </ItemGroup>
 
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">
