@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormControl } from '@angular/forms';
+import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
 import { AuthenticationService } from 'src/app/services/authentication/authentication.service';
 
 
@@ -10,20 +10,21 @@ import { AuthenticationService } from 'src/app/services/authentication/authentic
 })
 export class LoginComponent implements OnInit {
 
-  loginForm;
-  backgroundImgSrc = 'background/IMG_20191009_121937_054-02-01.jpeg';
+  loginForm = this.formBuilder.group({
+    login: [undefined, Validators.required],
+    password: [undefined, Validators.required]
+  });
+  backgroundImgSrc = 'background/background.jpg';
 
-  constructor(private auth:AuthenticationService) { }
+  constructor(private formBuilder: FormBuilder, private auth:AuthenticationService) { }
 
+  ngOnInit() {
+
+  }
 
   onSubmit() {
     this.auth.login(this.loginForm.value).subscribe(res => {this.auth.setToken(res)});
   }
 
-  ngOnInit() {
-    this.loginForm = new FormGroup({
-      login: new FormControl(''),
-      password: new FormControl(''),
-    });
-  }
+
 }

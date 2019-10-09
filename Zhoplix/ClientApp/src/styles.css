@@ -1,6 +1,8 @@
 /* You can add global styles to this file, and also import other style files */
 
 /* Provide sufficient contrast against white background */
+@import '@angular/material/prebuilt-themes/indigo-pink.css';
+
 body {
   background-color: rgb(26, 26, 26)
 }
@@ -48,4 +50,69 @@ header {
 .navbar-main {
   background: none;
   height: 90px;
+}
+
+.mat-form-field-flex{
+  background-color: #333; 
+  border-radius: 4px;
+  color: white;
+  height: 50px;
+}
+
+.mat-form-field-label-wrapper {
+  font-size: 16px;
+  color: white;
+}
+
+.mat-form-field-label {
+  padding: 0px 20px 7px;
+  color: white;
+} 
+
+.mat-form-field.mat-form-field-invalid .mat-form-field-label {
+  color: #E87C03;
+}
+
+.mat-form-field.mat-form-field-invalid .mat-form-field-ripple, .mat-form-field.mat-form-field-invalid .mat-form-field-ripple.mat-accent {
+  background-color: #E87C03;
+}
+
+.mat-form-field-appearance-legacy .mat-form-field-label {
+  color: white;
+}
+
+.mat-form-field.mat-focused .mat-form-field-label {
+  color: #8c8c8c;
+}
+
+.mat-form-field.mat-focused .mat-form-field-ripple {
+  display: none;
+}
+
+.mat-error {
+  padding: 6px 3px;
+  font-size: 13px;
+  color: #E87C03;
+}
+
+.mat-form-field-appearance-legacy.mat-form-field-can-float .mat-input-server:focus+.mat-form-field-label-wrapper .mat-form-field-label, .mat-form-field-appearance-legacy.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-label {
+  padding: 7px 25px 0px;
+}
+
+.mat-form-field-infix {
+  font-size: 16px;
+}
+
+.mat-input-element {
+  caret-color: white;
+  font-size: 16px;
+}
+
+.mat-form-field-invalid .mat-input-element, .mat-warn .mat-input-element {
+  caret-color: white;
+}
+
+.mat-form-field-appearance-legacy .mat-form-field-infix {
+  caret-color: white;
+  padding: 8px 20px 0px;
 }
