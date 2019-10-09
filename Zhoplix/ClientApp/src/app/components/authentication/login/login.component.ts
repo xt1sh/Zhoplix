@@ -11,6 +11,8 @@ import { AuthenticationService } from 'src/app/services/authentication/authentic
 export class LoginComponent implements OnInit {
 
   loginForm;
+  backgroundImgSrc = 'background/IMG_20191009_121937_054-02-01.jpeg';
+
   constructor(private auth:AuthenticationService) { }
 
 

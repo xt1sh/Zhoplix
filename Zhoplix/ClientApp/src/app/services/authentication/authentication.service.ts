@@ -15,7 +15,7 @@ constructor(private http: HttpClient,
             @Inject('BASE_URL') private readonly originUrl: string) { }
 
   login(userCredentials: Login) : Observable<HttpResponse<any>>  {
-    console.log("here1");
+
     return this.http.post<Login>(`${this.originUrl}Authentication/Login`, userCredentials, {
       headers: new HttpHeaders({
         'Content-Type': 'application/json'

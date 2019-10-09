@@ -5,5 +5,7 @@ import { Component } from '@angular/core';
   templateUrl: './app.component.html'
 })
 export class AppComponent {
+
+  loginBackgroundSrc = 'background/background.jpg';
   title = 'app';
 }
