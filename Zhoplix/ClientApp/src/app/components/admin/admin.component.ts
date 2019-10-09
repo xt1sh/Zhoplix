@@ -1,3 +1,5 @@
+import { AdminService } from './../../services/admin/admin.service';
+import { FormGroup, FormControl } from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { CreateTitle } from 'src/app/models/createTitle';
@@ -9,11 +11,20 @@ import { CreateTitle } from 'src/app/models/createTitle';
 })
 export class AdminComponent implements OnInit {
 
-  title: CreateTitle;
+  createTitleForm: FormGroup;
 
-  constructor() { }
+  constructor(private readonly adminService: AdminService) { }
 
   ngOnInit() {
-    this.title = new CreateTitle();
+    this.createTitleForm = new FormGroup({
+      name: new FormControl(''),
+      description: new FormControl(''),
+      ageRestriction: new FormControl('')
+    });
+  }
+
+  onSubmit() {
+    console.log('here');
+    this.adminService.createTitle(this.createTitleForm.value).subscribe();
   }
 }
