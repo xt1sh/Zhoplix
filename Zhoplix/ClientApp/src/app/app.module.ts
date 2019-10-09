@@ -17,8 +17,7 @@ import { LoginComponent } from './components/authentication/login/login.componen
     NavMenuComponent,
     HomeComponent,
     LoginComponent,
-    AdminComponent,
-
+    AdminComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
