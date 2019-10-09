@@ -11,6 +11,8 @@ import { MatAutocompleteModule, MatBadgeModule, MatButtonModule, MatButtonToggle
   MatPaginatorModule, MatProgressSpinnerModule, MatRadioModule, MatSelectModule,
   MatSidenavModule, MatSlideToggleModule, MatSnackBarModule, MatSortModule, MatStepperModule,
   MatTableModule, MatTabsModule, MatToolbarModule, MatTooltipModule } from '@angular/material';
+import { TokenInterceptor } from './services/authentication/token.interceptor';
+import { TokenInterceptor } from './services/authentication/token.interceptor';
 
 
 import { AppComponent } from './app.component';
@@ -65,7 +67,13 @@ import { LoginComponent } from './components/authentication/login/login.componen
       { path: 'admin', component: AdminComponent}
     ])
   ],
-  providers: [CookieService],
+  providers: [
+    CookieService, {
+      provide: HTTP_INTERCEPTORS,
+      useClass: TokenInterceptor,
+      multi: true
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
