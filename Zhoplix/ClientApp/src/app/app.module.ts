@@ -12,7 +12,6 @@ import { MatAutocompleteModule, MatBadgeModule, MatButtonModule, MatButtonToggle
   MatSidenavModule, MatSlideToggleModule, MatSnackBarModule, MatSortModule, MatStepperModule,
   MatTableModule, MatTabsModule, MatToolbarModule, MatTooltipModule } from '@angular/material';
 import { TokenInterceptor } from './services/authentication/token.interceptor';
-import { TokenInterceptor } from './services/authentication/token.interceptor';
 
 
 import { AppComponent } from './app.component';
@@ -43,7 +42,7 @@ import { LoginComponent } from './components/authentication/login/login.componen
     MatExpansionModule,
     MatIconModule,
     MatInputModule,
-    MatListModule, 
+    MatListModule,
     MatMenuModule,
     MatNativeDateModule,
     MatPaginatorModule,
