@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { Router } from '@angular/router';
 
-const routes: string[] = ['login'];
+const routes: string[] = [];
 
 @Component({
   selector: 'app-nav-menu',
