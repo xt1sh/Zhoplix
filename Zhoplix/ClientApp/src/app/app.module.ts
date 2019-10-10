@@ -22,6 +22,7 @@ import { LoginComponent } from './components/authentication/login/login.componen
 import { ROUTES } from './services/route-services/routes';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { AuthGuardService } from './services/route-services/auth-guard/auth-guard.service';
+import { RoleGuardService } from './services/route-services/role-guard/role-guard.service';
 
 @NgModule({
   declarations: [
@@ -72,7 +73,7 @@ import { AuthGuardService } from './services/route-services/auth-guard/auth-guar
       multi: true
     },
     AuthGuardService,
-    JwtHelperService
+    RoleGuardService
   ],
   bootstrap: [AppComponent]
 })
