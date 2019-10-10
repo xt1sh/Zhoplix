@@ -3,7 +3,7 @@ import { HttpClient, HttpResponse, HttpHeaders } from '@angular/common/http';
 import { Login } from 'src/app/models/Login';
 import { Observable } from 'rxjs';
 import { CookieService } from 'ngx-cookie-service';
-import { tap } from 'rxjs/operators';
+import { JwtHelperService } from '@auth0/angular-jwt';
 
 @Injectable({
   providedIn: 'root'
@@ -12,17 +12,14 @@ export class AuthenticationService {
 
   public redirectUrl: string;
 
-constructor(private http: HttpClient,
-            private cookieService: CookieService,
+constructor(private readonly http: HttpClient,
+            private readonly cookieService: CookieService,
             @Inject('BASE_URL') private readonly originUrl: string) { }
 
   login(userCredentials: Login): Observable<HttpResponse<any>>  {
 
-    return this.http.post<Login>(`${this.originUrl}Authentication/Login`, userCredentials, {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/json'
-      }),
-        observe: 'response'});
+    return this.http.post<Login>(`${this.originUrl}Authentication/Login`, userCredentials,
+                                { observe: 'response' });
   }
 
   setToken(authResult, setRefresh = true): void {
@@ -36,10 +33,11 @@ constructor(private http: HttpClient,
   }
 
   getToken(): string {
-    return localStorage.getItem('accessToken');
+    return localStorage.getItem('access_token');
   }
 
   get isLoggedIn(): boolean {
-    return localStorage.getItem('access_token') != null;
+    const jwtHelper = new JwtHelperService();
+    return !jwtHelper.isTokenExpired(localStorage.getItem('access_token'));
   }
 }
