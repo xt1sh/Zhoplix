@@ -12,8 +12,8 @@ export const ROUTES: Routes = [
   {
     path: 'admin',
     component: AdminComponent,
-    canActivate: [RoleGuardService],
-    data: {
+    canActivate: [AuthGuardService],
+    data: { 
       expectedRole: Roles.Admin
     }
   },

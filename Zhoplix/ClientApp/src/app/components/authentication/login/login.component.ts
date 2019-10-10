@@ -33,7 +33,7 @@ export class LoginComponent implements OnInit {
           this.auth.setToken(res, this.loginForm.controls['rememberMe'].value);
         });
     if (this.auth.redirectUrl) {
-      this.router.navigateByUrl(this.auth.redirectUrl);
+      this.router.navigate([this.auth.redirectUrl]);
       this.auth.redirectUrl = null;
     }
   }
