@@ -7,12 +7,14 @@ import { AuthenticationService } from '../../authentication/authentication.servi
 })
 export class AuthGuardService implements CanActivate {
 
-  constructor(private readonly auth: AuthenticationService,
+  constructor(private auth: AuthenticationService,
               private readonly router: Router) { }
 
   canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
     if(!this.auth.isLoggedIn) {
+      console.log(state.url)
       this.auth.redirectUrl = state.url.slice(1);
+      console.log(this.auth.redirectUrl)
       this.router.navigate(['login']);
       return false;
     }

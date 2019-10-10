@@ -1,6 +1,6 @@
 <body>
-  <div class="login-background">
-    <img [src]="loginBackgroundSrc">
+  <div *ngIf="imgSrc !== ''" class="login-background">
+    <img [src]="imgSrc">
     <div class="background-blur"></div>
   </div>
   <app-nav-menu></app-nav-menu>
