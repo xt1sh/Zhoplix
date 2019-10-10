@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
 import { AuthenticationService } from 'src/app/services/authentication/authentication.service';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 
 
 @Component({
@@ -21,7 +21,9 @@ export class LoginComponent implements OnInit {
 
   constructor(private formBuilder: FormBuilder,
      private auth: AuthenticationService,
-     private router: Router) { }
+     private router: Router,
+     private readonly activatedRoute: ActivatedRoute
+     ) { }
 
   ngOnInit() {
 
@@ -32,10 +34,12 @@ export class LoginComponent implements OnInit {
         .subscribe(res => {
           this.auth.setToken(res, this.loginForm.controls['rememberMe'].value);
         });
-    if (this.auth.redirectUrl) {
-      this.router.navigate([this.auth.redirectUrl]);
-      this.auth.redirectUrl = null;
-    }
+    this.activatedRoute.queryParams.subscribe(params => {
+      const returnUrl = params['returnUrl'];
+      if(returnUrl) {
+        this.router.navigate([returnUrl]);
+      }
+    })
   }
 
 }
