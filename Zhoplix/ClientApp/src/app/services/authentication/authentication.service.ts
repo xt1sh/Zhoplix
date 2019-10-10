@@ -10,14 +10,13 @@ import { JwtHelperService } from '@auth0/angular-jwt';
 })
 export class AuthenticationService {
 
-  public redirectUrl: string;
+  public redirectUrl: string = '';
 
-constructor(private readonly http: HttpClient,
-            private readonly cookieService: CookieService,
-            @Inject('BASE_URL') private readonly originUrl: string) { }
+  constructor(private readonly http: HttpClient,
+              private readonly cookieService: CookieService,
+              @Inject('BASE_URL') private readonly originUrl: string) { }
 
   login(userCredentials: Login): Observable<HttpResponse<any>>  {
-
     return this.http.post<Login>(`${this.originUrl}Authentication/Login`, userCredentials,
                                 { observe: 'response' });
   }

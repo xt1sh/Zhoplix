@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
+import { Validators, FormBuilder } from '@angular/forms';
 import { AuthenticationService } from 'src/app/services/authentication/authentication.service';
 import { Router, ActivatedRoute } from '@angular/router';
 
@@ -17,29 +17,36 @@ export class LoginComponent implements OnInit {
     rememberMe: [true]
   });
 
-  backgroundImgSrc = 'background/background.jpg';
+  returnUrl: string;
+  loginSpinner: boolean;
 
   constructor(private formBuilder: FormBuilder,
      private auth: AuthenticationService,
      private router: Router,
-     private readonly activatedRoute: ActivatedRoute
-     ) { }
+     private route: ActivatedRoute) { }
 
   ngOnInit() {
-
+    if(this.auth.isLoggedIn) {
+      this.router.navigate(['']);
+    }
+    this.loginSpinner = false;
+    const query = this.route.snapshot.queryParams['returnUrl'];
+    this.returnUrl = query ? query.slice(1) : '';
   }
 
   onSubmit() {
+    this.loginSpinner = true;
+    let password = this.loginForm.controls['password'];
+    password.setErrors({'incorrect': true});
     this.auth.login(this.loginForm.value)
         .subscribe(res => {
-          this.auth.setToken(res, this.loginForm.controls['rememberMe'].value);
-        });
-    this.activatedRoute.queryParams.subscribe(params => {
-      const returnUrl = params['returnUrl'];
-      if(returnUrl) {
-        this.router.navigate([returnUrl]);
-      }
-    })
-  }
 
+          this.auth.setToken(res, this.loginForm.controls['rememberMe'].value);
+          this.router.navigate([this.returnUrl]);
+          this.loginSpinner = false;
+        }, error => {
+          this.loginSpinner = false;
+          password.setValue('');
+        });
+  }
 }

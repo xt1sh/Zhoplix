@@ -1,6 +1,5 @@
-
-
-<div class="login-body">
+<div *ngIf="loginSpinner"><mat-spinner></mat-spinner></div>
+<div *ngIf="!loginSpinner" class="login-body">
   <mat-card class="login-body-container" fxFlex="500px" fxFlex.xs="100%">
       <h1>Sign In</h1>
       <form class="login-form-body" [formGroup]="loginForm" autocomplete="off" novalidate (ngSubmit)="onSubmit()" fxLayout="column wrap"
@@ -12,6 +11,7 @@
         </mat-form-field>
         <mat-form-field class="password-field">
           <input matInput type="text" placeholder="Password" formControlName="password">
+          <mat-error *ngIf="loginForm.controls['password'].hasError('incorrect')">Wrong password</mat-error>
           <mat-error *ngIf="loginForm.controls['password'].hasError('required')">Password is required</mat-error>
         </mat-form-field>
       </mat-card-content>
