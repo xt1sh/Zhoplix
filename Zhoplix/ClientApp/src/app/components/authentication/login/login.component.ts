@@ -17,8 +17,6 @@ export class LoginComponent implements OnInit {
     rememberMe: [true]
   });
 
-  backgroundImgSrc = 'background/background.jpg';
-
   constructor(private formBuilder: FormBuilder,
      private auth: AuthenticationService,
      private router: Router) { }

@@ -1,7 +1,7 @@
 <body>
-  <div *ngIf="imgSrc !== ''" class="login-background">
-    <img [src]="imgSrc">
-    <div class="background-blur"></div>
+  <div class="login-background">
+    <img *ngIf="imgSrc !== ''" [src]="imgSrc">
+    <div *ngIf="url == 'login'" class="background-blur"></div>
   </div>
   <app-nav-menu></app-nav-menu>
   <div class="route-wrapper">

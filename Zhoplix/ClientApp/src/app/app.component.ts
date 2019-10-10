@@ -10,7 +10,7 @@ export class AppComponent {
 
   title = 'app';
   imgSrc = '';
-
+  url = '';
   constructor(private readonly router: Router) {
     router.events.subscribe(() => {
       this.checkBackground();
@@ -21,8 +21,10 @@ export class AppComponent {
     BACKGROUNDS.forEach(element => {
       if(element.routes.includes(this.router.url.slice(1))) {
         this.imgSrc = element.imageSrc;
+        this.url = this.router.url.slice(1);
       } else {
         this.imgSrc = '';
+        this.url = '';
       }
     });
   }
