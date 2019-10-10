@@ -5,15 +5,17 @@ import { LoginComponent } from "src/app/components/authentication/login/login.co
 import { AuthGuardService } from "./auth-guard/auth-guard.service";
 import { RoleGuardService } from "./role-guard/role-guard.service";
 import { Roles } from "src/app/models/roles";
+import { RegistrationComponent } from "src/app/components/authentication/registration/registration.component";
 
 export const ROUTES: Routes = [
   { path: '', component: HomeComponent, pathMatch: 'full'},
   { path: 'login', component: LoginComponent, pathMatch: 'full'},
+  { path: 'signup', component: RegistrationComponent, pathMatch: 'full'},
   {
     path: 'admin',
     component: AdminComponent,
     canActivate: [RoleGuardService],
-    data: {
+    data: { 
       expectedRole: Roles.Admin
     }
   },

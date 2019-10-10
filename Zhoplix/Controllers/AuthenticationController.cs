@@ -27,9 +27,6 @@ namespace Zhoplix.Controllers
         private readonly IAuthenticationService _authentication;
         private readonly UserManager<User> _userManager;
         private readonly IMapper _mapper;
-        private readonly ITokenHandler _tokenHandler;
-        private readonly JwtConfiguration _jwtConfig;
-        private readonly IRepository<User> _userRepository;
         private readonly ILogger<AuthenticationController> _logger;
 
         public AuthenticationController(UserManager<User> userManager,
@@ -43,9 +40,6 @@ namespace Zhoplix.Controllers
         {
             _userManager = userManager;
             _mapper = mapper;
-            _tokenHandler = tokenHandler;
-            _jwtConfig = jwtConfig.Value;
-            _userRepository = userRepository;
             _authentication = authentication;
             _logger = logger;
         }
