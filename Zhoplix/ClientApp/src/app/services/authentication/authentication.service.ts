@@ -4,6 +4,8 @@ import { Login } from 'src/app/models/Login';
 import { Observable } from 'rxjs';
 import { CookieService } from 'ngx-cookie-service';
 import { JwtHelperService } from '@auth0/angular-jwt';
+import { CurrentUser } from 'src/app/models/current-user';
+import decode from 'jwt-decode';
 
 @Injectable({
   providedIn: 'root'
@@ -20,6 +22,13 @@ constructor(private readonly http: HttpClient,
 
     return this.http.post<Login>(`${this.originUrl}Authentication/Login`, userCredentials,
                                 { observe: 'response' });
+  }
+
+  getCurrentUser(): CurrentUser {
+    let user: CurrentUser;
+    const tokenPayload = decode(localStorage.getItem('access_token'));
+    user.role = tokenPayload['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];
+    return user;
   }
 
   setToken(authResult, setRefresh = true): void {
