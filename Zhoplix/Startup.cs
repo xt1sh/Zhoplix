@@ -104,7 +104,7 @@ namespace Zhoplix
             services.AddAutoMapper(typeof(Startup));
 
             services.AddSingleton<ITokenHandler, TokenHandler>();
-            services.AddSingleton<IAuthenticationService, AuthenticationService>();
+            services.AddScoped<IAuthenticationService, AuthenticationService>();
 
             services.AddCors(options =>
             {

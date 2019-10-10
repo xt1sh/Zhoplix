@@ -10,31 +10,36 @@ import { tap } from 'rxjs/operators';
 })
 export class AuthenticationService {
 
+  public redirectUrl: string;
+
 constructor(private http: HttpClient,
             private cookieService: CookieService,
             @Inject('BASE_URL') private readonly originUrl: string) { }
 
-  login(userCredentials: Login) : Observable<HttpResponse<any>>  {
+  login(userCredentials: Login): Observable<HttpResponse<any>>  {
 
     return this.http.post<Login>(`${this.originUrl}Authentication/Login`, userCredentials, {
       headers: new HttpHeaders({
         'Content-Type': 'application/json'
       }),
         observe: 'response'});
-     
-
   }
 
-  setToken(authResult): void {
-    var expirationTime = new Date();
+  setToken(authResult, setRefresh = true): void {
+    const expirationTime = new Date();
     expirationTime.setSeconds(authResult.body.expirationTime);
-    localStorage.setItem("expires_in", expirationTime.toString());
-    localStorage.setItem("access_token", authResult.body.accessToken );
-    this.cookieService.set("refresh_token", authResult.body.refreshToken, 30);
+    localStorage.setItem('expires_in', expirationTime.toString());
+    localStorage.setItem('access_token', authResult.body.accessToken);
+    if (setRefresh) {
+      this.cookieService.set('refresh_token', authResult.body.refreshToken, 30);
+    }
   }
 
   getToken(): string {
     return localStorage.getItem('accessToken');
   }
 
+  get isLoggedIn(): boolean {
+    return localStorage.getItem('access_token') != null;
+  }
 }

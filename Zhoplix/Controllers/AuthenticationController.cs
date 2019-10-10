@@ -54,16 +54,11 @@ namespace Zhoplix.Controllers
         public async Task<IActionResult> Registration(RegistrationViewModel model)
         {
             var user = _mapper.Map<RegistrationViewModel, User>(model);
-            var response = await _authentication.CreateUserAsync(user, model.Password, "Member");
+            var (isSuccess, response) = await _authentication.CreateUserAsync(user, model.Password, "Member");
 
-            if (response.Success)
-            { 
-                return Ok(new
-                {
-                    accessToken = response.AccessToken,
-                    refreshToken = response.RefreshToken,
-                    expirationTime = response.ExpirationTime
-                });
+            if (isSuccess)
+            {
+                return Ok(response);
             }
 
             return BadRequest();
@@ -74,30 +69,19 @@ namespace Zhoplix.Controllers
         public async Task<IActionResult> Login(LoginViewModel model)
         {
             var user = await _userManager.FindByNameAsync(model.Login) ?? await _userManager.FindByEmailAsync(model.Login);
-            var response = await _authentication.AuthenticateAsync(user, model.Password, model.RememberMe);
+            var (isSuccess, response) = await _authentication.AuthenticateAsync(user, model.Password, model.RememberMe);
 
-            if (response.Success)
-            { 
+            if (isSuccess)
+            {
 
                 if (model.RememberMe)
-                    return Ok(new
-                    {
-                        accessToken = response.AccessToken,
-                        refreshToken = response.RefreshToken,
-                        expirationTime = response.ExpirationTime
-                    });
+                    return Ok(response);
 
-                return Ok(new
-                {
-                    accessToken = response.AccessToken,
-                    expirationTime = response.ExpirationTime
-                });
+                return Ok(response);
             }
 
             return BadRequest();
         }
-        
-        
     }
-    
+ 
 }

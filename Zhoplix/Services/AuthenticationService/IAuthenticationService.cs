@@ -10,8 +10,8 @@ namespace Zhoplix.Services.AuthenticationService
 {
     public interface IAuthenticationService
     {
-        Task<DefaultResponse> AuthenticateAsync(User user, string password, bool rememberMe);
+        Task<(bool, AccessTokenResponse)> AuthenticateAsync(User user, string password, bool rememberMe);
 
-        Task<DefaultResponse> CreateUserAsync(User user, string password, string role);
+        Task<(bool, DefaultResponse)> CreateUserAsync(User user, string password, string role);
     }
 }

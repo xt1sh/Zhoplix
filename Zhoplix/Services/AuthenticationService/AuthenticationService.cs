@@ -32,7 +32,7 @@ namespace Zhoplix.Services.AuthenticationService
             _userRepository = userRepository;
         }
 
-        public async Task<DefaultResponse> AuthenticateAsync(User user, string password, bool rememberMe)
+        public async Task<(bool, AccessTokenResponse)> AuthenticateAsync(User user, string password, bool rememberMe)
         {
             if (user != null && await _userManager.CheckPasswordAsync(user, password))
             {
@@ -50,16 +50,16 @@ namespace Zhoplix.Services.AuthenticationService
                     user.RefreshToken = refreshToken;
                     await _userRepository.ChangeObjectAsync(user);
 
-                    return new DefaultResponse(true, accessToken, refreshToken, _jwtConfig.AccessExpirationTime);
+                    return (true, new DefaultResponse(accessToken, refreshToken, _jwtConfig.AccessExpirationTime));
                 }
 
-                return new DefaultResponse(true, accessToken, null, _jwtConfig.AccessExpirationTime);
+                return (true, new AccessTokenResponse(accessToken, _jwtConfig.AccessExpirationTime));
             }
 
-            return new DefaultResponse(false);
+            return (false, null);
         }
 
-        public async Task<DefaultResponse> CreateUserAsync(User user, string password, string role)
+        public async Task<(bool, DefaultResponse)> CreateUserAsync(User user, string password, string role)
         {
             var result = await _userManager.CreateAsync(user, password);
 
@@ -79,10 +79,10 @@ namespace Zhoplix.Services.AuthenticationService
                 user.RefreshToken = refreshToken;
                 await _userRepository.ChangeObjectAsync(user);
 
-                return new DefaultResponse(true, accessToken, refreshToken, _jwtConfig.AccessExpirationTime);
+                return (true, new DefaultResponse(accessToken, refreshToken, _jwtConfig.AccessExpirationTime));
 
             }
-            return new DefaultResponse(false);
+            return (false, null);
         }
 
     }
