@@ -32,8 +32,8 @@ namespace Zhoplix.Services.TokenHandler
 
             var key = Encoding.UTF8.GetBytes(_jwtConfiguration.Secret);
 
-            foreach (var role in roles)
-                claims.Add(new Claim(ClaimsIdentity.DefaultRoleClaimType, role));
+            claims.AddRange(from role in roles
+                            select new Claim(ClaimsIdentity.DefaultRoleClaimType, role));
             claims.Add(new Claim("token_type", "access"));
             
             var token = new JwtSecurityToken(

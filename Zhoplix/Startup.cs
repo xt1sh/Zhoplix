@@ -20,6 +20,7 @@ using Zhoplix.Services.TokenHandler;
 using TokenHandler = Zhoplix.Services.TokenHandler.TokenHandler;
 using Zhoplix.Services;
 using Zhoplix.Models;
+using Zhoplix.Services.AuthenticationService;
 
 namespace Zhoplix
 {
@@ -103,6 +104,7 @@ namespace Zhoplix
             services.AddAutoMapper(typeof(Startup));
 
             services.AddSingleton<ITokenHandler, TokenHandler>();
+            services.AddScoped<IAuthenticationService, AuthenticationService>();
 
             services.AddCors(options =>
             {

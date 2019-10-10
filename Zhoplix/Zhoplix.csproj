@@ -45,7 +45,6 @@
 
   <ItemGroup>
     <Folder Include="Controllers\" />
-    <Folder Include="Services\AuthenticationService\Response\" />
     <Folder Include="Services\Repository\" />
     <Folder Include="ViewModels\Title\" />
     <Folder Include="wwwroot\background\" />

@@ -16,6 +16,7 @@ using Zhoplix.ViewModels.Authentication;
 using Zhoplix.Services;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Logging;
+using Zhoplix.Services.AuthenticationService;
 
 namespace Zhoplix.Controllers
 {
@@ -23,6 +24,7 @@ namespace Zhoplix.Controllers
     [ApiController]
     public class AuthenticationController : ControllerBase
     {
+        private readonly IAuthenticationService _authentication;
         private readonly UserManager<User> _userManager;
         private readonly IMapper _mapper;
         private readonly ITokenHandler _tokenHandler;
@@ -35,15 +37,16 @@ namespace Zhoplix.Controllers
             ITokenHandler tokenHandler,
             IOptions<JwtConfiguration> jwtConfig,
             IRepository<User> userRepository,
+            IAuthenticationService authentication,
             ILogger<AuthenticationController> logger
         )
         {
-
             _userManager = userManager;
             _mapper = mapper;
             _tokenHandler = tokenHandler;
             _jwtConfig = jwtConfig.Value;
             _userRepository = userRepository;
+            _authentication = authentication;
             _logger = logger;
         }
 
@@ -51,34 +54,11 @@ namespace Zhoplix.Controllers
         public async Task<IActionResult> Registration(RegistrationViewModel model)
         {
             var user = _mapper.Map<RegistrationViewModel, User>(model);
+            var (isSuccess, response) = await _authentication.CreateUserAsync(user, model.Password, "Member");
 
-            var result = await _userManager.CreateAsync(user, model.Password);
-            
-            if (result.Succeeded)
+            if (isSuccess)
             {
-                await _userManager.AddToRoleAsync(user, "Member");
-                
-
-                var authClaims = new[]
-                {
-                    new Claim(JwtRegisteredClaimNames.Sub, user.UserName),
-                    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
-                };
-
-
-                    
-                var accessToken = await _tokenHandler.GenerateAccessTokenAsync(new List<Claim>(authClaims), _userManager.GetRolesAsync(user).Result);
-                var refreshToken = await _tokenHandler.GenerateRefreshTokenAsync(new List<Claim>(authClaims));
-
-                user.RefreshToken = refreshToken;
-                await _userRepository.ChangeObjectAsync(user);
-
-                return Ok(new
-                {
-                    accessToken = accessToken,
-                    refreshToken = refreshToken,
-                    expirationTime = _jwtConfig.AccessExpirationTime
-                });
+                return Ok(response);
             }
 
             return BadRequest();
@@ -89,33 +69,19 @@ namespace Zhoplix.Controllers
         public async Task<IActionResult> Login(LoginViewModel model)
         {
             var user = await _userManager.FindByNameAsync(model.Login) ?? await _userManager.FindByEmailAsync(model.Login);
+            var (isSuccess, response) = await _authentication.AuthenticateAsync(user, model.Password, model.RememberMe);
 
-            if (user != null && await _userManager.CheckPasswordAsync(user, model.Password))
+            if (isSuccess)
             {
-                var authClaims = new[]
-                {
-                    new Claim(JwtRegisteredClaimNames.Sub, user.UserName),
-                    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
-                };
 
-                var accessToken = await _tokenHandler.GenerateAccessTokenAsync(new List<Claim>(authClaims), _userManager.GetRolesAsync(user).Result);
-                var refreshToken = await _tokenHandler.GenerateRefreshTokenAsync(new List<Claim>(authClaims));
+                if (model.RememberMe)
+                    return Ok(response);
 
-                user.RefreshToken = refreshToken;
-                await _userRepository.ChangeObjectAsync(user);
-
-                return Ok(new
-                {
-                    accessToken = accessToken,
-                    refreshToken = refreshToken,
-                    expirationTime = _jwtConfig.AccessExpirationTime
-                });
+                return Ok(response);
             }
 
             return BadRequest();
         }
-        
-        
     }
-    
+ 
 }
