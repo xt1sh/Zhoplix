@@ -3,6 +3,8 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
+import { MDBBootstrapModule } from 'angular-bootstrap-md';
+import { CarouselModule, WavesModule } from 'angular-bootstrap-md';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CookieService } from 'ngx-cookie-service';
 import { MatAutocompleteModule, MatBadgeModule, MatButtonModule, MatButtonToggleModule,
@@ -23,6 +25,7 @@ import { ROUTES } from './services/route-services/routes';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { AuthGuardService } from './services/route-services/auth-guard/auth-guard.service';
 import { RoleGuardService } from './services/route-services/role-guard/role-guard.service';
+import { RegistrationComponent } from './components/authentication/registration/registration.component';
 
 @NgModule({
   declarations: [
@@ -30,12 +33,16 @@ import { RoleGuardService } from './services/route-services/role-guard/role-guar
     NavMenuComponent,
     HomeComponent,
     LoginComponent,
-    AdminComponent
+    AdminComponent,
+    RegistrationComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
+    MDBBootstrapModule.forRoot(),
     HttpClientModule,
     ReactiveFormsModule,
+    CarouselModule,
+    WavesModule,
     MatAutocompleteModule,
     MatBadgeModule,
     MatButtonModule,

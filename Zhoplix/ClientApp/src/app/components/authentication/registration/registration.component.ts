@@ -7,6 +7,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class RegistrationComponent implements OnInit {
 
+  firstLogo = 'tempLogos/firstLogo.png';
   constructor() { }
 
   ngOnInit() {

@@ -2,10 +2,11 @@
 
 /* Provide sufficient contrast against white background */
 @import '@angular/material/prebuilt-themes/pink-bluegrey.css';
+@import 'bootstrap';
 
-body {
-  background-color: rgb(26, 26, 26)
-}
+// body {
+//   background-color: rgb(26, 26, 26)
+// }
 
 .route-wrapper {
   position: relative;
@@ -58,7 +59,7 @@ header {
 }
 
 .mat-form-field-flex{
-  background-color: #333; 
+  background-color: #333;
   border-radius: 4px;
   color: white;
   height: 50px;
@@ -72,7 +73,7 @@ header {
 .mat-form-field-label {
   padding: 0px 20px 7px;
   color: white;
-} 
+}
 
 .mat-form-field.mat-form-field-invalid .mat-form-field-label {
   color: #E87C03;
@@ -124,4 +125,8 @@ header {
 
 .mat-checkbox-checked.mat-accent .mat-checkbox-background, .mat-checkbox-indeterminate.mat-accent .mat-checkbox-background {
   background-color: white;
-} 
+}
+
+.mat-progress-spinner circle, .mat-spinner circle {
+  stroke: #a71b1b;
+}

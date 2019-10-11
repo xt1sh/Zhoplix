@@ -2,9 +2,32 @@
 .login-body {
     display: flex;
     justify-content: center;
-    
+
 }
 
+.login-spinner-field {
+    min-width: 450px;
+    min-height: 660px;
+    flex-basis: 450px;
+    background-color: rgba(0, 0, 0, 0.75);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    padding: 60px 68px 40px;
+    position: fixed;
+}
+
+.login-spinner {
+    margin: 0 auto;
+    margin-top: 200px;
+}
+
+.incorrect {
+    text-align: center;
+    font-size: 16px;
+    padding-bottom: 16px;
+}
 
 .login-body-container {
     min-height: 660px;
@@ -49,7 +72,7 @@ h1 {
     width: 100%;
     background: #E50914;
     font-size: 16px;
-    font-weight: bold; 
+    font-weight: bold;
 }
 
 
