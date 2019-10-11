@@ -1,0 +1,93 @@
+.simple-container {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+.center-container {
+    display: flex;
+    flex-direction: column;
+    padding: 20px 32px 60px;
+}
+
+.plain-container {
+    text-align: center;
+    flex-basis: 340px;
+}
+
+.first-step-logo {
+    display: inline-block;
+}
+
+.first-logo {
+    margin: 100px 0 20px;
+    width: 50px;
+    height: 50px;
+}
+
+.step-header {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.step-indicator {
+    font-size: 13px;
+}
+.step-title {
+    display: inline-block;
+    font-weight: bold;
+    font-size: 23px;
+}
+
+.context-body {
+    font-size: 17px;
+}
+
+.checked-list {
+    text-align: left;
+}
+
+ul > li {
+    margin-bottom: 5px;
+}
+
+.bullet {
+    list-style: none;
+    padding: 0 0 1em 2em;
+    position: relative;
+}
+
+.checked-list .bullet::before {
+    color: rgba(0, 0, 0, 0);
+    display: block;
+    position: absolute;
+    top: 0.3em;
+    height: 0.3em;
+    width: 0.8em;
+    content: '✓';
+    left: 0.2em;
+    border-bottom: 1px solid #e50914;
+    border-left: 1px solid #e50914;
+    transform: rotate(-45deg);
+}
+
+.submit-btn-container {
+    display: flex;
+    align-items: flex-start;
+    flex-basis: 340px;
+    margin-top: 24px;
+    justify-content: center;
+}
+
+.submit-btn {
+    min-height: 48px;
+    font-weight: normal;
+    font-size: 17px;
+    border-radius: 2px;
+    color: #ffffff;
+    background-color: #e50914;
+    flex-basis: 340px;
+    border: none;
+    width: 100%;
+}
