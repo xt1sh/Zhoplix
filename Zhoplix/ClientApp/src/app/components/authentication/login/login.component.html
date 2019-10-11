@@ -1,5 +1,4 @@
-<div *ngIf="loginSpinner"><mat-spinner></mat-spinner></div>
-<div *ngIf="!loginSpinner" class="login-body">
+<div class="login-body">
   <mat-card class="login-body-container" fxFlex="500px" fxFlex.xs="100%">
       <h1>Sign In</h1>
       <form class="login-form-body" [formGroup]="loginForm" autocomplete="off" novalidate (ngSubmit)="onSubmit()" fxLayout="column wrap"
@@ -23,6 +22,9 @@
       </mat-card-footer>
       </form>
     </mat-card>
+    <div *ngIf="loginSpinner" class="login-spinner-field" fxFlix="500px" fxFlex.xs="100%">
+      <mat-spinner class="login-spinner"></mat-spinner>
+    </div>
 </div>
 
 

@@ -37,7 +37,7 @@ export class LoginComponent implements OnInit {
   onSubmit() {
     this.loginSpinner = true;
     let password = this.loginForm.controls['password'];
-    password.setErrors({'incorrect': true});
+
     this.auth.login(this.loginForm.value)
         .subscribe(res => {
 
@@ -46,7 +46,9 @@ export class LoginComponent implements OnInit {
           this.loginSpinner = false;
         }, error => {
           this.loginSpinner = false;
+          password.markAsUntouched();
           password.setValue('');
+          password.setErrors({'incorrect': true});
         });
   }
 }

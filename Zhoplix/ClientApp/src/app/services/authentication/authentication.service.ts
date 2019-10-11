@@ -36,7 +36,11 @@ export class AuthenticationService {
   }
 
   get isLoggedIn(): boolean {
+    const token = localStorage.getItem('access_token');
+    if(!token) {
+      return false;
+    }
     const jwtHelper = new JwtHelperService();
-    return !jwtHelper.isTokenExpired(localStorage.getItem('access_token'));
+    return !jwtHelper.isTokenExpired(token);
   }
 }
