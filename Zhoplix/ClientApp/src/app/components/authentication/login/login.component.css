@@ -23,6 +23,12 @@
     margin-top: 200px;
 }
 
+.incorrect {
+    text-align: center;
+    font-size: 16px;
+    padding-bottom: 16px;
+}
+
 .login-body-container {
     min-height: 660px;
     flex-basis: 450px;

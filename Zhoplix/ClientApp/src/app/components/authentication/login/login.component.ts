@@ -19,6 +19,7 @@ export class LoginComponent implements OnInit {
 
   returnUrl: string;
   loginSpinner: boolean;
+  incorrect: boolean;
 
   constructor(private formBuilder: FormBuilder,
      private auth: AuthenticationService,
@@ -29,6 +30,7 @@ export class LoginComponent implements OnInit {
     if(this.auth.isLoggedIn) {
       this.router.navigate(['']);
     }
+    this.incorrect = false;
     this.loginSpinner = false;
     const query = this.route.snapshot.queryParams['returnUrl'];
     this.returnUrl = query ? query.slice(1) : '';
@@ -37,18 +39,16 @@ export class LoginComponent implements OnInit {
   onSubmit() {
     this.loginSpinner = true;
     let password = this.loginForm.controls['password'];
-
     this.auth.login(this.loginForm.value)
         .subscribe(res => {
-
+          this.incorrect = false;
           this.auth.setToken(res, this.loginForm.controls['rememberMe'].value);
           this.router.navigate([this.returnUrl]);
           this.loginSpinner = false;
         }, error => {
+          this.incorrect = true;
           this.loginSpinner = false;
-          password.markAsUntouched();
-          password.setValue('');
-          password.setErrors({'incorrect': true});
+          password.reset();
         });
   }
 }
