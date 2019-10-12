@@ -1,4 +1,4 @@
-<mdb-carousel class="carousel slide carousel-fade" [isControls]="false" [animation]="'fade'" [interval]="'0'">
+<mdb-carousel class="carousel slide carousel-fade" [isControls]="false" [animation]="'slide'" [interval]="'0'" [noWrap]="true">
   <mdb-carousel-item>
     <div class="simple-container">
       <div class="center-container">
@@ -29,13 +29,42 @@
           </div>
         </div>
         <div class="submit-btn-container">
-          <button type="button" class="submit-btn">Пошел нахуй?</button>
+          <button type="button" class="submit-btn" (click)="onClickOne()">Пошел нахуй?</button>
         </div>
       </div>
     </div>
   </mdb-carousel-item>
   <mdb-carousel-item>
-    <img class="d-block w-100" src="https://mdbootstrap.com/img/Photos/Slides/img%20(6).jpg" alt="Second slide">
+    <div class="simple-container">
+      <div class="center-container">
+        <div class="plain-container">
+          <div class="step-header-container">
+            <div class="step-header">
+              <span class="step-indicator">
+                STEP <b>2</b> OF <b>3</b>
+              </span>
+              <h1 class="step-title">Здесь могла бы быть ваша реклама</h1>
+            </div>
+          </div>
+          <div class="context-body">
+            <ul class="checked-list">
+              <li class="bullet">
+                В Москве состоялся гей-парад, собрались журналисты, православные активисты, полиция, националисты и разные другие пид@расы. Геи не пришли!
+              </li>
+              <li class="bullet">
+                Вот раньше большая пачка презервативов была на 12 штук, и было очень удобно. А потом сделали по 10 штук. И в чем прикол? Остальные 2 месяца в году не еб@ться что ли?
+              </li>
+              <li class="bullet">
+                  В Воронеже жителям девятиэтажки вместо отопления дали п@зды.
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="submit-btn-container">
+          <button type="button" class="submit-btn" (click)="onClickOne()">Пошел нахуй?</button>
+        </div>
+      </div>
+    </div>
   </mdb-carousel-item>
   <mdb-carousel-item>
     <img class="d-block w-100" src="https://mdbootstrap.com/img/Photos/Slides/img%20(9).jpg" alt="Third slide">
