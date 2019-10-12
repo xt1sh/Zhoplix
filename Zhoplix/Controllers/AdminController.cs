@@ -67,5 +67,10 @@ namespace Zhoplix.Controllers
         {
             return Ok();
         }
+
+        public async Task<IActionResult> UploadPhoto(UploadPhoto photo)
+        {
+            return Ok();
+        }
     }
 }

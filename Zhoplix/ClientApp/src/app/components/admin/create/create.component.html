@@ -1,1 +1,11 @@
-<p>create works!</p>
+<div class="create-container">
+  <div *ngIf="type === 'title'">
+    title
+  </div>
+  <div *ngIf="type === 'season'">
+    season
+  </div>
+  <div *ngIf="type === 'episode'">
+    episode
+  </div>
+</div>

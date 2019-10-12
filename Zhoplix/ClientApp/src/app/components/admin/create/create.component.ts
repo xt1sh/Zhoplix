@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { FormBuilder } from '@angular/forms';
 
 @Component({
   selector: 'app-create',
@@ -7,9 +9,23 @@ import { Component, OnInit } from '@angular/core';
 })
 export class CreateComponent implements OnInit {
 
-  constructor() { }
+  type: string;
+  form: any;
+
+  constructor(private readonly activatedRoute: ActivatedRoute,
+              private readonly fb: FormBuilder) { }
 
   ngOnInit() {
+    this.activatedRoute.params.subscribe(params => {
+      this.type = params['id'].toLowerCase();
+    })
   }
 
+  createForm() {
+    if(this.type === 'title') {
+      this.form = this.fb.group({
+
+      })
+    }
+  }
 }
