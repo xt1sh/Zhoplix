@@ -4,13 +4,23 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Zhoplix.Models;
-using System.Drawing;
+using SixLabors.ImageSharp.Processing;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.PixelFormats;
 using System.IO;
-using System.Drawing.Imaging;
 
 namespace Zhoplix.Services
 {
-    public class MediaService
+    public interface IMediaService
+    {
+        void CreatePhoto(UploadPhoto photo);
+        void CreateResizedPhoto(string inputPath, string outputPath, float percent);
+        void CreateResizedPhoto(UploadPhoto photo, float percent, string addToName);
+        void DeleteAllPhotosWithId(int id);
+        void DeletePhoto(string name);
+    }
+
+    public class MediaService : IMediaService
     {
         private readonly ILogger<MediaService> _logger;
 
@@ -19,21 +29,44 @@ namespace Zhoplix.Services
             _logger = logger;
         }
 
-        public bool CreatePhotoAsync(UploadPhoto photo)
+        public void CreatePhoto(UploadPhoto photo)
         {
-            try
+            using var image = Image.Load<Rgba32>(photo.Photo);
+            Directory.CreateDirectory($"wwwroot/Images/Uploaded/{photo.PhotoId}");
+            image.Save($"wwwroot/Images/Uploaded/{photo.PhotoId}/{photo.PhotoId}.png");
+        }
+
+        public void CreateResizedPhoto(UploadPhoto photo, float percent, string addToName)
+        {
+            Directory.CreateDirectory($"wwwroot/Images/Uploaded/{photo.PhotoId}");
+            using var image = Image.Load<Rgba32>(photo.Photo);
+            image.Mutate(x => x.Resize((int)(image.Width * percent), (int)(image.Height * percent)));
+            image.Save($"wwwroot/Images/Uploaded/{photo.PhotoId}/{photo.PhotoId}_{addToName}.png");
+        }
+
+        public void CreateResizedPhoto(string inputPath, string outputPath, float percent)
+        {
+            Directory.CreateDirectory(outputPath);
+            using var image = Image.Load<Rgba32>(inputPath);
+            image.Mutate(x => x.Resize((int)(image.Width * percent), (int)(image.Height * percent)));
+            image.Save(outputPath);
+        }
+
+        public void DeleteAllPhotosWithId(int id)
+        {
+            var di = new DirectoryInfo($"wwwroot/Images/Uploaded/{id}");
+
+            foreach (FileInfo file in di.GetFiles())
             {
-                using (var image = Image.FromStream(new MemoryStream(photo.Photo)))
-                {
-                    image.Save($"Images/Uploads/{photo.PhotoId}/{photo.PhotoId}.png", ImageFormat.Png);
-                }
-                return true;
+                file.Delete();
             }
-            catch
-            {
-                _logger.LogError($"Failed to create image with {photo.PhotoId} id");
-                return false;
-            }
+            di.Delete();
+        }
+
+        public void DeletePhoto(string name)
+        {
+            var id = name.Split('_')[0];
+            File.Delete($"wwwroot/Images/Uploaded/{id}/{name}");
         }
     }
 }

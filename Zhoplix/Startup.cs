@@ -103,6 +103,7 @@ namespace Zhoplix
 
             services.AddAutoMapper(typeof(Startup));
 
+            services.AddScoped<IMediaService, MediaService>();
             services.AddSingleton<ITokenHandler, TokenHandler>();
             services.AddScoped<IAuthenticationService, AuthenticationService>();
 
@@ -146,6 +147,7 @@ namespace Zhoplix
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "API V1");
             });
 
+            app.UseAuthorization();
             app.UseRouting();
 
             app.UseEndpoints(endpoints =>
