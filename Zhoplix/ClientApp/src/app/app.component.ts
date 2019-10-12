@@ -1,5 +1,5 @@
 import { Component, OnChanges } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, NavigationStart, NavigationEnd } from '@angular/router';
 import { BACKGROUNDS } from './services/background/backgrounds';
 
 @Component({
@@ -12,14 +12,16 @@ export class AppComponent {
   imgSrc = '';
   url = '';
   constructor(private readonly router: Router) {
-    router.events.subscribe(() => {
-      this.checkBackground();
+    router.events.subscribe(event => {
+      if(event instanceof NavigationEnd) {
+        this.checkBackground();
+      }
     });
   }
 
   checkBackground(): void {
     BACKGROUNDS.forEach(element => {
-      if(element.routes.includes(this.router.url.slice(1))) {
+      if(this.router.url.includes(element.route)) {
         this.imgSrc = element.imageSrc;
         this.url = this.router.url.slice(1);
       } else {
