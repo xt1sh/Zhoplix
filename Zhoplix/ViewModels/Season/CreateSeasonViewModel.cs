@@ -9,6 +9,6 @@ namespace Zhoplix.ViewModels.Season
     public class CreateSeasonViewModel
     {
         public string Name { get; set; }
-        public List<CreateEpisodeViewModel> Episodes { get; set; }
+        public int TitleId { get; set; }
     }
 }

@@ -19,13 +19,14 @@ import { TokenInterceptor } from './services/authentication/token.interceptor';
 import { AppComponent } from './app.component';
 import { NavMenuComponent } from './components/nav-menu/nav-menu.component';
 import { HomeComponent } from './components/home/home.component';
-import { AdminComponent } from './components/admin/admin.component';
+import { AdminComponent } from './components/admin/admin/admin.component';
 import { LoginComponent } from './components/authentication/login/login.component';
 import { ROUTES } from './services/route-services/routes';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { AuthGuardService } from './services/route-services/auth-guard/auth-guard.service';
 import { RoleGuardService } from './services/route-services/role-guard/role-guard.service';
 import { RegistrationComponent } from './components/authentication/registration/registration.component';
+import { CreateComponent } from './components/admin/create/create.component';
 
 @NgModule({
   declarations: [
@@ -35,6 +36,7 @@ import { RegistrationComponent } from './components/authentication/registration/
     LoginComponent,
     AdminComponent,
     RegistrationComponent,
+    CreateComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
