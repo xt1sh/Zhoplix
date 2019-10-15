@@ -1,6 +1,16 @@
 <div class="create-container">
   <div *ngIf="type === 'title'">
-    title
+    <form [formGroup]="form">
+      <div>
+        <input type="text" formControlName="name" placeholder="Name">
+      </div>
+      <div>
+        <input type="text" formControlName="description" placeholder="Description">
+      </div>
+      <div>
+        <input type="number" formControlName="ageRestriction" placeholder="Age Restriction">
+      </div>
+    </form>
   </div>
   <div *ngIf="type === 'season'">
     season

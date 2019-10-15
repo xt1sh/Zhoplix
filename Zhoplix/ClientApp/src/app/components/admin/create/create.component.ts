@@ -24,7 +24,9 @@ export class CreateComponent implements OnInit {
   createForm() {
     if(this.type === 'title') {
       this.form = this.fb.group({
-
+        name: '',
+        description: '',
+        ageRestriction: '0'
       })
     }
   }
