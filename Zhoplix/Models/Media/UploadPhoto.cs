@@ -7,7 +7,7 @@ namespace Zhoplix.Models
 {
     public class UploadPhoto
     {
-        public int PhotoId { get; set; }
+        public string PhotoId { get; set; }
         public byte[] Photo { get; set; }
     }
 }

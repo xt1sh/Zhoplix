@@ -17,5 +17,6 @@ namespace Zhoplix.Models
         public float Rating { get; set; }
         [Range(0, 18)]
         public int AgeRestriction { get; set; }
+        public string ImageId { get; set; }
     }
 }

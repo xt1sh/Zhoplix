@@ -32,9 +32,6 @@ namespace Zhoplix.Controllers
 
         public AuthenticationController(UserManager<User> userManager,
             IMapper mapper,
-            ITokenHandler tokenHandler,
-            IOptions<JwtConfiguration> jwtConfig,
-            IRepository<User> userRepository,
             IAuthenticationService authentication,
             ILogger<AuthenticationController> logger
         )
