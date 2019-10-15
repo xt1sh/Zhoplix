@@ -75,20 +75,21 @@ namespace Zhoplix.Controllers
         [HttpPost]
         public IActionResult UploadPhoto(UploadPhoto photo)
         {
+            photo.PhotoId = Guid.NewGuid().ToString();
             _mediaService.CreatePhoto(photo);
             _mediaService.CreateResizedPhoto(photo, 0.1f, "small");
             _mediaService.CreateResizedPhoto(photo, 0.5f, "medium");
-            return Ok();
+            return Ok(new { photo.PhotoId });
         }
 
-        [HttpPost]
+        [HttpDelete]
         public IActionResult DeletePhoto(DeletePhoto photo)
         {
             _mediaService.DeletePhoto(photo.Name);
             return Ok();
         }
 
-        [HttpPost]
+        [HttpDelete]
         public IActionResult DeleteAllPhotos(DeleteAllPhotos id)
         {
             _mediaService.DeleteAllPhotosWithId(id.Id);

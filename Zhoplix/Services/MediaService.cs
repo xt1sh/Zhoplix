@@ -16,7 +16,7 @@ namespace Zhoplix.Services
         void CreatePhoto(UploadPhoto photo);
         void CreateResizedPhoto(string inputPath, string outputPath, float percent);
         void CreateResizedPhoto(UploadPhoto photo, float percent, string addToName);
-        void DeleteAllPhotosWithId(int id);
+        void DeleteAllPhotosWithId(string id);
         void DeletePhoto(string name);
     }
 
@@ -52,7 +52,7 @@ namespace Zhoplix.Services
             image.Save(outputPath);
         }
 
-        public void DeleteAllPhotosWithId(int id)
+        public void DeleteAllPhotosWithId(string id)
         {
             var di = new DirectoryInfo($"wwwroot/Images/Uploaded/{id}");
 
