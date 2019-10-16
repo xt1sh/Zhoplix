@@ -1,4 +1,4 @@
-<mdb-carousel class="carousel slide carousel-fade" [isControls]="false" [animation]="'fade'" [interval]="'0'">
+<mdb-carousel class="carousel slide carousel-fade" [isControls]="false" [animation]="'slide'" [interval]="'0'" [noWrap]="true">
   <mdb-carousel-item>
     <div class="simple-container">
       <div class="center-container">
@@ -29,15 +29,66 @@
           </div>
         </div>
         <div class="submit-btn-container">
-          <button type="button" class="submit-btn">Пошел нахуй?</button>
+          <button type="button" class="submit-btn" (click)="onClickOne(2)">Пошел нахуй?</button>
         </div>
       </div>
     </div>
   </mdb-carousel-item>
   <mdb-carousel-item>
-    <img class="d-block w-100" src="https://mdbootstrap.com/img/Photos/Slides/img%20(6).jpg" alt="Second slide">
+    <div class="simple-container">
+      <div class="center-container">
+          <div class="plain-container">
+          <div class="step-header-container">
+            <div class="step-header">
+              <span class="step-indicator">
+                STEP <b>2</b> OF <b>3</b>
+              </span>
+              <h1 class="step-title">Здесь могла бы быть ваша реклама</h1>
+            </div>
+          </div>
+        </div>
+        <div class="submit-btn-container">
+          <button type="button" class="submit-btn" (click)="onClickOne(3)">Пошел нахуй?</button>
+        </div>
+      </div>
+    </div>
   </mdb-carousel-item>
   <mdb-carousel-item>
-    <img class="d-block w-100" src="https://mdbootstrap.com/img/Photos/Slides/img%20(9).jpg" alt="Third slide">
+      <div class="simple-container">
+          <div class="center-container">
+              <div class="plain-container">
+              <div class="step-header-container">
+                <div class="step-header">
+                  <span class="step-indicator">
+                    STEP <b>3</b> OF <b>3</b>
+                  </span>
+                  <h1 class="step-title">Sign up to start your free month</h1>
+                </div>
+              </div>
+              <form class="registration-form-body" [formGroup]="registrationForm" autocomplete="off" novalidate (ngSubmit)="onSubmit()" fxLayout="column wrap" fxLayoutAlign="center center" fxLayoutGap="10px">
+                <mat-card-content class="form-content">
+                  <mat-error class="incorrect" *ngIf="incorrect">Ты даун?</mat-error>
+                  <mat-form-field class="username-field">
+                    <input matInput class="username-input-field" type="text" placeholder="Username" formControlName="username" id="username" >
+                    <mat-error *ngIf="registrationForm.controls['username'].hasError('required')">Username is required</mat-error>
+                  </mat-form-field>
+                  <mat-form-field class="email-field">
+                      <input matInput class="email-input-field" type="text" placeholder="Email" formControlName="email" id="email" >
+                      <mat-error *ngIf="registrationForm.controls['email'].hasError('required')">Email is required</mat-error>
+                    </mat-form-field>
+                  <mat-form-field class="password-field">
+                    <input matInput type="text" placeholder="Password" formControlName="password">
+                    <mat-error *ngIf="registrationForm.controls['password'].hasError('required')">Password is required</mat-error>
+                  </mat-form-field>
+                </mat-card-content>
+                <mat-card-actions>
+                    <div class="submit-btn-container">
+                      <button type="button" class="submit-btn">Пошел нахуй?</button>
+                    </div>
+                </mat-card-actions>
+              </form>
+            </div>
+          </div>
+        </div>
   </mdb-carousel-item>
 </mdb-carousel>

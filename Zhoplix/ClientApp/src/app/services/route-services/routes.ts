@@ -11,7 +11,8 @@ import { CreateComponent } from "src/app/components/admin/create/create.componen
 export const ROUTES: Routes = [
   { path: '', component: HomeComponent, pathMatch: 'full'},
   { path: 'login', component: LoginComponent},
-  { path: 'signup', component: RegistrationComponent},
+  { path: 'signup/:id', component: RegistrationComponent},
+  { path: 'signup', redirectTo: 'signup/1'},
   {
     path: 'admin',
     component: AdminComponent,
