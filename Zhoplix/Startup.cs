@@ -21,6 +21,7 @@ using TokenHandler = Zhoplix.Services.TokenHandler.TokenHandler;
 using Zhoplix.Services;
 using Zhoplix.Models;
 using Zhoplix.Services.AuthenticationService;
+using Microsoft.AspNetCore.Http.Features;
 
 namespace Zhoplix
 {
@@ -103,6 +104,7 @@ namespace Zhoplix
 
             services.AddAutoMapper(typeof(Startup));
 
+            services.AddScoped<IMediaService, MediaService>();
             services.AddSingleton<ITokenHandler, TokenHandler>();
             services.AddScoped<IAuthenticationService, AuthenticationService>();
 
@@ -115,6 +117,13 @@ namespace Zhoplix
             });
 
             services.AddControllersWithViews();
+
+            services.Configure<FormOptions>(opt =>
+            {
+                opt.ValueLengthLimit = int.MaxValue;
+                opt.MultipartBodyLengthLimit = long.MaxValue;
+            });
+
             // In production, the Angular files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
             {
@@ -146,6 +155,7 @@ namespace Zhoplix
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "API V1");
             });
 
+            app.UseAuthorization();
             app.UseRouting();
 
             app.UseEndpoints(endpoints =>

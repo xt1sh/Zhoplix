@@ -2,13 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Zhoplix.ViewModels.Episode;
 
-namespace Zhoplix.ViewModels.Season
+namespace Zhoplix.Models.Media
 {
-    public class CreateSeasonViewModel
+    public class DeletePhoto
     {
         public string Name { get; set; }
-        public int TitleId { get; set; }
     }
 }
