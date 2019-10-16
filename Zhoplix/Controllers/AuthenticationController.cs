@@ -17,6 +17,7 @@ using Zhoplix.Services;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Logging;
 using Zhoplix.Services.AuthenticationService;
+using System.Text.RegularExpressions;
 
 namespace Zhoplix.Controllers
 {
@@ -31,9 +32,6 @@ namespace Zhoplix.Controllers
 
         public AuthenticationController(UserManager<User> userManager,
             IMapper mapper,
-            ITokenHandler tokenHandler,
-            IOptions<JwtConfiguration> jwtConfig,
-            IRepository<User> userRepository,
             IAuthenticationService authentication,
             ILogger<AuthenticationController> logger
         )
@@ -47,7 +45,7 @@ namespace Zhoplix.Controllers
         [HttpPost]
         public async Task<IActionResult> Registration(RegistrationViewModel model)
         {
-            var user = _mapper.Map<RegistrationViewModel, User>(model);
+            var user = _mapper.Map<User>(model);
             var (isSuccess, response) = await _authentication.CreateUserAsync(user, model.Password, "Member");
 
             if (isSuccess)
@@ -62,7 +60,12 @@ namespace Zhoplix.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(LoginViewModel model)
         {
-            var user = await _userManager.FindByNameAsync(model.Login) ?? await _userManager.FindByEmailAsync(model.Login);
+            var regex = new Regex(@"^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$");
+
+            var user = regex.IsMatch(model.Login)
+                    ? await _userManager.FindByEmailAsync(model.Login)
+                    : await _userManager.FindByNameAsync(model.Login);
+
             var (isSuccess, response) = await _authentication.AuthenticateAsync(user, model.Password, model.RememberMe);
 
             if (isSuccess)

@@ -25,6 +25,10 @@ namespace Zhoplix
                     logging.AddDebug();
                     logging.AddEventSourceLogger();
                 })
-                .UseStartup<Startup>();
+                .UseStartup<Startup>()
+                .UseKestrel(opt =>
+                {
+                    opt.Limits.MaxRequestBodySize = null;
+                });
     }
 }
