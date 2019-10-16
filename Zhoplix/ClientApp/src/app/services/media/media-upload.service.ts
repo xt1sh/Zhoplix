@@ -1,5 +1,5 @@
 import { Injectable, Inject } from '@angular/core';
-import { HttpRequest, HttpClient, HttpEventType } from '@angular/common/http';
+import { HttpRequest, HttpClient, HttpEventType, HttpHeaders } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
 
 @Injectable({
@@ -34,6 +34,7 @@ export class MediaUploadService {
 
     const uploadReq = new HttpRequest('POST', `${this.originUrl}Admin/UploadVideo`, formData, {
       reportProgress: true,
+
     });
 
     this.http.request(uploadReq).subscribe(event => {
@@ -41,6 +42,7 @@ export class MediaUploadService {
         this.progress.next(Math.round(100 * event.loaded / event.total));
       else if (event.type === HttpEventType.Response) {
         this.message.next(event.body.toString());
+        console.log(event.body.toString())
       }
     });
   }
