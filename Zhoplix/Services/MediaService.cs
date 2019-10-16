@@ -8,6 +8,9 @@ using SixLabors.ImageSharp.Processing;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using System.IO;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Hosting;
+using System.Net.Http.Headers;
 
 namespace Zhoplix.Services
 {
@@ -18,15 +21,19 @@ namespace Zhoplix.Services
         void CreateResizedPhoto(UploadPhoto photo, float percent, string addToName);
         void DeleteAllPhotosWithId(string id);
         void DeletePhoto(string name);
+        bool UploadVideo(IFormFile file);
     }
 
     public class MediaService : IMediaService
     {
         private readonly ILogger<MediaService> _logger;
+        private readonly IWebHostEnvironment _hostingEnvironment;
 
-        public MediaService(ILogger<MediaService> logger)
+        public MediaService(ILogger<MediaService> logger,
+            IWebHostEnvironment hostingEnvironment)
         {
             _logger = logger;
+            _hostingEnvironment = hostingEnvironment;
         }
 
         public void CreatePhoto(UploadPhoto photo)
@@ -67,6 +74,35 @@ namespace Zhoplix.Services
         {
             var id = name.Split('_')[0];
             File.Delete($"wwwroot/Images/Uploaded/{id}/{name}");
+        }
+
+        public bool UploadVideo(IFormFile file)
+        {
+            try
+            {
+                var folderName = "UploadVideos";
+                var webRoot = _hostingEnvironment.WebRootPath;
+                var newPath = Path.Combine(webRoot, folderName);
+                if (!Directory.Exists(newPath))
+                    Directory.CreateDirectory(newPath);
+
+                if (file.Length > 0)
+                {
+                    var fileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
+                    var fullPath = Path.Combine(newPath, fileName);
+                    using (var stream = new FileStream(fullPath, FileMode.Create))
+                    {
+                        file.CopyTo(stream);
+                    }
+                }
+
+                return true;
+            }
+            catch(Exception e)
+            {
+                _logger.LogError($"Failed to create file {file.Name} with exception: {e}");
+                return false;
+            }
         }
     }
 }

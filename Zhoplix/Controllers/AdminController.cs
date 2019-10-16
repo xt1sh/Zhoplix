@@ -67,9 +67,14 @@ namespace Zhoplix.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> UploadVideo(UploadVideo video)
+        [DisableRequestSizeLimit]
+        public IActionResult UploadVideo()
         {
-            return Ok();
+            var file = Request.Form.Files[0];
+            if (_mediaService.UploadVideo(file))
+                return Ok();
+
+            return BadRequest();
         }
 
         [HttpPost]

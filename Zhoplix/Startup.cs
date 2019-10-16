@@ -21,6 +21,7 @@ using TokenHandler = Zhoplix.Services.TokenHandler.TokenHandler;
 using Zhoplix.Services;
 using Zhoplix.Models;
 using Zhoplix.Services.AuthenticationService;
+using Microsoft.AspNetCore.Http.Features;
 
 namespace Zhoplix
 {
@@ -116,6 +117,13 @@ namespace Zhoplix
             });
 
             services.AddControllersWithViews();
+
+            services.Configure<FormOptions>(opt =>
+            {
+                opt.ValueLengthLimit = int.MaxValue;
+                opt.MultipartBodyLengthLimit = long.MaxValue;
+            });
+
             // In production, the Angular files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
             {
