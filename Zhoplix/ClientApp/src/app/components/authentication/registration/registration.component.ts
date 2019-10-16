@@ -1,5 +1,8 @@
 import { Component, OnInit, AfterViewInit, ElementRef, Renderer2, ViewChild } from '@angular/core';
-import {SlideComponent, CarouselComponent} from 'angular-bootstrap-md';
+import { SlideComponent, CarouselComponent } from 'angular-bootstrap-md';
+import { FormBuilder, Validators } from '@angular/forms';
+import { AuthenticationService } from 'src/app/services/authentication/authentication.service';
+
 @Component({
   selector: 'app-registration',
   templateUrl: './registration.component.html',
@@ -7,12 +10,26 @@ import {SlideComponent, CarouselComponent} from 'angular-bootstrap-md';
 })
 export class RegistrationComponent implements AfterViewInit {
 
-  @ViewChild(CarouselComponent, null) item: ElementRef;
+  @ViewChild(CarouselComponent, {static: true}) item: CarouselComponent;
   firstLogo = 'tempLogos/firstLogo.png';
-  constructor(private rd: Renderer2) { }
+  registrationForm = this.formBuilder.group({
+    username: [undefined, Validators.required],
+    email: [undefined, Validators.required],
+    password: [undefined, Validators.required],
+  });
 
-    onClickOne() {
+  constructor(private rd: Renderer2, private formBuilder: FormBuilder, private auth: AuthenticationService) { }
+
+  onClickOne() {
       this.item.nextSlide();
+  }
+
+  onSubmit() {
+    this.auth.signUp(this.registrationForm.value)
+    .subscribe(res => {
+      this.auth.setToken(res);
+      
+    })
   }
 
   ngAfterViewInit() {
