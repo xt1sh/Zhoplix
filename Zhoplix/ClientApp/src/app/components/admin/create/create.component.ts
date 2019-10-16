@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { FormBuilder } from '@angular/forms';
+import { MediaUploadService } from '../../../services/media/media-upload.service';
 
 @Component({
   selector: 'app-create',
@@ -11,13 +12,18 @@ export class CreateComponent implements OnInit {
 
   type: string;
   form: any;
+  progress: number;
 
   constructor(private readonly activatedRoute: ActivatedRoute,
-              private readonly fb: FormBuilder) { }
+              private readonly fb: FormBuilder,
+              private readonly media: MediaUploadService) { }
 
   ngOnInit() {
     this.activatedRoute.params.subscribe(params => {
       this.type = params['id'].toLowerCase();
+    });
+    this.media.getProgress().subscribe(value => {
+      this.progress = value;
     })
   }
 
@@ -30,4 +36,6 @@ export class CreateComponent implements OnInit {
       })
     }
   }
+
+
 }
