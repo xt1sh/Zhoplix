@@ -8,6 +8,7 @@ namespace Zhoplix.ViewModels.Episode
     public class CreateEpisodeViewModel
     {
         public string Name { get; set; }
-        public byte[] Video { get; set; }
+        public int SeasonId { get; set; }
+        public string VideoId { get; set; }
     }
 }
