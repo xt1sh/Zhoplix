@@ -41,9 +41,30 @@ export class MediaUploadService {
       if (event.type === HttpEventType.UploadProgress)
         this.progress.next(Math.round(100 * event.loaded / event.total));
       else if (event.type === HttpEventType.Response) {
-        this.message.next(event.body.toString());
-        console.log(event.body.toString())
+        //this.message.next(event.body.toString());
       }
     });
+  }
+
+  uploadPhoto(photo) {
+    if(!photo)
+      return;
+
+    this.progress.next(0);
+    let reader = new FileReader();
+    reader.readAsDataURL(photo);
+    reader.onload = () => {
+      const uploadReq = new HttpRequest('POST', `${this.originUrl}Admin/UploadPhoto`, {photo: reader.result.toString().split(',')[1]}, {
+        reportProgress: true,
+      });
+      this.http.request(uploadReq).subscribe(event => {
+        if (event.type === HttpEventType.UploadProgress)
+          this.progress.next(Math.round(100 * event.loaded / event.total));
+        else if (event.type === HttpEventType.Response) {
+          this.progress.next(-1);
+          this.message.next(event.body['photoId'].toString());
+        }
+      });
+    }
   }
 }
