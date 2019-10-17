@@ -26,7 +26,8 @@ import { JwtHelperService } from '@auth0/angular-jwt';
 import { AuthGuardService } from './services/route-services/auth-guard/auth-guard.service';
 import { RoleGuardService } from './services/route-services/role-guard/role-guard.service';
 import { RegistrationComponent } from './components/authentication/registration/registration.component';
-import { CreateComponent } from './components/admin/create/create.component';
+import { CreateComponent } from './components/admin/create/create/create.component';
+import { TitleComponent } from './components/admin/create/title/title.component';
 
 @NgModule({
   declarations: [
@@ -36,7 +37,8 @@ import { CreateComponent } from './components/admin/create/create.component';
     LoginComponent,
     AdminComponent,
     RegistrationComponent,
-    CreateComponent
+    CreateComponent,
+    TitleComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),

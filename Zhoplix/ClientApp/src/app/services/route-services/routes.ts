@@ -6,7 +6,8 @@ import { AuthGuardService } from "./auth-guard/auth-guard.service";
 import { RoleGuardService } from "./role-guard/role-guard.service";
 import { Roles } from "src/app/models/roles";
 import { RegistrationComponent } from "src/app/components/authentication/registration/registration.component";
-import { CreateComponent } from "src/app/components/admin/create/create.component";
+import { CreateComponent } from "src/app/components/admin/create/create/create.component";
+import { TitleComponent } from '../../components/admin/create/title/title.component';
 
 export const ROUTES: Routes = [
   { path: '', component: HomeComponent, pathMatch: 'full'},
@@ -20,8 +21,14 @@ export const ROUTES: Routes = [
     data: {
       expectedRole: Roles.Admin
     },
-    children: [
-      { path: 'create/:id', component: CreateComponent}
+    children: [{ 
+        path: 'create', 
+        component: CreateComponent,
+        children: [{
+          path: 'title',
+          component: TitleComponent
+        }]
+      }
     ]
   },
   { path: '**', redirectTo: ''}
