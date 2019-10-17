@@ -78,12 +78,12 @@ namespace Zhoplix.Controllers
         }
 
         [HttpPost]
-        public IActionResult UploadPhoto(UploadPhoto photo)
+        public async Task<IActionResult> UploadPhoto(UploadPhoto photo)
         {
             photo.PhotoId = Guid.NewGuid().ToString();
-            _mediaService.CreatePhoto(photo);
-            _mediaService.CreateResizedPhoto(photo, 0.1f, "small");
-            _mediaService.CreateResizedPhoto(photo, 0.5f, "medium");
+            await _mediaService.CreatePhoto(photo);
+            await _mediaService.CreateResizedPhoto(photo, 0.1f, "small");
+            await _mediaService.CreateResizedPhoto(photo, 0.5f, "medium");
             return Ok(new { photo.PhotoId });
         }
 

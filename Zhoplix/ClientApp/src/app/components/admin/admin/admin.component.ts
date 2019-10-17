@@ -1,5 +1,3 @@
-import { AdminService } from './../../../services/admin/admin.service';
-import { FormGroup, FormControl, FormArray, FormBuilder } from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -9,8 +7,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AdminComponent implements OnInit {
 
-  constructor(private readonly adminService: AdminService,
-              private readonly fb: FormBuilder) { }
+  constructor() { }
 
   ngOnInit() {}
 }
