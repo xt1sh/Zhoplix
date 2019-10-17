@@ -1,11 +1,12 @@
 import { Inject, Injectable } from '@angular/core';
 import { HttpClient, HttpResponse, HttpHeaders } from '@angular/common/http';
-import { Login } from 'src/app/models/Login';
+import { Login } from 'src/app/models/login';
 import { Observable } from 'rxjs';
 import { CookieService } from 'ngx-cookie-service';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { CurrentUser } from 'src/app/models/current-user';
 import decode from 'jwt-decode';
+import { Registration } from 'src/app/models/registration';
 
 @Injectable({
   providedIn: 'root'
@@ -20,6 +21,11 @@ export class AuthenticationService {
 
   login(userCredentials: Login): Observable<HttpResponse<any>>  {
     return this.http.post<Login>(`${this.originUrl}Authentication/Login`, userCredentials,
+                                { observe: 'response' });
+  }
+
+  signUp(userCredentials: Registration): Observable<HttpResponse<any>> {
+    return this.http.post<Registration>(`${this.originUrl}Authentication/Registration`, userCredentials, 
                                 { observe: 'response' });
   }
 

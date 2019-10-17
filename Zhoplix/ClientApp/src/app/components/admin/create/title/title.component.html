@@ -1,0 +1,18 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div>
+        <input type="text" formControlName="name" placeholder="Name">
+    </div>
+    <div>
+        <input type="text" formControlName="description" placeholder="Description">
+    </div>
+    <div>
+        <input type="number" formControlName="ageRestriction" placeholder="Age Restriction">
+    </div>
+    <div>
+        <input #file type="file" (change)="uploadPhoto(file.files)">
+    </div>
+    <div *ngIf="progress > 0 && progress < 100">
+        {{progress}}%
+    </div>
+    <button type="submit">Submit</button>
+</form>
