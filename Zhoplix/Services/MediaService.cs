@@ -21,7 +21,7 @@ namespace Zhoplix.Services
         void CreateResizedPhoto(UploadPhoto photo, float percent, string addToName);
         void DeleteAllPhotosWithId(string id);
         void DeletePhoto(string name);
-        bool UploadVideo(IFormFile file);
+        Task<bool> UploadVideo(IFormFile file);
     }
 
     public class MediaService : IMediaService
@@ -76,7 +76,7 @@ namespace Zhoplix.Services
             File.Delete($"wwwroot/Images/Uploaded/{id}/{name}");
         }
 
-        public bool UploadVideo(IFormFile file)
+        public async Task<bool> UploadVideo(IFormFile file)
         {
             try
             {
@@ -90,10 +90,8 @@ namespace Zhoplix.Services
                 {
                     var fileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
                     var fullPath = Path.Combine(newPath, fileName);
-                    using (var stream = new FileStream(fullPath, FileMode.Create))
-                    {
-                        file.CopyTo(stream);
-                    }
+                    using var stream = new FileStream(fullPath, FileMode.Create);
+                    await Task.Run(() => { file.CopyTo(stream); });
                 }
 
                 return true;

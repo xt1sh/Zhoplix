@@ -10,6 +10,9 @@
       <div>
         <input type="number" formControlName="ageRestriction" placeholder="Age Restriction">
       </div>
+      <div>
+        <input #file type="file" (change)="uploadPhoto(file.files)">
+      </div>
     </form>
   </div>
   <div *ngIf="type === 'season'">
