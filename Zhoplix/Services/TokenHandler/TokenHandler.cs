@@ -18,12 +18,10 @@ namespace Zhoplix.Services.TokenHandler
     
     public class TokenHandler : ITokenHandler
     {
-        private readonly IConfiguration _config;
         private readonly JwtConfiguration _jwtConfiguration;
 
-        public TokenHandler(IConfiguration config, IOptions<JwtConfiguration> jwtConfiguration)
+        public TokenHandler(IOptions<JwtConfiguration> jwtConfiguration)
         {
-            _config = config;
             _jwtConfiguration = jwtConfiguration.Value;
         }
 

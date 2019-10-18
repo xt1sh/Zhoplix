@@ -29,6 +29,11 @@ export class AuthenticationService {
                                 { observe: 'response' });
   }
 
+  confirmEmail(userId:string, token:string): Observable<HttpResponse<any>> {
+    return this.http.post(`${this.originUrl}Authentication/ConfirmEmail`, {userId:userId, token:token}, 
+                                { observe: 'response'});
+  }
+
   getCurrentUser(): CurrentUser {
     let user: CurrentUser;
     const tokenPayload = decode(localStorage.getItem('access_token'));

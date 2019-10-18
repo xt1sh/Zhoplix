@@ -8,12 +8,14 @@ import { Roles } from "src/app/models/roles";
 import { RegistrationComponent } from "src/app/components/authentication/registration/registration.component";
 import { CreateComponent } from "src/app/components/admin/create/create/create.component";
 import { TitleComponent } from '../../components/admin/create/title/title.component';
+import { ConfirmEmailComponent } from "src/app/components/authentication/confirmEmail/confirmEmail.component";
 
 export const ROUTES: Routes = [
   { path: '', component: HomeComponent, pathMatch: 'full'},
   { path: 'login', component: LoginComponent},
   { path: 'signup/:id', component: RegistrationComponent},
   { path: 'signup', redirectTo: 'signup/1'},
+  { path: 'account/confirmEmail', component: ConfirmEmailComponent },
   {
     path: 'admin',
     component: AdminComponent,

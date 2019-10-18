@@ -10,6 +10,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Zhoplix.Configurations;
 using Microsoft.OpenApi.Models;
@@ -22,6 +23,12 @@ using Zhoplix.Services;
 using Zhoplix.Models;
 using Zhoplix.Services.AuthenticationService;
 using Microsoft.AspNetCore.Http.Features;
+using Microsoft.AspNetCore.Identity.UI.Services;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.AspNetCore.Mvc.Routing;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using Zhoplix.Services.EmailService;
 
 namespace Zhoplix
 {
@@ -68,6 +75,8 @@ namespace Zhoplix
                 options.Password.RequiredLength = PasswordConfiguration.RequiredLength;
                 options.Password.RequiredUniqueChars = PasswordConfiguration.RequiredUniqueChars;
 
+                options.SignIn.RequireConfirmedAccount = true;
+
                 options.User.RequireUniqueEmail = true;
 
             });
@@ -106,6 +115,14 @@ namespace Zhoplix
 
             services.AddScoped<IMediaService, MediaService>();
             services.AddSingleton<ITokenHandler, TokenHandler>();
+            services.AddSingleton<IEmailSender, EmailSender>();
+            services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
+            services.AddScoped<IUrlHelper>(x => {
+                var actionContext = x.GetRequiredService<IActionContextAccessor>().ActionContext;
+                var factory = x.GetRequiredService<IUrlHelperFactory>();
+                return factory.GetUrlHelper(actionContext);
+            });
             services.AddScoped<IAuthenticationService, AuthenticationService>();
 
             services.AddCors(options =>

@@ -16,9 +16,9 @@ namespace Zhoplix.Services
 {
     public interface IMediaService
     {
-        void CreatePhoto(UploadPhoto photo);
-        void CreateResizedPhoto(string inputPath, string outputPath, float percent);
-        void CreateResizedPhoto(UploadPhoto photo, float percent, string addToName);
+        Task CreatePhoto(UploadPhoto photo);
+        Task CreateResizedPhoto(string inputPath, string outputPath, float percent);
+        Task CreateResizedPhoto(UploadPhoto photo, float percent, string addToName);
         void DeleteAllPhotosWithId(string id);
         void DeletePhoto(string name);
         Task<bool> UploadVideo(IFormFile file);
@@ -36,27 +36,33 @@ namespace Zhoplix.Services
             _hostingEnvironment = hostingEnvironment;
         }
 
-        public void CreatePhoto(UploadPhoto photo)
+        public async Task CreatePhoto(UploadPhoto photo)
         {
             using var image = Image.Load<Rgba32>(photo.Photo);
             Directory.CreateDirectory($"wwwroot/Images/Uploaded/{photo.PhotoId}");
-            image.Save($"wwwroot/Images/Uploaded/{photo.PhotoId}/{photo.PhotoId}.png");
+            await Task.Run(() => image.Save($"wwwroot/Images/Uploaded/{photo.PhotoId}/{photo.PhotoId}.png"));
         }
 
-        public void CreateResizedPhoto(UploadPhoto photo, float percent, string addToName)
+        public async Task CreateResizedPhoto(UploadPhoto photo, float percent, string addToName)
         {
             Directory.CreateDirectory($"wwwroot/Images/Uploaded/{photo.PhotoId}");
             using var image = Image.Load<Rgba32>(photo.Photo);
-            image.Mutate(x => x.Resize((int)(image.Width * percent), (int)(image.Height * percent)));
-            image.Save($"wwwroot/Images/Uploaded/{photo.PhotoId}/{photo.PhotoId}_{addToName}.png");
+            await Task.Run(() =>
+            {
+                image.Mutate(x => x.Resize((int)(image.Width * percent), (int)(image.Height * percent)));
+                image.Save($"wwwroot/Images/Uploaded/{photo.PhotoId}/{photo.PhotoId}_{addToName}.png");
+            });
         }
 
-        public void CreateResizedPhoto(string inputPath, string outputPath, float percent)
+        public async Task CreateResizedPhoto(string inputPath, string outputPath, float percent)
         {
             Directory.CreateDirectory(outputPath);
             using var image = Image.Load<Rgba32>(inputPath);
-            image.Mutate(x => x.Resize((int)(image.Width * percent), (int)(image.Height * percent)));
-            image.Save(outputPath);
+            await Task.Run(() =>
+            {
+                image.Mutate(x => x.Resize((int)(image.Width * percent), (int)(image.Height * percent)));
+                image.Save(outputPath);
+            });
         }
 
         public void DeleteAllPhotosWithId(string id)
