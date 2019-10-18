@@ -28,6 +28,7 @@ import { RoleGuardService } from './services/route-services/role-guard/role-guar
 import { RegistrationComponent } from './components/authentication/registration/registration.component';
 import { CreateComponent } from './components/admin/create/create/create.component';
 import { TitleComponent } from './components/admin/create/title/title.component';
+import { ConfirmEmailComponent } from './components/authentication/confirmEmail/confirmEmail.component';
 
 @NgModule({
   declarations: [
@@ -38,6 +39,7 @@ import { TitleComponent } from './components/admin/create/title/title.component'
     AdminComponent,
     RegistrationComponent,
     CreateComponent,
+    ConfirmEmailComponent,
     TitleComponent
   ],
   imports: [
