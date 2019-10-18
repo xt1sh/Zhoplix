@@ -100,7 +100,7 @@ namespace Zhoplix.Services.AuthenticationService
             var result = await _userManager.ConfirmEmailAsync(user, token);
             if (result.Succeeded)
             {
-                await _userManager.AddToRoleAsync(user, "Member");
+                await _userManager.AddToRoleAsync(user, role);
 
                 var authClaims = new[]
                 {
