@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.Eventing.Reader;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -18,6 +19,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Logging;
 using Zhoplix.Services.AuthenticationService;
 using System.Text.RegularExpressions;
+using Zhoplix.Services.AuthenticationService.Response;
 
 namespace Zhoplix.Controllers
 {
@@ -29,10 +31,12 @@ namespace Zhoplix.Controllers
         private readonly UserManager<User> _userManager;
         private readonly IMapper _mapper;
         private readonly ILogger<AuthenticationController> _logger;
+        private readonly ITokenHandler _tokenHandler;
 
         public AuthenticationController(UserManager<User> userManager,
             IMapper mapper,
             IAuthenticationService authentication,
+            ITokenHandler tokenHandler,
             ILogger<AuthenticationController> logger
         )
         {
@@ -40,17 +44,19 @@ namespace Zhoplix.Controllers
             _mapper = mapper;
             _authentication = authentication;
             _logger = logger;
+            _tokenHandler = tokenHandler;
         }
 
         [HttpPost]
         public async Task<IActionResult> Registration(RegistrationViewModel model)
         {
             var user = _mapper.Map<User>(model);
-            var (isSuccess, response) = await _authentication.CreateUserAsync(user, model.Password, "Member");
+
+            var isSuccess = await _authentication.CreateUserAsync(user, model.Password);
 
             if (isSuccess)
             {
-                return Ok(response);
+                return Ok();
             }
 
             return BadRequest();
@@ -70,10 +76,30 @@ namespace Zhoplix.Controllers
 
             if (isSuccess)
             {
+                return Ok(response);
+            }
 
-                if (model.RememberMe)
-                    return Ok(response);
+            return BadRequest();
+        }
 
+        [HttpPost]
+        public async Task<IActionResult> ConfirmEmail(EmailConfirmationViewModel model)
+        {
+            if (string.IsNullOrWhiteSpace(model.UserId) || string.IsNullOrWhiteSpace(model.Token))
+            {
+                return BadRequest();
+            }
+
+            var user = await _userManager.FindByIdAsync(model.UserId);
+            if (user == null)
+            {
+                return BadRequest();
+            }
+
+            var (isSuccess, response) = await _authentication.ConfirmUser(user, model.Token, "Member");
+
+            if (isSuccess)
+            {
                 return Ok(response);
             }
 

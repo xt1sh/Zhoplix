@@ -12,6 +12,8 @@ namespace Zhoplix.Services.AuthenticationService
     {
         Task<(bool, AccessTokenResponse)> AuthenticateAsync(User user, string password, bool rememberMe);
 
-        Task<(bool, DefaultResponse)> CreateUserAsync(User user, string password, string role);
+        Task<bool> CreateUserAsync(User user, string password);
+
+        Task<(bool, DefaultResponse)> ConfirmUser(User user, string token, string role);
     }
 }
