@@ -4,7 +4,7 @@
 .simple-container {
     display: flex;
     justify-content: center;
-    width: 100%;
+    width: 60%;
 }
 
 .center-container {
@@ -95,13 +95,36 @@ ul > li {
     width: 100%;
 }
 
+ .main-container {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+} 
+
 mat-card-content {
     display: flex;
     flex-direction: column;
 }
 
+.context-row {
+  font-size: 19px;
+  text-align: left;
+}
+
+.regFormTitle {
+  margin-bottom: 13px;
+  text-align: left;
+  font-size: 19px;
+  font-weight: bold;
+  margin-top: 10px;
+}
+
 .form-content > mat-form-field {
     margin-bottom: 20px;
+}
+
+.confirm-email-row {
+  font-size: 23px;
 }
 
 ::ng-deep .mat-form-field-flex{

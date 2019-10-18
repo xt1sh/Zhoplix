@@ -1,5 +1,6 @@
-<mdb-carousel class="carousel slide carousel-fade" [isControls]="false" [animation]="'slide'" [interval]="'0'" [noWrap]="true">
+<mdb-carousel class="carousel slide" [isControls]="false" [animation]="'slide'" [interval]="'0'" [noWrap]="true">
   <mdb-carousel-item>
+    <div class="main-container">
     <div class="simple-container">
       <div class="center-container">
         <div class="plain-container">
@@ -33,27 +34,31 @@
         </div>
       </div>
     </div>
+  </div>
   </mdb-carousel-item>
   <mdb-carousel-item>
-    <div class="simple-container">
-      <div class="center-container">
-          <div class="plain-container">
-          <div class="step-header-container">
-            <div class="step-header">
-              <span class="step-indicator">
-                STEP <b>2</b> OF <b>3</b>
-              </span>
-              <h1 class="step-title">Здесь могла бы быть ваша реклама</h1>
+    <div class="main-container">
+      <div class="simple-container">
+        <div class="center-container">
+            <div class="plain-container">
+            <div class="step-header-container">
+              <div class="step-header">
+                <span class="step-indicator">
+                  STEP <b>2</b> OF <b>3</b>
+                </span>
+                <h1 class="step-title">Здесь могла бы быть ваша реклама</h1>
+              </div>
             </div>
           </div>
-        </div>
-        <div class="submit-btn-container">
-          <button type="button" class="submit-btn" (click)="onClickOne(3)">Пошел нахуй?</button>
+          <div class="submit-btn-container">
+            <button type="button" class="submit-btn" (click)="onClickOne(3)">Пошел нахуй?</button>
+          </div>
         </div>
       </div>
     </div>
   </mdb-carousel-item>
   <mdb-carousel-item>
+    <div class="main-container">
       <div class="simple-container">
           <div class="center-container">
               <div class="plain-container">
@@ -63,9 +68,12 @@
                     STEP <b>3</b> OF <b>3</b>
                   </span>
                   <h1 class="step-title">Sign up to start your free month</h1>
+                  <div class="context-row">Just two more steps and you're done!</div>
+                  <div class="context-row"> We hate paperwork, too.</div>
+                  <div class="regFormTitle">Create your account.</div>
                 </div>
               </div>
-              <form class="registration-form-body" [formGroup]="registrationForm" autocomplete="off" novalidate (ngSubmit)="onSubmit()" fxLayout="column wrap" fxLayoutAlign="center center" fxLayoutGap="10px">
+              <form class="registration-form-body" [formGroup]="registrationForm" autocomplete="off" novalidate (ngSubmit)="onSubmit()" fxLayout="column wrap" fxLayoutAlign="center center" fxLayoutGap="10px" >
                 <mat-card-content class="form-content">
                   <mat-error class="incorrect" *ngIf="incorrect">Ты даун?</mat-error>
                   <mat-form-field class="username-field">
@@ -90,5 +98,27 @@
             </div>
           </div>
         </div>
+      </div>
   </mdb-carousel-item>
+  <mdb-carousel-item>
+      <div class="main-container">
+          <div class="simple-container">
+            <div class="center-container">
+                <div class="plain-container">
+                <div class="email-confirmation-title-container">
+                  <div class="email-header">
+                    <h1 class="email-title">Confirm your Email</h1>
+                  </div>
+                </div>
+                <div class="confirm-email-row">
+                  Please check your inbox for a confirmation email. Click the link in the email to confirm your email address.
+                </div>
+              </div>
+              <div class="submit-btn-container">
+                <button type="button" class="submit-btn" >Re-send confrimation email</button>
+              </div>
+            </div>
+          </div>
+        </div>
+</mdb-carousel-item>
 </mdb-carousel>

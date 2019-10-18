@@ -44,7 +44,8 @@ export class RegistrationComponent implements AfterViewInit, OnInit {
 
   onSubmit() {
     this.auth.signUp(this.registrationForm.value)
-    .subscribe();
+     .subscribe();
+    this.onClickOne(4);
   }
 
   ngAfterViewInit() {
