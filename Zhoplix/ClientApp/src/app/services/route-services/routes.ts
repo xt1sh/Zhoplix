@@ -9,6 +9,7 @@ import { RegistrationComponent } from "src/app/components/authentication/registr
 import { CreateComponent } from "src/app/components/admin/create/create/create.component";
 import { TitleComponent } from '../../components/admin/create/title/title.component';
 import { ConfirmEmailComponent } from "src/app/components/authentication/confirmEmail/confirmEmail.component";
+import { PlayerComponent } from "src/app/components/player/player/player.component";
 
 export const ROUTES: Routes = [
   { path: '', component: HomeComponent, pathMatch: 'full'},
@@ -16,6 +17,7 @@ export const ROUTES: Routes = [
   { path: 'signup/:id', component: RegistrationComponent},
   { path: 'signup', redirectTo: 'signup/1'},
   { path: 'account/confirmEmail', component: ConfirmEmailComponent },
+  { path: 'player', component: PlayerComponent, pathMatch: 'full' },
   {
     path: 'admin',
     component: AdminComponent,
@@ -23,8 +25,8 @@ export const ROUTES: Routes = [
     data: {
       expectedRole: Roles.Admin
     },
-    children: [{ 
-        path: 'create', 
+    children: [{
+        path: 'create',
         component: CreateComponent,
         children: [{
           path: 'title',

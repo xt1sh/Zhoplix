@@ -1,0 +1,19 @@
+<vg-player>
+  <vg-buffering></vg-buffering>
+  <vg-controls>
+    <vg-play-pause></vg-play-pause>
+    <vg-playback-button></vg-playback-button>
+    <vg-time-display vgProperty="current" vgFormat="mm:ss"></vg-time-display>
+    <vg-scrub-bar>
+      <vg-scrub-bar-current-time></vg-scrub-bar-current-time>
+      <vg-scrub-bar-buffering-time></vg-scrub-bar-buffering-time>
+    </vg-scrub-bar>
+    <vg-time-display vgProperty="total" vgFormat="mm:ss"></vg-time-display>
+    <vg-mute></vg-mute>
+    <vg-volume></vg-volume>
+    <vg-fullscreen></vg-fullscreen>
+  </vg-controls>
+  <video #media [vgMedia]="media" id="singleVideo" preload="auto" crossorigin>
+    <source [src]="video.src" type="{{ video.type }}" />
+  </video>
+</vg-player>
