@@ -14,6 +14,9 @@ import { MatAutocompleteModule, MatBadgeModule, MatButtonModule, MatButtonToggle
   MatSidenavModule, MatSlideToggleModule, MatSnackBarModule, MatSortModule, MatStepperModule,
   MatTableModule, MatTabsModule, MatToolbarModule, MatTooltipModule } from '@angular/material';
 import { TokenInterceptor } from './services/authentication/token.interceptor';
+import { VgCoreModule } from 'videogular2/compiled/core';
+import { VgControlsModule } from 'videogular2/compiled/controls';
+import { VgBufferingModule } from 'videogular2/compiled/buffering';
 
 
 import { AppComponent } from './app.component';
@@ -22,13 +25,13 @@ import { HomeComponent } from './components/home/home.component';
 import { AdminComponent } from './components/admin/admin/admin.component';
 import { LoginComponent } from './components/authentication/login/login.component';
 import { ROUTES } from './services/route-services/routes';
-import { JwtHelperService } from '@auth0/angular-jwt';
 import { AuthGuardService } from './services/route-services/auth-guard/auth-guard.service';
 import { RoleGuardService } from './services/route-services/role-guard/role-guard.service';
 import { RegistrationComponent } from './components/authentication/registration/registration.component';
 import { CreateComponent } from './components/admin/create/create/create.component';
 import { TitleComponent } from './components/admin/create/title/title.component';
 import { ConfirmEmailComponent } from './components/authentication/confirmEmail/confirmEmail.component';
+import { PlayerComponent } from './components/player/player/player.component';
 
 @NgModule({
   declarations: [
@@ -40,7 +43,8 @@ import { ConfirmEmailComponent } from './components/authentication/confirmEmail/
     RegistrationComponent,
     CreateComponent,
     ConfirmEmailComponent,
-    TitleComponent
+    TitleComponent,
+    PlayerComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -77,6 +81,9 @@ import { ConfirmEmailComponent } from './components/authentication/confirmEmail/
     MatTooltipModule,
     BrowserAnimationsModule,
     FormsModule,
+    VgCoreModule,
+    VgControlsModule,
+    VgBufferingModule,
     RouterModule.forRoot(ROUTES)
   ],
   providers: [
