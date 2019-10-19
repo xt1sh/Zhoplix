@@ -11,8 +11,11 @@
     <div>
         <input #file type="file" (change)="uploadPhoto(file.files)">
     </div>
-    <div *ngIf="progress > 0 && progress < 100">
-        {{progress}}%
+    <div *ngIf="!uploading">
+      <button type="submit">Submit</button>
     </div>
-    <button type="submit">Submit</button>
+    <div *ngIf="uploading">
+      <p>Wait for upload to complete</p>
+      <button type="submit" disabled>Submit</button>
+    </div>
 </form>
