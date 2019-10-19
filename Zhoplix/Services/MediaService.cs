@@ -16,16 +16,21 @@ namespace Zhoplix.Services
 {
     public interface IMediaService
     {
-        Task CreatePhoto(UploadPhoto photo);
+        string UploadImagesPath { get; }
+        string UploadVideosPath { get; }   Task CreatePhoto(UploadPhoto photo);
+
         Task CreateResizedPhoto(string inputPath, string outputPath, float percent);
         Task CreateResizedPhoto(UploadPhoto photo, float percent, string addToName);
         void DeleteAllPhotosWithId(string id);
         void DeletePhoto(string name);
-        Task<bool> UploadVideo(IFormFile file);
+        Task<bool> UploadVideo(IFormFile file, string id);
     }
 
     public class MediaService : IMediaService
     {
+        public string UploadImagesPath { get; }
+        public string UploadVideosPath { get; }
+
         private readonly ILogger<MediaService> _logger;
         private readonly IWebHostEnvironment _hostingEnvironment;
 
@@ -34,23 +39,29 @@ namespace Zhoplix.Services
         {
             _logger = logger;
             _hostingEnvironment = hostingEnvironment;
+            UploadImagesPath = Path.Combine(hostingEnvironment.WebRootPath, "wwwroot", "Images", "Uploaded");
+            UploadVideosPath = Path.Combine(hostingEnvironment.WebRootPath, "wwwroor", "Videos", "Uploaded");
         }
 
         public async Task CreatePhoto(UploadPhoto photo)
         {
             using var image = Image.Load<Rgba32>(photo.Photo);
-            Directory.CreateDirectory($"wwwroot/Images/Uploaded/{photo.PhotoId}");
-            await Task.Run(() => image.Save($"wwwroot/Images/Uploaded/{photo.PhotoId}/{photo.PhotoId}.png"));
+            var folder = Path.Combine(UploadImagesPath, photo.PhotoId);
+            Directory.CreateDirectory(folder);
+            var path = Path.ChangeExtension(Path.Combine(folder, photo.PhotoId), "png");
+            await Task.Run(() => image.Save(path));
         }
 
         public async Task CreateResizedPhoto(UploadPhoto photo, float percent, string addToName)
         {
-            Directory.CreateDirectory($"wwwroot/Images/Uploaded/{photo.PhotoId}");
+            Directory.CreateDirectory(Path.Combine(UploadImagesPath, photo.PhotoId));
+            var folder = Path.Combine(UploadImagesPath, photo.PhotoId);
             using var image = Image.Load<Rgba32>(photo.Photo);
+            var path = Path.ChangeExtension(Path.Combine(folder, $"{photo.PhotoId}_{addToName}"), "png");
             await Task.Run(() =>
             {
                 image.Mutate(x => x.Resize((int)(image.Width * percent), (int)(image.Height * percent)));
-                image.Save($"wwwroot/Images/Uploaded/{photo.PhotoId}/{photo.PhotoId}_{addToName}.png");
+                image.Save(path);
             });
         }
 
@@ -67,7 +78,7 @@ namespace Zhoplix.Services
 
         public void DeleteAllPhotosWithId(string id)
         {
-            var di = new DirectoryInfo($"wwwroot/Images/Uploaded/{id}");
+            var di = new DirectoryInfo(Path.Combine(UploadImagesPath, id));
 
             foreach (FileInfo file in di.GetFiles())
             {
@@ -79,23 +90,18 @@ namespace Zhoplix.Services
         public void DeletePhoto(string name)
         {
             var id = name.Split('_')[0];
-            File.Delete($"wwwroot/Images/Uploaded/{id}/{name}");
+            File.Delete(Path.Combine(UploadImagesPath, id, name));
         }
 
-        public async Task<bool> UploadVideo(IFormFile file)
+        public async Task<bool> UploadVideo(IFormFile file, string id)
         {
             try
             {
-                var folderName = "UploadVideos";
-                var webRoot = _hostingEnvironment.WebRootPath;
-                var newPath = Path.Combine(webRoot, folderName);
-                if (!Directory.Exists(newPath))
-                    Directory.CreateDirectory(newPath);
+                Directory.CreateDirectory(UploadVideosPath);
 
                 if (file.Length > 0)
                 {
-                    var fileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
-                    var fullPath = Path.Combine(newPath, fileName);
+                    var fullPath = Path.Combine(UploadVideosPath, id);
                     using var stream = new FileStream(fullPath, FileMode.Create);
                     await Task.Run(() => { file.CopyTo(stream); });
                 }
@@ -107,6 +113,20 @@ namespace Zhoplix.Services
                 _logger.LogError($"Failed to create file {file.Name} with exception: {e}");
                 return false;
             }
+        }
+
+        public void RenameVideo(string path, string newName)
+        {
+            var info = new FileInfo(path);
+            var directory = Path.GetDirectoryName(path);
+            File.Move(path, Path.ChangeExtension(Path.Combine(directory, newName), info.Extension));
+        }
+
+        public void RenameUploadedVideo(string name, string newName)
+        {
+            var path = Path.Combine(UploadVideosPath, name);
+            var info = new FileInfo(path);
+            RenameVideo(info.FullName, newName);
         }
     }
 }
