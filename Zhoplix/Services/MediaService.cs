@@ -17,8 +17,9 @@ namespace Zhoplix.Services
     public interface IMediaService
     {
         string UploadImagesPath { get; }
-        string UploadVideosPath { get; }   Task CreatePhoto(UploadPhoto photo);
+        string UploadVideosPath { get; }
 
+        Task CreatePhoto(UploadPhoto photo);
         Task CreateResizedPhoto(string inputPath, string outputPath, float percent);
         Task CreateResizedPhoto(UploadPhoto photo, float percent, string addToName);
         void DeleteAllPhotosWithId(string id);
@@ -39,8 +40,8 @@ namespace Zhoplix.Services
         {
             _logger = logger;
             _hostingEnvironment = hostingEnvironment;
-            UploadImagesPath = Path.Combine(hostingEnvironment.WebRootPath, "wwwroot", "Images", "Uploaded");
-            UploadVideosPath = Path.Combine(hostingEnvironment.WebRootPath, "wwwroor", "Videos", "Uploaded");
+            UploadImagesPath = Path.Combine(hostingEnvironment.WebRootPath, "Images", "Uploaded");
+            UploadVideosPath = Path.Combine(hostingEnvironment.WebRootPath, "Videos", "Uploaded");
         }
 
         public async Task CreatePhoto(UploadPhoto photo)

@@ -73,7 +73,7 @@ namespace Zhoplix.Controllers
             var file = Request.Form.Files[0];
             var id = Guid.NewGuid().ToString();
             if (await _mediaService.UploadVideo(file, id))
-                return Ok();
+                return Ok(new { id });
 
             return BadRequest();
         }
