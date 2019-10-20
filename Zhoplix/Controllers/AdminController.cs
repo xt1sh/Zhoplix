@@ -10,6 +10,7 @@ using Microsoft.Extensions.Logging;
 using Zhoplix.Models;
 using Zhoplix.Models.Media;
 using Zhoplix.Services;
+using Zhoplix.ViewModels;
 using Zhoplix.ViewModels.Episode;
 using Zhoplix.ViewModels.Season;
 using Zhoplix.ViewModels.Title;
@@ -100,6 +101,13 @@ namespace Zhoplix.Controllers
         {
             _mediaService.DeleteAllPhotosWithId(id.Id);
             return Ok();
+        }
+
+        public async Task<IActionResult> GetTitlesPage(Page page)
+        {
+            var titles = await _titleContext.GetObjectsByPageAsync(page.PageNumber, page.PageSize);
+            var toShow = _mapper.Map<IEnumerable<TitleViewModel>>(titles);
+            return Ok(toShow);
         }
     }
 }
