@@ -102,12 +102,10 @@ namespace Zhoplix.Services
 
                 if (file.Length > 0)
                 {
-                    var fullPath = Path.Combine(UploadVideosPath, id);
+                    var fullPath = Path.Combine(UploadVideosPath, id, id + ".mp4");
                     using var stream = new FileStream(fullPath, FileMode.Create);
                     await Task.Run(() => { file.CopyTo(stream); });
                 }
-
-
 
                 return true;
             }
@@ -130,12 +128,6 @@ namespace Zhoplix.Services
             var path = Path.Combine(UploadVideosPath, name);
             var info = new FileInfo(path);
             RenameVideo(info.FullName, newName);
-        }
-
-        private void CreateThumbnails(string inputPath)
-        {
-            var ffMpeg = new NReco.VideoConverter.FFMpegConverter();
-            //ffMpeg.GetVideoThumbnail(inputPath, );
         }
     }
 }
