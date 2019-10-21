@@ -1,6 +1,6 @@
 .donate-button {
   background-color: transparent;
-  color: white;
+  color: red;
   border: none;
   font-size: 21px;
   padding-bottom: 10px;
@@ -12,5 +12,7 @@
 }
 
 .player {
-
+  margin: 0 auto;
+  max-width: 1280px;
+  height: 720px;
 }

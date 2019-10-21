@@ -9,7 +9,7 @@ import { Router, NavigationEnd, ActivatedRoute, RoutesRecognized } from '@angula
   templateUrl: './registration.component.html',
   styleUrls: ['./registration.component.css']
 })
-export class RegistrationComponent implements AfterViewInit, OnInit {
+export class RegistrationComponent implements OnInit {
 
   currentSlide: number;
 
@@ -46,8 +46,5 @@ export class RegistrationComponent implements AfterViewInit, OnInit {
     this.auth.signUp(this.registrationForm.value)
      .subscribe();
     this.onClickOne(4);
-  }
-
-  ngAfterViewInit() {
   }
 }
