@@ -70,11 +70,10 @@ namespace Zhoplix.Services.AuthenticationService
             return (false, null);
         }
 
-        public async Task<bool> CreateUserAsync(User user, string password)
+        public async Task<(bool, IEnumerable<IdentityError>)> CreateUserAsync(User user, string password)
         {
-            var result = await _userManager.CreateAsync(user, password);
-
-            if (result.Succeeded)
+            var result = await _userManager.CreateAsync(user, password); 
+            if (result.Succeeded)   
             {
                 var emailConfirmationToken = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                 var callbackUrl = _url.Action(
@@ -90,9 +89,9 @@ namespace Zhoplix.Services.AuthenticationService
 
                 await _emailSender.SendEmailAsync(user.Email, "Account confirmation", htmlMessage);
 
-                return true;
+                return (true, null);
             }
-            return false;
+            return (false, result.Errors);
         }
 
         public async Task<(bool, DefaultResponse)> ConfirmUser(User user, string token, string role)

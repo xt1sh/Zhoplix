@@ -48,7 +48,9 @@
 
   <ItemGroup>
     <Folder Include="Controllers\" />
+    <Folder Include="Models\Media\" />
     <Folder Include="Services\Repository\" />
+    <Folder Include="ViewModels\Media\" />
     <Folder Include="ViewModels\Title\" />
     <Folder Include="wwwroot\background\" />
   </ItemGroup>

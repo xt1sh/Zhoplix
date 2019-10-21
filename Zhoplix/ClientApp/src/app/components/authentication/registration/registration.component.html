@@ -75,18 +75,20 @@
               </div>
               <form class="registration-form-body" [formGroup]="registrationForm" autocomplete="off" novalidate (ngSubmit)="onSubmit()" fxLayout="column wrap" fxLayoutAlign="center center" fxLayoutGap="10px" >
                 <mat-card-content class="form-content">
-                  <mat-error class="incorrect" *ngIf="incorrect">Ты даун?</mat-error>
+                  <mat-error class="incorrect" *ngIf="incorrect">{{error}}</mat-error>
                   <mat-form-field class="username-field">
                     <input matInput class="username-input-field" type="text" placeholder="Username" formControlName="username" id="username" >
                     <mat-error *ngIf="registrationForm.controls['username'].hasError('required')">Username is required</mat-error>
                   </mat-form-field>
                   <mat-form-field class="email-field">
-                      <input matInput class="email-input-field" type="text" placeholder="Email" formControlName="email" id="email" >
+                      <input matInput class="email-input-field" type="email" placeholder="Email" formControlName="email" id="email" >
                       <mat-error *ngIf="registrationForm.controls['email'].hasError('required')">Email is required</mat-error>
+                      <mat-error *ngIf="registrationForm.controls['email'].hasError('email')">Wrong email address</mat-error>
                     </mat-form-field>
                   <mat-form-field class="password-field">
-                    <input matInput type="text" placeholder="Password" formControlName="password">
+                    <input matInput type="password" placeholder="Password" formControlName="password">
                     <mat-error *ngIf="registrationForm.controls['password'].hasError('required')">Password is required</mat-error>
+                    <mat-error *ngIf="registrationForm.controls['password'].hasError('pattern')">Password must be at least 6 characters long and contain at least one uppercase latter and one digit</mat-error>
                   </mat-form-field>
                 </mat-card-content>
                 <mat-card-actions>
@@ -97,6 +99,9 @@
               </form>
             </div>
           </div>
+        </div>
+        <div *ngIf="signUpSpinner" class="signup-spinner-field" fxFlix="500px" fxFlex.xs="100%">
+          <mat-spinner class="signup-spinner"></mat-spinner>
         </div>
       </div>
   </mdb-carousel-item>

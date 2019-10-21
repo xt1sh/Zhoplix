@@ -90,7 +90,7 @@ ul > li {
     border-radius: 2px;
     color: #ffffff;
     background-color: #e50914;
-    flex-basis: 340px;
+    flex-basis: 350px;
     border: none;
     width: 100%;
 }
@@ -126,6 +126,22 @@ mat-card-content {
 .confirm-email-row {
   font-size: 23px;
 }
+
+ .signup-spinner-field {
+  display: flex;
+  position: absolute;
+  flex-basis: 355px;
+  min-width: 355px;
+  justify-content: center;
+  align-items: center;
+  margin-top: 120px;
+  min-height: 400px;
+}
+/*
+.signup-spinner {
+  margin: 0 auto;
+  margin-top: 200px;
+} */
 
 ::ng-deep .mat-form-field-flex{
     background-color: white;

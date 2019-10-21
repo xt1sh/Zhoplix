@@ -52,14 +52,17 @@ namespace Zhoplix.Controllers
         {
             var user = _mapper.Map<User>(model);
 
-            var isSuccess = await _authentication.CreateUserAsync(user, model.Password);
+            var (isSuccess, errors) = await _authentication.CreateUserAsync(user, model.Password);
 
             if (isSuccess)
             {
                 return Ok();
             }
 
-            return BadRequest();
+            return BadRequest(new
+            {
+                errors = errors
+            });
 
         }
 
