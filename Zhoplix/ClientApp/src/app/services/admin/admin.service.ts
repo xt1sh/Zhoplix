@@ -22,26 +22,4 @@ export class AdminService {
   createEpisode(episode: any): Observable<HttpResponse<any>> {
     return this.http.post<any>(`${this.originUrl}Admin/CreateEpisode`, episode, { observe: 'response' });
   }
-
-  public upload(data, videoId) {
-    let uploadURL = `${this.originUrl}Admin/UploadVideo`;
-
-    return this.http.post<any>(uploadURL, {data, videoId}, {
-      reportProgress: true,
-      observe: 'events'
-    }).subscribe((event) => {
-
-      switch (event.type) {
-
-        case HttpEventType.UploadProgress:
-          const progress = Math.round(100 * event.loaded / event.total);
-          return { status: 'progress', message: progress };
-
-        case HttpEventType.Response:
-          return event.body;
-        default:
-          return `Unhandled event: ${event.type}`;
-      }
-    });
-  }
 }

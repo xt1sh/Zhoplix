@@ -10,6 +10,7 @@ using Microsoft.Extensions.Logging;
 using Zhoplix.Models;
 using Zhoplix.Models.Media;
 using Zhoplix.Services;
+using Zhoplix.ViewModels;
 using Zhoplix.ViewModels.Episode;
 using Zhoplix.ViewModels.Season;
 using Zhoplix.ViewModels.Title;
@@ -55,7 +56,7 @@ namespace Zhoplix.Controllers
         {
             var season = _mapper.Map<Season>(model);
             await _seasonContext.AddObjectAsync(season);
-            return Created($"{HttpContext.Request.Scheme}://{HttpContext.Request.Host}/Title/{season.Id}", _mapper.Map<SeasonViewModel>(season));
+            return Created($"{HttpContext.Request.Scheme}://{HttpContext.Request.Host}/Season/{season.Id}", _mapper.Map<SeasonViewModel>(season));
         }
 
         [HttpPost]
@@ -63,7 +64,7 @@ namespace Zhoplix.Controllers
         {
             var episode = _mapper.Map<Episode>(model);
             await _episodeContext.AddObjectAsync(episode);
-            return Created($"{HttpContext.Request.Scheme}://{HttpContext.Request.Host}/Title/{episode.Id}", _mapper.Map<SeasonViewModel>(episode));
+            return Created($"{HttpContext.Request.Scheme}://{HttpContext.Request.Host}/Episode/{episode.Id}", _mapper.Map<SeasonViewModel>(episode));
         }
 
         [HttpPost]
@@ -71,8 +72,9 @@ namespace Zhoplix.Controllers
         public async Task<IActionResult> UploadVideo()
         {
             var file = Request.Form.Files[0];
-            if (await _mediaService.UploadVideo(file))
-                return Ok();
+            var id = Guid.NewGuid().ToString();
+            if (await _mediaService.UploadVideo(file, id))
+                return Ok(new { id });
 
             return BadRequest();
         }
@@ -99,6 +101,13 @@ namespace Zhoplix.Controllers
         {
             _mediaService.DeleteAllPhotosWithId(id.Id);
             return Ok();
+        }
+
+        public async Task<IActionResult> GetTitlesPage(Page page)
+        {
+            var titles = await _titleContext.GetObjectsByPageAsync(page.PageNumber, page.PageSize);
+            var toShow = _mapper.Map<IEnumerable<TitleViewModel>>(titles);
+            return Ok(toShow);
         }
     }
 }

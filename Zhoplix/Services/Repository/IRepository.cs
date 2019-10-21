@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,6 +21,8 @@ namespace Zhoplix.Services
         Task DeleteRangeByIdsAsync(int[] ids);
         Task<T> GetObjectByIdAsync(int id);
         Task<T> GetObjectByInstanceAsync(T obj);
+        Task<IEnumerable<T>> GetObjectsByPageAsync(int page, int pageSize);
+        Task<int> GetAmountAsync();
     }
 
     public class Repository<T> : IRepository<T> where T : class
@@ -39,13 +42,19 @@ namespace Zhoplix.Services
         public async Task<T> GetObjectByInstanceAsync(T obj) =>
             await _context.FindAsync<T>(obj);
 
+        public async Task<IEnumerable<T>> GetObjectsByPageAsync(int page, int pageSize) =>
+            await _context.Set<T>().Skip(page * (pageSize - 1)).Take(pageSize).ToListAsync();
+
+        public async Task<int> GetAmountAsync() =>
+            await _context.Set<T>().CountAsync();
+
         public async Task AddObjectAsync(T model)
         {
             await _context.AddAsync(model);
             await SaveAllAsync();
         }
 
-        public async Task AddRangeAsync(T[] objs)
+        public async Task AddRangeAsync(params T[] objs)
         {
             await _context.AddRangeAsync(objs);
         }
@@ -56,7 +65,7 @@ namespace Zhoplix.Services
             await SaveAllAsync();
         }
 
-        public async Task ChangeRangeAsync(T[] newObjs)
+        public async Task ChangeRangeAsync(params T[] newObjs)
         {
             _context.UpdateRange(newObjs);
             await SaveAllAsync();
@@ -88,13 +97,13 @@ namespace Zhoplix.Services
             await SaveAllAsync();
         }
 
-        public async Task DeleteRangeAsync(T[] objs)
+        public async Task DeleteRangeAsync(params T[] objs)
         {
             _context.RemoveRange(objs);
             await SaveAllAsync();
         }
 
-        public async Task DeleteRangeByIdsAsync(int[] ids)
+        public async Task DeleteRangeByIdsAsync(params int[] ids)
         {
             var objectsToRemove = ids.Select(async id => await GetObjectByIdAsync(id));
             _context.RemoveRange(objectsToRemove);
