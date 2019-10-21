@@ -39,6 +39,7 @@ export class LoginComponent implements OnInit {
   onSubmit() {
     this.loginSpinner = true;
     let password = this.loginForm.controls['password'];
+    if (this.loginForm.valid) {
     this.auth.login(this.loginForm.value)
         .subscribe(res => {
           this.incorrect = false;
@@ -50,5 +51,10 @@ export class LoginComponent implements OnInit {
           this.loginSpinner = false;
           password.reset();
         });
+    }
+    else {
+      this.loginSpinner = false;
+    }
+
   }
 }
