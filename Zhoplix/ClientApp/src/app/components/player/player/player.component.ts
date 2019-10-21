@@ -8,19 +8,18 @@ import { PlayerMedia } from 'src/app/models/player-media';
   styleUrls: ['./player.component.scss']
 })
 export class PlayerComponent implements OnInit {
-  
+
   api: VgAPI
   video: PlayerMedia;
-  clicks: number;
-  timer: any;
+  isSingleClick: boolean;
 
   constructor() { }
 
   ngOnInit() {
-    this.clicks = 0;
+    this.isSingleClick = true;
     this.video = {
       title: "El Camino",
-      src: "http://localhost:5000/Videos/Uploaded/The.Hateful.Eight.mp4",
+      src: "http://localhost:5000/Videos/Uploaded/ElCamino/ElCamino.mp4",
       type: "video/mp4"
     };
   }
@@ -28,21 +27,16 @@ export class PlayerComponent implements OnInit {
   onPlayerReady(api: VgAPI) {
     this.api = api;
     this.api.getDefaultMedia().subscriptions.ended.subscribe(() => {
-      // Set the video to the beginning
       this.api.getDefaultMedia().currentTime = 0;
     });
     this.api.play();
   }
 
   onVideoClick() {
-    this.clicks++;
-    this.timer = setTimeout(() => {
-      if(this.clicks < 2 && this.clicks !== 0) {
-        this.clicks = 0;
+    this.isSingleClick = true;
+    setTimeout(() => {
+      if(this.isSingleClick) {
         this.playPauseClick();
-      } else if(this.clicks !== 0) {
-        this.clicks = 0;
-        this.onVideoDclick();
       }
     }, 250);
   }
@@ -66,6 +60,7 @@ export class PlayerComponent implements OnInit {
   }
 
   onVideoDclick() {
+    this.isSingleClick = false;
     this.api.fsAPI.toggleFullscreen();
   }
 }
