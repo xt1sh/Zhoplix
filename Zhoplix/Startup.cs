@@ -129,7 +129,7 @@ namespace Zhoplix
             {
                 options.AddPolicy("EnableCORS", builder =>
                 {
-                    builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod().AllowCredentials().Build();
+                    builder.WithOrigins("http://localhost:5000").AllowAnyHeader().AllowAnyMethod().AllowCredentials();
                 });
             });
 
@@ -166,15 +166,16 @@ namespace Zhoplix
                 app.UseSpaStaticFiles();
             }
 
+
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "API V1");
             });
-
+            
             app.UseAuthorization();
             app.UseRouting();
-
+            app.UseCors("EnableCORS");
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
