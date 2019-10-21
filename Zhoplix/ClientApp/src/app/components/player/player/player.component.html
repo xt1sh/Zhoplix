@@ -14,7 +14,7 @@
       <vg-volume></vg-volume>
       <vg-fullscreen></vg-fullscreen>
     </vg-controls>
-    <video #media (click)="onVideoClick()" [vgMedia]="media" id="singleVideo" preload="auto" crossorigin>
+    <video #media (click)="onVideoClick()" (dblclick)="onVideoDclick()" [vgMedia]="media" id="singleVideo" preload="auto" crossorigin>
       <source [src]="video.src" type="{{ video.type }}" />
     </video>
   </vg-player>
