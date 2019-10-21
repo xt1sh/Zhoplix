@@ -105,8 +105,6 @@ namespace Zhoplix.Services
                     await Task.Run(() => { file.CopyTo(stream); });
                 }
 
-
-
                 return true;
             }
             catch(Exception e)
@@ -128,12 +126,6 @@ namespace Zhoplix.Services
             var path = Path.Combine(UploadVideosPath, name);
             var info = new FileInfo(path);
             RenameVideo(info.FullName, newName);
-        }
-
-        private void CreateThumbnails(string inputPath)
-        {
-            var ffMpeg = new NReco.VideoConverter.FFMpegConverter();
-            //ffMpeg.GetVideoThumbnail(inputPath, );
         }
     }
 }

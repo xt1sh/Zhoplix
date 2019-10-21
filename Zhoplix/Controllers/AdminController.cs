@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using IronPython.Hosting;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Microsoft.Scripting.Hosting;
 using Zhoplix.Models;
 using Zhoplix.Models.Media;
 using Zhoplix.Services;
@@ -123,6 +125,13 @@ namespace Zhoplix.Controllers
         public async Task<IActionResult> CreateAvatar()
         {
             await Task.Run(() => _avatarGenerator.GenerateAvatar(7, 700));
+            return Ok();
+        }
+
+        public IActionResult PythonScript()
+        {
+            ScriptEngine engine = Python.CreateEngine();
+            engine.ExecuteFile("VideoConverter/setup.py");
             return Ok();
         }
     }
