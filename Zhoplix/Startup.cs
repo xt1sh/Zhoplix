@@ -29,6 +29,7 @@ using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Zhoplix.Services.EmailService;
+using Zhoplix.Services.Media;
 
 namespace Zhoplix
 {
@@ -101,29 +102,30 @@ namespace Zhoplix
                     };
                 });
 
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Zhoplix", Version = "v1" });
+            });
+            services.AddAutoMapper(typeof(Startup));
+
+            services.AddSingleton<ITokenHandler, TokenHandler>();
+            services.AddSingleton<IEmailSender, EmailSender>();
+            services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
+            services.AddSingleton<IFfMpegProvider, FfMpegProvider>();
+
             services.AddTransient<IRepository<Title>, Repository<Title>>();
             services.AddTransient<IRepository<Season>, Repository<Season>>();
             services.AddTransient<IRepository<Episode>, Repository<Episode>>();
             services.AddTransient<IRepository<User>, Repository<User>>();
 
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Zhoplix", Version = "v1" });
-            });
-
-            services.AddAutoMapper(typeof(Startup));
-
+            services.AddScoped<IAuthenticationService, AuthenticationService>();
             services.AddScoped<IMediaService, MediaService>();
-            services.AddSingleton<ITokenHandler, TokenHandler>();
-            services.AddSingleton<IEmailSender, EmailSender>();
-            services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-            services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
             services.AddScoped<IUrlHelper>(x => {
                 var actionContext = x.GetRequiredService<IActionContextAccessor>().ActionContext;
                 var factory = x.GetRequiredService<IUrlHelperFactory>();
                 return factory.GetUrlHelper(actionContext);
             });
-            services.AddScoped<IAuthenticationService, AuthenticationService>();
 
             services.AddCors(options =>
             {

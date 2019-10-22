@@ -27,6 +27,7 @@
     "@fortawesome/fontawesome-free": "^5.11.2",
     "@nguniversal/module-map-ngfactory-loader": "8.0.0-rc.1",
     "@types/chart.js": "^2.8.7",
+    "@types/video.js": "^7.2.15",
     "angular-bootstrap-md": "^8.3.1",
     "animate.css": "^3.7.2",
     "aspnet-prerendering": "^3.0.1",
@@ -43,6 +44,7 @@
     "rxjs": "^6.5.3",
     "video.js": "^7.6.5",
     "videogular2": "^7.0.1",
+    "videojs-sprite-thumbnails": "^0.5.2",
     "zone.js": "~0.10.2"
   },
   "devDependencies": {
