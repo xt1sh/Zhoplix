@@ -5,7 +5,7 @@
       <vg-play-pause class="play-button"></vg-play-pause>
       <button class="donate-button">Donate</button>
       <vg-time-display vgProperty="current" vgFormat="hh:mm:ss"></vg-time-display>
-      <vg-scrub-bar>
+      <vg-scrub-bar (mouseover)="onMouseOver($event)" (mouseleave)="onMouseLeave()" (document:mousemove)="onMouseMove($event)">
         <vg-scrub-bar-current-time></vg-scrub-bar-current-time>
         <vg-scrub-bar-buffering-time></vg-scrub-bar-buffering-time>
       </vg-scrub-bar>
@@ -18,4 +18,7 @@
       <source [src]="video.src" type="{{ video.type }}" />
     </video>
   </vg-player>
+</div>
+<div class="thumbnail" id="thumbnail">
+  <img *ngIf="isMouseOver" [src]="thumbSrc">
 </div>

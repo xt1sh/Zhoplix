@@ -33,13 +33,11 @@ namespace Zhoplix.Services
         public string UploadVideosPath { get; }
 
         private readonly ILogger<MediaService> _logger;
-        private readonly IWebHostEnvironment _hostingEnvironment;
 
         public MediaService(ILogger<MediaService> logger,
             IWebHostEnvironment hostingEnvironment)
         {
             _logger = logger;
-            _hostingEnvironment = hostingEnvironment;
             UploadImagesPath = Path.Combine(hostingEnvironment.WebRootPath, "Images", "Uploaded");
             UploadVideosPath = Path.Combine(hostingEnvironment.WebRootPath, "Videos", "Uploaded");
         }

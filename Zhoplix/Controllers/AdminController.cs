@@ -10,6 +10,7 @@ using Microsoft.Extensions.Logging;
 using Zhoplix.Models;
 using Zhoplix.Models.Media;
 using Zhoplix.Services;
+using Zhoplix.Services.Media;
 using Zhoplix.ViewModels;
 using Zhoplix.ViewModels.Episode;
 using Zhoplix.ViewModels.Season;
@@ -27,13 +28,15 @@ namespace Zhoplix.Controllers
         private readonly IMapper _mapper;
         private readonly ILogger<AdminController> _logger;
         private readonly IMediaService _mediaService;
+        private readonly IFfMpegProvider _ffMpeg;
 
         public AdminController(IRepository<Title> titleContext,
             IRepository<Season> seasonContext,
             IRepository<Episode> episodeContext,
             IMapper mapper,
             ILogger<AdminController> logger,
-            IMediaService mediaService)
+            IMediaService mediaService,
+            IFfMpegProvider ffMpeg)
         {
             _titleContext = titleContext;
             _seasonContext = seasonContext;
@@ -41,6 +44,7 @@ namespace Zhoplix.Controllers
             _mapper = mapper;
             _logger = logger;
             _mediaService = mediaService;
+            _ffMpeg = ffMpeg;
         }
 
         [HttpPost]
@@ -109,6 +113,17 @@ namespace Zhoplix.Controllers
             var titles = await _titleContext.GetObjectsByPageAsync(page.PageNumber, page.PageSize);
             var toShow = _mapper.Map<IEnumerable<TitleViewModel>>(titles);
             return Ok(toShow);
+        }
+
+        public async Task<IActionResult> CreateThumbnails()
+        {
+            await Task.Run(() => 
+            {
+                _ffMpeg.ResizeVideo("C:\\Coding\\Zhoplix\\Zhoplix\\wwwroot\\Videos\\Uploaded\\ElCamino\\ElCamino.mp4", 120);
+                _ffMpeg.CreateThumbnails("C:\\Coding\\Zhoplix\\Zhoplix\\wwwroot\\Videos\\Uploaded\\ElCamino\\ElCamino_120.mp4",
+                    "C:\\Coding\\Zhoplix\\Zhoplix\\wwwroot\\Videos\\Uploaded\\ElCamino\\Thumbnails");
+            });
+            return Ok();
         }
     }
 }
