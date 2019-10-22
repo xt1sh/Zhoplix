@@ -3,12 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
-using IronPython.Hosting;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Microsoft.Scripting.Hosting;
 using Zhoplix.Models;
 using Zhoplix.Models.Media;
 using Zhoplix.Services;
@@ -111,13 +109,6 @@ namespace Zhoplix.Controllers
             var titles = await _titleContext.GetObjectsByPageAsync(page.PageNumber, page.PageSize);
             var toShow = _mapper.Map<IEnumerable<TitleViewModel>>(titles);
             return Ok(toShow);
-        }
-
-        public IActionResult PythonScript()
-        {
-            ScriptEngine engine = Python.CreateEngine();
-            engine.ExecuteFile("VideoConverter/setup.py");
-            return Ok();
         }
     }
 }
