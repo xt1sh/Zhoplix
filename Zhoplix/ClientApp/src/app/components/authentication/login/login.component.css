@@ -2,7 +2,6 @@
 .login-body {
     display: flex;
     justify-content: center;
-
 }
 
 .login-spinner-field {
@@ -73,6 +72,7 @@ h1 {
     background: #E50914;
     font-size: 16px;
     font-weight: bold;
+    height: 48px;
 }
 
 
