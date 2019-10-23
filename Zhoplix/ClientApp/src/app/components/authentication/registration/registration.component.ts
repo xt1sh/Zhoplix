@@ -1,6 +1,6 @@
 import { Component, OnInit, AfterViewInit, ElementRef, Renderer2, ViewChild } from '@angular/core';
 import { SlideComponent, CarouselComponent } from 'angular-bootstrap-md';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, Validators, FormControl } from '@angular/forms';
 import { AuthenticationService } from 'src/app/services/authentication/authentication.service';
 import { Router, NavigationEnd, ActivatedRoute, RoutesRecognized } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -17,7 +17,7 @@ export class RegistrationComponent implements OnInit {
   @ViewChild(CarouselComponent, {static: true}) item: CarouselComponent;
   firstLogo = 'tempLogos/firstLogo.png';
   registrationForm = this.formBuilder.group({
-    username: [undefined, Validators.required],
+    username: [undefined, [Validators.required, Validators.pattern('^(?=.{3,20}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$')]],
     email: [undefined, [Validators.required, Validators.email]],
     password: [undefined, [Validators.required, 
       Validators.pattern('((?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{6,30})')]],
