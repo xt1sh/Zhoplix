@@ -32,6 +32,17 @@
   object-fit: contain;
 }
 
+.video-player {
+  position: relative;
+}
+
 .thumbnail {
   position: absolute;
+  bottom: 50px;
+}
+
+.thumbnail > img {
+  width: 120px;
+  height: 68px;
+  object-fit: contain;
 }
