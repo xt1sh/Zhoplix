@@ -14,25 +14,12 @@
 .player {
   position: relative;
   margin: 0 auto;
+  max-width: 1280px;
+  height: 720px;
 }
 
 .video-player {
   width: 100%;
-  position: relative;
-}
-
-.thumbnail {
-  position: absolute;
-  bottom: 50px;
-}
-
-.thumbnail > img {
-  width: 120px;
-  height: 68px;
-  object-fit: contain;
-}
-
-.video-player {
   position: relative;
 }
 
