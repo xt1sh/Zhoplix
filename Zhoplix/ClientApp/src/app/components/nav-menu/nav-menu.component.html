@@ -1,33 +1,19 @@
 <header>
-  <div *ngIf="toShow$ | async as toShow">
-    <nav
-      class="navbar navbar-main navbar-expand-sm navbar-toggleable-sm mb-3"
-    >
-      <a class="main-logo" [routerLink]="['']">
-        <img src="{{zhoplixLogoSrc}}">
-      </a>
-      <button
-        class="navbar-toggler"
-        type="button"
-        data-toggle="collapse"
-        data-target=".navbar-collapse"
-        aria-label="Toggle navigation"
-        [attr.aria-expanded]="isExpanded"
-        (click)="toggle()"
-      >
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div
-        class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse"
-        [ngClass]="{ show: isExpanded }"
-      >
-        <ul class="navbar-nav flex-grow">
-          <li class="nav-item" [routerLinkActive]="['link-active']">
-            <a class="nav-link" [routerLink]="['admin']">
-              Admin
-            </a>
-          </li>
-        </ul>
+  <div class="navbar" *ngIf="toShow$ | async as toShow">
+    <nav class="navbar-main">
+      <div class="navbar-logo">
+        <a class="home-link" [routerLink]="['']">
+          <img class="main-logo" srcset="{{zhoplixLogoSrcLarge}} 167w,
+                                        {{zhoplixLogoSrcMedium}} 134w,
+                                        {{zhoplixLogoSrcSmall}} 108w"
+              sizes="(max-width: 949px) 108px,
+                    (max-width: 1449px) 134px,
+                    167px"
+              src="{{zhoplixLogoSrcLarge}}" alt="">>
+        </a>
+      </div>
+      <div class="sign-in-button">
+        <a [routerLink]="['login']" class="sign-in-link">Sign In</a>
       </div>
     </nav>
   </div>
