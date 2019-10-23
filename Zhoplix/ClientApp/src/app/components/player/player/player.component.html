@@ -14,11 +14,14 @@
       <vg-volume></vg-volume>
       <vg-fullscreen></vg-fullscreen>
     </vg-controls>
-    <video #media (click)="onVideoClick()" (dblclick)="onVideoDclick()" [vgMedia]="media" id="singleVideo" preload="auto" crossorigin>
-      <source [src]="video.src" type="{{ video.type }}" />
-    </video>
+    <div class="video-player">
+      <video #media (click)="onVideoClick()" (dblclick)="onVideoDclick()" [vgMedia]="media" id="singleVideo" preload="auto" crossorigin>
+        <source [src]="video.src" type="{{ video.type }}" />
+      </video>
+      <div class="thumbnail" id="thumbnail">
+        <img *ngIf="isMouseOver" [src]="thumbSrc">
+      </div>
+    </div>
   </vg-player>
 </div>
-<div class="thumbnail" id="thumbnail">
-  <img *ngIf="isMouseOver" [src]="thumbSrc">
-</div>
+
