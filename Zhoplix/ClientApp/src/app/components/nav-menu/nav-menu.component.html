@@ -9,10 +9,10 @@
               sizes="(max-width: 949px) 108px,
                     (max-width: 1449px) 134px,
                     167px"
-              src="{{zhoplixLogoSrcLarge}}" alt="">>
+              src="{{zhoplixLogoSrcLarge}}" alt="">
         </a>
       </div>
-      <div class="sign-in-button">
+      <div *ngIf="toShowSignIn$ | async as toShow" class="sign-in-button">
         <a [routerLink]="['login']" class="sign-in-link">Sign In</a>
       </div>
     </nav>
