@@ -74,15 +74,16 @@ export class PlayerComponent implements OnInit {
   }
 
   onMouseOver(event) {
-    this.changeThumbPosition(event.clientX - 60);
+    console.log(event)
+    this.changeThumbPosition(event.offsetX + 132);
     this.isMouseOver = true;
-    this.thumbSrc = this.thumbs + '/' + (Math.floor((event.offsetX + 2) / (event.target.clientWidth / 48)) + 1) + '.png';
+    this.thumbSrc = this.thumbs + '/' + (Math.floor((event.offsetX + 2) / (event.target.clientWidth / 15)) + 1) + '.png';
   }
 
   onMouseMove(event) {
     if(this.isMouseOver) {
-      this.changeThumbPosition(event.clientX - 60);
-      this.thumbSrc = this.thumbs + '/' + (Math.floor((event.offsetX + 2) / (event.target.clientWidth / 48)) + 1) + '.png';
+      this.changeThumbPosition(event.offsetX + 132);
+      this.thumbSrc = this.thumbs + '/' + (Math.floor((event.offsetX + 2) / (event.target.clientWidth / 15)) + 1) + '.png';
     }
   }
 
