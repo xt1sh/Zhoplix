@@ -74,15 +74,15 @@ export class PlayerComponent implements OnInit {
   }
 
   onMouseOver(event) {
-    this.changeThumbPosition(event.clientX, event.clientY - event.offsetY);
+    this.changeThumbPosition(event.clientX - 60);
     this.isMouseOver = true;
-    this.thumbSrc = this.thumbs + '/' + (Math.floor(event.offsetX / (event.target.clientWidth / 75)) + 2) + '.png';
+    this.thumbSrc = this.thumbs + '/' + (Math.floor((event.offsetX + 2) / (event.target.clientWidth / 48)) + 1) + '.png';
   }
 
   onMouseMove(event) {
     if(this.isMouseOver) {
-      this.changeThumbPosition(event.clientX, event.clientY - event.offsetY);
-      this.thumbSrc = this.thumbs + '/' + (Math.floor(event.offsetX / (event.target.clientWidth / 75)) + 2) + '.png';
+      this.changeThumbPosition(event.clientX - 60);
+      this.thumbSrc = this.thumbs + '/' + (Math.floor((event.offsetX + 2) / (event.target.clientWidth / 48)) + 1) + '.png';
     }
   }
 
@@ -90,8 +90,7 @@ export class PlayerComponent implements OnInit {
     this.isMouseOver = false;
   }
 
-  changeThumbPosition(x: number, y: number) {
+  changeThumbPosition(x: number) {
     this.thumbnail.style.left = `${x}px`;
-    this.thumbnail.style.top = `${y}px`;
   }
 }
