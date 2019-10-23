@@ -36,22 +36,26 @@
   min-width: 100%;
 }
 
-a {
-  color: #0366d6;
+a:-webkit-any-link {
+  cursor: pointer;
+  text-decoration: none;
 }
+// a {
+//   color: #0366d6;
+// }
 
-code {
-  color: #e01a76;
-}
+// code {
+//   color: #e01a76;
+// }
 
-.btn-primary {
-  color: #fff;
-  background-color: #1b6ec2;
-  border-color: #1861ac;
-}
-header {
-  position: relative;
-}
+// .btn-primary {
+//   color: #fff;
+//   background-color: #1b6ec2;
+//   border-color: #1861ac;
+// }
+// header {
+//   position: relative;
+// }
 
 .navbar-main {
   background: none;

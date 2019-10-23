@@ -10,7 +10,9 @@ const routes: string[] = [];
   styleUrls: ['./nav-menu.component.css']
 })
 export class NavMenuComponent implements OnInit {
-  zhoplixLogoSrc = 'Logos/zhoplix_empty.png';
+  zhoplixLogoSrcLarge = 'Logos/zhoplix_empty_167.png';
+  zhoplixLogoSrcMedium = 'Logos/zhoplix_empty_134.png';
+  zhoplixLogoSrcSmall = 'Logos/zhoplix_empty_108.png';
   isExpanded = false;
   toShow$: Observable<boolean>;
   toShow: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
