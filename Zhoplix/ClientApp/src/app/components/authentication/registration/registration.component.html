@@ -30,7 +30,7 @@
           </div>
         </div>
         <div class="submit-btn-container">
-          <button type="button" class="submit-btn" (click)="onClickOne(2)">Пошел нахуй?</button>
+          <button type="button" class="submit-btn" (click)="onClickOne(2)">SEE THE PLANS</button>
         </div>
       </div>
     </div>
@@ -51,7 +51,7 @@
             </div>
           </div>
           <div class="submit-btn-container">
-            <button type="button" class="submit-btn" (click)="onClickOne(3)">Пошел нахуй?</button>
+            <button type="button" class="submit-btn" (click)="onClickOne(3)">CONTINUE</button>
           </div>
         </div>
       </div>
@@ -79,6 +79,7 @@
                   <mat-form-field class="username-field">
                     <input matInput class="username-input-field" type="text" placeholder="Username" formControlName="username" id="username" >
                     <mat-error *ngIf="registrationForm.controls['username'].hasError('required')">Username is required</mat-error>
+                    <mat-error *ngIf="registrationForm.controls['username'].hasError('pattern')">Wrong username</mat-error>
                   </mat-form-field>
                   <mat-form-field class="email-field">
                       <input matInput class="email-input-field" type="email" placeholder="Email" formControlName="email" id="email" >
@@ -93,7 +94,7 @@
                 </mat-card-content>
                 <mat-card-actions>
                     <div class="submit-btn-container">
-                      <button type="submit" class="submit-btn">Пошел нахуй?</button>
+                      <button type="submit" class="submit-btn">CONTINUE</button>
                     </div>
                 </mat-card-actions>
               </form>
