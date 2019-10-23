@@ -79,6 +79,7 @@
                   <mat-form-field class="username-field">
                     <input matInput class="username-input-field" type="text" placeholder="Username" formControlName="username" id="username" >
                     <mat-error *ngIf="registrationForm.controls['username'].hasError('required')">Username is required</mat-error>
+                    <mat-error *ngIf="registrationForm.controls['username'].hasError('pattern')">Wrong username</mat-error>
                   </mat-form-field>
                   <mat-form-field class="email-field">
                       <input matInput class="email-input-field" type="email" placeholder="Email" formControlName="email" id="email" >
