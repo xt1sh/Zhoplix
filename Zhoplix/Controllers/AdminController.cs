@@ -88,8 +88,8 @@ namespace Zhoplix.Controllers
         {
             photo.PhotoId = Guid.NewGuid().ToString();
             await _mediaService.CreatePhoto(photo);
-            await _mediaService.CreateResizedPhoto(photo, 0.1f, "small");
-            await _mediaService.CreateResizedPhoto(photo, 0.5f, "medium");
+            //await _mediaService.CreateResizedPhoto(photo, 0.1f, "small");
+            //await _mediaService.CreateResizedPhoto(photo, 0.5f, "medium");
             return Ok(new { photo.PhotoId });
         }
 
