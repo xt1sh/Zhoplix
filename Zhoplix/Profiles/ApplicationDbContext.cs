@@ -11,6 +11,8 @@ namespace Zhoplix
         public DbSet<Title> Titles { get; set; }
         public DbSet<Season> Seasons { get; set; }
         public DbSet<Episode> Episodes { get; set; }
+        public DbSet<Genre> Genres { get; set; }
+        public DbSet<Rating> Ratings { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
@@ -33,6 +35,12 @@ namespace Zhoplix
                 .HasForeignKey(bc => bc.EpisodeId);
 
             builder.Entity<UserTitle>()
+                .HasKey(k => new { k.UserId, k.TitleId });
+
+            builder.Entity<TitleGenre>()
+                .HasKey(k => new { k.TitleId, k.GenreId });
+
+            builder.Entity<Rating>()
                 .HasKey(k => new { k.UserId, k.TitleId });
         }
     }
