@@ -41,17 +41,14 @@
 
   <ItemGroup>
     <!-- Don't publish the SPA source files, but do show them in the project files list -->
-    <Compile Remove="Models\Media\**" />
     <Content Remove="$(SpaRoot)**" />
-    <Content Remove="Models\Media\**" />
-    <EmbeddedResource Remove="Models\Media\**" />
     <None Remove="$(SpaRoot)**" />
-    <None Remove="Models\Media\**" />
     <None Include="$(SpaRoot)**" Exclude="$(SpaRoot)node_modules\**" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Controllers\" />
+    <Folder Include="Migrations\" />
     <Folder Include="Services\Repository\" />
     <Folder Include="ViewModels\Media\" />
     <Folder Include="ViewModels\Title\" />
