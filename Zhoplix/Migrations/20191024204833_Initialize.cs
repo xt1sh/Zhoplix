@@ -41,11 +41,25 @@ namespace Zhoplix.Migrations
                     TwoFactorEnabled = table.Column<bool>(nullable: false),
                     LockoutEnd = table.Column<DateTimeOffset>(nullable: true),
                     LockoutEnabled = table.Column<bool>(nullable: false),
-                    AccessFailedCount = table.Column<int>(nullable: false)
+                    AccessFailedCount = table.Column<int>(nullable: false),
+                    RefreshToken = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Genres",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Genres", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -56,8 +70,8 @@ namespace Zhoplix.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(nullable: true),
                     Description = table.Column<string>(nullable: true),
-                    Rating = table.Column<float>(nullable: false),
-                    AgeRestriction = table.Column<int>(nullable: false)
+                    AgeRestriction = table.Column<int>(nullable: false),
+                    ImageId = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -171,12 +185,39 @@ namespace Zhoplix.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Ratings",
+                columns: table => new
+                {
+                    UserId = table.Column<int>(nullable: false),
+                    TitleId = table.Column<int>(nullable: false),
+                    Liked = table.Column<bool>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Ratings", x => new { x.UserId, x.TitleId });
+                    table.ForeignKey(
+                        name: "FK_Ratings_Titles_TitleId",
+                        column: x => x.TitleId,
+                        principalTable: "Titles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Ratings_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Seasons",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(nullable: true),
+                    Description = table.Column<string>(nullable: true),
+                    ImageId = table.Column<string>(nullable: true),
                     TitleId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
@@ -188,6 +229,30 @@ namespace Zhoplix.Migrations
                         principalTable: "Titles",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "TitleGenre",
+                columns: table => new
+                {
+                    TitleId = table.Column<int>(nullable: false),
+                    GenreId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TitleGenre", x => new { x.TitleId, x.GenreId });
+                    table.ForeignKey(
+                        name: "FK_TitleGenre_Genres_GenreId",
+                        column: x => x.GenreId,
+                        principalTable: "Genres",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_TitleGenre_Titles_TitleId",
+                        column: x => x.TitleId,
+                        principalTable: "Titles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -221,8 +286,13 @@ namespace Zhoplix.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(nullable: true),
+                    Description = table.Column<string>(nullable: true),
                     SeasonId = table.Column<int>(nullable: true),
-                    Duration = table.Column<TimeSpan>(nullable: false)
+                    Duration = table.Column<TimeSpan>(nullable: false),
+                    OpeningStart = table.Column<TimeSpan>(nullable: true),
+                    OpeningFinish = table.Column<TimeSpan>(nullable: true),
+                    ThumbnailsAmount = table.Column<int>(nullable: false),
+                    CreditsStart = table.Column<TimeSpan>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -236,12 +306,54 @@ namespace Zhoplix.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Audio",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Language = table.Column<string>(nullable: true),
+                    Translation = table.Column<string>(nullable: true),
+                    EpisodeId = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Audio", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Audio_Episodes_EpisodeId",
+                        column: x => x.EpisodeId,
+                        principalTable: "Episodes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Subtitles",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Language = table.Column<string>(nullable: true),
+                    EpisodeId = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Subtitles", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Subtitles_Episodes_EpisodeId",
+                        column: x => x.EpisodeId,
+                        principalTable: "Episodes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "UserEpisode",
                 columns: table => new
                 {
                     UserId = table.Column<int>(nullable: false),
                     EpisodeId = table.Column<int>(nullable: false),
-                    TimeStopped = table.Column<TimeSpan>(nullable: false)
+                    TimeStopped = table.Column<TimeSpan>(nullable: false),
+                    Finished = table.Column<bool>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -258,6 +370,31 @@ namespace Zhoplix.Migrations
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Video",
+                columns: table => new
+                {
+                    Id = table.Column<string>(nullable: false),
+                    EpisodeId = table.Column<int>(nullable: true),
+                    Location = table.Column<string>(nullable: true),
+                    Width = table.Column<int>(nullable: false),
+                    Height = table.Column<int>(nullable: false),
+                    WidthRatio = table.Column<float>(nullable: false),
+                    HeightRatio = table.Column<float>(nullable: false),
+                    Codec = table.Column<string>(nullable: true),
+                    Size = table.Column<long>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Video", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Video_Episodes_EpisodeId",
+                        column: x => x.EpisodeId,
+                        principalTable: "Episodes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
@@ -300,14 +437,34 @@ namespace Zhoplix.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Audio_EpisodeId",
+                table: "Audio",
+                column: "EpisodeId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Episodes_SeasonId",
                 table: "Episodes",
                 column: "SeasonId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Ratings_TitleId",
+                table: "Ratings",
+                column: "TitleId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Seasons_TitleId",
                 table: "Seasons",
                 column: "TitleId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Subtitles_EpisodeId",
+                table: "Subtitles",
+                column: "EpisodeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TitleGenre_GenreId",
+                table: "TitleGenre",
+                column: "GenreId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_UserEpisode_EpisodeId",
@@ -318,6 +475,11 @@ namespace Zhoplix.Migrations
                 name: "IX_UserTitle_TitleId",
                 table: "UserTitle",
                 column: "TitleId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Video_EpisodeId",
+                table: "Video",
+                column: "EpisodeId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -338,19 +500,37 @@ namespace Zhoplix.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "Audio");
+
+            migrationBuilder.DropTable(
+                name: "Ratings");
+
+            migrationBuilder.DropTable(
+                name: "Subtitles");
+
+            migrationBuilder.DropTable(
+                name: "TitleGenre");
+
+            migrationBuilder.DropTable(
                 name: "UserEpisode");
 
             migrationBuilder.DropTable(
                 name: "UserTitle");
 
             migrationBuilder.DropTable(
+                name: "Video");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "Episodes");
+                name: "Genres");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "Episodes");
 
             migrationBuilder.DropTable(
                 name: "Seasons");
