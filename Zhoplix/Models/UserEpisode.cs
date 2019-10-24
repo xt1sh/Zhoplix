@@ -13,5 +13,6 @@ namespace Zhoplix.Models
         public User User { get; set; }
         public Episode Episode { get; set; }
         public TimeSpan TimeStopped { get; set; }
+        public bool Finished { get; set; }
     }
 }
