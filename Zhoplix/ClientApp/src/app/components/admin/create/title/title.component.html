@@ -1,10 +1,16 @@
-<form [formGroup]="form" (ngSubmit)="onSubmit()">
+<form [formGroup]="form">
     <div>
         <input type="text" formControlName="name" placeholder="Name">
     </div>
     <div>
         <input type="text" formControlName="description" placeholder="Description">
     </div>
+    <div formArrayName="genres" *ngFor="let genre of form.get('genres').controls; let i = index;">
+      <div [formGroupName]="i">
+        <input formControlName="name" placeholder="Genre">
+      </div>
+    </div>
+    <button (click)="addGenre()">Add genre</button>
     <div>
         <input type="number" formControlName="ageRestriction" placeholder="Age Restriction">
     </div>
@@ -12,10 +18,10 @@
         <input #file type="file" (change)="uploadPhoto(file.files)">
     </div>
     <div *ngIf="!uploading">
-      <button type="submit">Submit</button>
+      <button (click)="onSubmit()">Submit</button>
     </div>
     <div *ngIf="uploading">
       <p>Wait for upload to complete</p>
-      <button type="submit" disabled>Submit</button>
+      <button (click)="onSubmit()" disabled>Submit</button>
     </div>
 </form>

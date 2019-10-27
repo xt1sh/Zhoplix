@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AutoMapper;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -11,6 +12,8 @@ namespace Zhoplix.ViewModels.Title
     {
         public string Name { get; set; }
         public string Description { get; set; }
+        [IgnoreMap]
+        public IList<GenreViewModel> Genres { get; set; }
         public int AgeRestriction { get; set; }
         public string ImageId { get; set; }
     }
