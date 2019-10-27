@@ -51,6 +51,8 @@ namespace Zhoplix.Controllers
         public async Task<IActionResult> CreateTitle(CreateTitleViewModel model)
         {
             var title = _mapper.Map<Title>(model);
+            var genres = _mapper.Map<Genre>(model.Genres);
+            // todo add logic
             await _titleContext.AddObjectAsync(title);
             return Created($"{HttpContext.Request.Scheme}://{HttpContext.Request.Host}/Title/{title.Id}", _mapper.Map<TitleViewModel>(title));
         }

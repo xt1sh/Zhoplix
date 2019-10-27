@@ -28,12 +28,18 @@ export class TitleComponent implements OnInit {
     this.form = this.fb.group({
       name: '',
       description: '',
+      genres: this.fb.array([]),
       ageRestriction: 0,
-      imageId: ''
-    })
+      imageId: '',
+    });
+    this.addGenre();
     this.media.getProgress().subscribe(value => {
       this.progress = value;
     });
+  }
+
+  addGenre() {
+    this.form.get('genres').push(this.fb.group({name: ''}));
   }
 
   uploadPhoto(files) {
@@ -44,7 +50,7 @@ export class TitleComponent implements OnInit {
         this.form.controls['imageId'].setValue(value);
         this.uploading = false;
       }
-    })
+    });
   }
 
   onSubmit() {
