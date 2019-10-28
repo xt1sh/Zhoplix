@@ -10,13 +10,13 @@ namespace Zhoplix.Models
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public List<Season> Seasons { get; set; }
-        public List<UserTitle> UserTitles { get; set; }
-        public List<TitleGenre> Genres { get; set; }
+        public IList<Season> Seasons { get; set; }
+        public IList<UserTitle> UserTitles { get; set; }
+        public IList<TitleGenre> Genres { get; set; }
         public string Description { get; set; }
         [Range(0, 18)]
         public int AgeRestriction { get; set; }
         public string ImageId { get; set; }
-        public List<Rating> Ratings { get; set; }
+        public IList<Rating> Ratings { get; set; }
     }
 }
