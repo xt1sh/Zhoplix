@@ -447,6 +447,13 @@ namespace Zhoplix.Migrations
                 column: "SeasonId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Genres_Name",
+                table: "Genres",
+                column: "Name",
+                unique: true,
+                filter: "[Name] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Ratings_TitleId",
                 table: "Ratings",
                 column: "TitleId");

@@ -42,6 +42,10 @@ namespace Zhoplix
 
             builder.Entity<Rating>()
                 .HasKey(k => new { k.UserId, k.TitleId });
+
+            builder.Entity<Genre>()
+                .HasIndex(x => x.Name)
+                .IsUnique();
         }
     }
 }
