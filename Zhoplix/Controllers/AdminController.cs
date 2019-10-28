@@ -11,6 +11,7 @@ using Microsoft.Extensions.Logging;
 using Zhoplix.Models;
 using Zhoplix.Models.Media;
 using Zhoplix.Services;
+using Zhoplix.Services.CRUD;
 using Zhoplix.Services.Media;
 using Zhoplix.ViewModels;
 using Zhoplix.ViewModels.Episode;
@@ -23,6 +24,7 @@ namespace Zhoplix.Controllers
     [ApiController]
     public class AdminController : ControllerBase
     {
+        private readonly ITitleService _titleService;
         private readonly ApplicationDbContext _context;
         private readonly DbSet<Title> _titleContext;
         private readonly DbSet<Season> _seasonContext;
@@ -33,13 +35,14 @@ namespace Zhoplix.Controllers
         private readonly IMediaService _mediaService;
         private readonly IFfMpegProvider _ffMpeg;
 
-        public AdminController(
+        public AdminController(ITitleService titleService,
             ApplicationDbContext context,
             IMapper mapper,
             ILogger<AdminController> logger,
             IMediaService mediaService,
             IFfMpegProvider ffMpeg)
         {
+            _titleService = titleService;
             _context = context;
             _titleContext = _context.Titles;
             _seasonContext = _context.Seasons;
@@ -54,28 +57,8 @@ namespace Zhoplix.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateTitle(CreateTitleViewModel model)
         {
-            var title = _mapper.Map<Title>(model);
-            var titleGenres = new List<TitleGenre>();
-
-            foreach(var genrevm in model.Genres)
-            {
-                var genre = _mapper.Map<Genre>(genrevm);
-                var genreFromContext = await _genreContext.FirstOrDefaultAsync(x => x.Name == genre.Name);
-                if (genreFromContext == null)
-                    genreFromContext = genre;
-
-                titleGenres.Add(new TitleGenre
-                {
-                    Title = title,
-                    TitleId = title.Id,
-                    Genre = genreFromContext,
-                    GenreId = genreFromContext.Id
-                });
-            }
-            title.Genres = titleGenres;
-            await _titleContext.AddAsync(title);
-            
-            if (await _context.SaveChangesAsync() > 0 )
+            var title = await _titleService.CreateTitleFromCreateViewModelAsync(model);
+            if (title != null)
                 return Created($"{HttpContext.Request.Scheme}://{HttpContext.Request.Host}/Title/{title.Id}", _mapper.Map<TitleViewModel>(title));
 
             return BadRequest();

@@ -30,6 +30,7 @@ using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Zhoplix.Services.EmailService;
 using Zhoplix.Services.Media;
+using Zhoplix.Services.CRUD;
 
 namespace Zhoplix
 {
@@ -113,6 +114,8 @@ namespace Zhoplix
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
             services.AddSingleton<IFfMpegProvider, FfMpegProvider>();
+
+            services.AddTransient<ITitleService, TitleService>();
 
             services.AddScoped<IAuthenticationService, AuthenticationService>();
             services.AddScoped<IMediaService, MediaService>();
