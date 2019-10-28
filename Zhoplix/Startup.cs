@@ -114,11 +114,6 @@ namespace Zhoplix
             services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
             services.AddSingleton<IFfMpegProvider, FfMpegProvider>();
 
-            services.AddTransient<IRepository<Title>, Repository<Title>>();
-            services.AddTransient<IRepository<Season>, Repository<Season>>();
-            services.AddTransient<IRepository<Episode>, Repository<Episode>>();
-            services.AddTransient<IRepository<User>, Repository<User>>();
-
             services.AddScoped<IAuthenticationService, AuthenticationService>();
             services.AddScoped<IMediaService, MediaService>();
             services.AddScoped<IUrlHelper>(x => {

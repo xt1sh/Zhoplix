@@ -14,6 +14,7 @@ using Zhoplix.Configurations;
 using Zhoplix.Models.Identity;
 using Zhoplix.Services.AuthenticationService.Response;
 using Zhoplix.Services.TokenHandler;
+using Microsoft.EntityFrameworkCore;
 
 namespace Zhoplix.Services.AuthenticationService
 {
@@ -23,22 +24,25 @@ namespace Zhoplix.Services.AuthenticationService
 
         public readonly ITokenHandler _tokenHandler;
         private readonly JwtConfiguration _jwtConfig;
-        private readonly IRepository<User> _userRepository;
+        private readonly DbSet<User> _userContext;
+        private readonly ApplicationDbContext _context;
         private readonly IUrlHelper _url;
         private readonly IEmailSender _emailSender;
 
 
-        public AuthenticationService(UserManager<User> userManager,
+        public AuthenticationService(
+            UserManager<User> userManager,
             ITokenHandler tokenHandler,
             IOptions<JwtConfiguration> jwtConfig,
-            IRepository<User> userRepository,
+            ApplicationDbContext context,
             IUrlHelper url,
             IEmailSender emailSender)
         {
             _userManager = userManager;
             _tokenHandler = tokenHandler;
             _jwtConfig = jwtConfig.Value;
-            _userRepository = userRepository;
+            _context = context;
+            _userContext = _context.Users;
             _url = url;
             _emailSender = emailSender;
         }
@@ -59,7 +63,8 @@ namespace Zhoplix.Services.AuthenticationService
                 {
                     var refreshToken = await _tokenHandler.GenerateRefreshTokenAsync(new List<Claim>(authClaims));
                     user.RefreshToken = refreshToken;
-                    await _userRepository.ChangeObjectAsync(user);
+                    _userContext.Update(user);
+                    await _context.SaveChangesAsync();
 
                     return (true, new DefaultResponse(accessToken, refreshToken, _jwtConfig.AccessExpirationTime));
                 }
@@ -112,8 +117,8 @@ namespace Zhoplix.Services.AuthenticationService
                 var refreshToken = await _tokenHandler.GenerateRefreshTokenAsync(new List<Claim>(authClaims));
 
                 user.RefreshToken = refreshToken;
-                await _userRepository.ChangeObjectAsync(user);
-
+                _userContext.Update(user);
+                await _context.SaveChangesAsync();
 
                 return (true, new DefaultResponse(accessToken, refreshToken, _jwtConfig.AccessExpirationTime));
 
