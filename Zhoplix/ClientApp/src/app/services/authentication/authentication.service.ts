@@ -7,6 +7,7 @@ import { JwtHelperService } from '@auth0/angular-jwt';
 import { CurrentUser } from 'src/app/models/current-user';
 import decode from 'jwt-decode';
 import { Registration } from 'src/app/models/registration';
+import fingerprint from 'fingerprintjs2';
 
 @Injectable({
   providedIn: 'root'
@@ -62,5 +63,12 @@ export class AuthenticationService {
     }
     const jwtHelper = new JwtHelperService();
     return !jwtHelper.isTokenExpired(token);
+  }
+
+  createFingerprint() {
+    fingerprint.get((result) => {
+      console.log(result)
+      console.log(fingerprint.x64hash128(result.join('')));
+    })
   }
 }
