@@ -47,12 +47,10 @@ export class LoginComponent implements OnInit {
         login.fingerPrint = value;
         this.auth.login(login)
           .subscribe(res => {
-            console.log(1)
             this.incorrect = false;
             this.auth.setToken(res, this.loginForm.controls['rememberMe'].value);
             this.ngZone.run(() => this.router.navigate([this.returnUrl])).then();
             this.loginSpinner = false;
-            console.log(this.loginSpinner)
             loginObservable.unsubscribe();
           }, error => {
             this.incorrect = true;

@@ -29,15 +29,9 @@ namespace Zhoplix.Controllers
     public class AuthenticationController : ControllerBase
     {
         private readonly IAuthenticationService _authentication;
-        private readonly UserManager<User> _userManager;
-        private readonly IMapper _mapper;
 
-        public AuthenticationController(UserManager<User> userManager,
-  
-            IAuthenticationService authentication
-        )
+        public AuthenticationController(IAuthenticationService authentication)
         {
-
             _authentication = authentication;
         }
 
@@ -45,7 +39,7 @@ namespace Zhoplix.Controllers
         public async Task<IActionResult> Registration(RegistrationViewModel model)
         {
             
-            var errors = await _authentication.CreateUserAsync(model);
+            var errors = await _authentication.SignUpUserAsync(model);
 
             if (errors is null)
             {
@@ -76,9 +70,20 @@ namespace Zhoplix.Controllers
         [HttpPost]
         public async Task<IActionResult> ConfirmEmail(EmailConfirmationViewModel model)
         {
+            var response = await _authentication.ConfirmUserAsync(model);
 
+            if (response != null)
+            {
+                return Ok(response);
+            }
 
-            var response = await _authentication.ConfirmUser(model);
+            return BadRequest();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> RefreshTokens(RefreshViewModel model)
+        {
+            var response = await _authentication.RefreshTokensAsync(model);
 
             if (response != null)
             {

@@ -4,8 +4,6 @@ import { AuthenticationService } from 'src/app/services/authentication/authentic
 
 @Component({
   selector: 'app-confirmEmail',
-  templateUrl: './confirmEmail.component.html',
-  styleUrls: ['./confirmEmail.component.scss']
 })
 export class ConfirmEmailComponent implements OnInit {
 
@@ -23,12 +21,14 @@ export class ConfirmEmailComponent implements OnInit {
 }
 
   ngOnInit() {
-  
-    this.auth.confirmEmail(this.userId, this.token)
-    .subscribe(res => {
-      this.auth.setToken(res);
-    });
+    
+    const confirmEmailObservable = this.auth.createFingerprint().subscribe(value => {
+    this.auth.confirmEmail(this.userId, this.token, value)
+      .subscribe(res => {
+        this.auth.setToken(res);
+      });
     this.router.navigate(['']);
+    });
   }
 
 }
