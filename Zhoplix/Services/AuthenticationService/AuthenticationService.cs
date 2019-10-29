@@ -172,6 +172,30 @@ namespace Zhoplix.Services.AuthenticationService
             return null;
         }
 
+        public async Task<DefaultResponse> RefreshTokensAsync(RefreshViewModel model)
+        {
+            var session = await _sessionContext.FirstOrDefaultAsync(s => s.RefreshToken == model.RefreshToken);
+            if (DateTime.Now > _tokenHandler.ValidTo(model.RefreshToken) || session.Fingerprint != model.Fingerprint)
+                return null;
+            
+            _sessionContext.Remove(session);
+            var user = await _userManager.FindByIdAsync(session.UserId.ToString());
+            var accessToken = await _tokenHandler.GenerateAccessTokenAsync(user, _userManager.GetRolesAsync(user).Result);
+            var refreshToken = await _tokenHandler.GenerateRefreshTokenAsync(user);
+            _sessionContext.Add(new Session
+            {
+                User = user,
+                RefreshToken = model.RefreshToken,
+                Fingerprint = model.Fingerprint,
+                CreatedAt = DateTime.Now
+            });
+
+            if (await _context.SaveChangesAsync() > 0)
+                return new DefaultResponse(accessToken, refreshToken, _jwtConfig.AccessExpirationTime);
+
+            return null;
+        }
+
         public string GenerateConfirmationMessage(int userId, string token)
         {
             var callbackUrl = _url.Action(

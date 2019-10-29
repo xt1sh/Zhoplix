@@ -34,8 +34,6 @@ namespace Zhoplix.Controllers
         public AuthenticationController(IAuthenticationService authentication)
         {
             _authentication = authentication;
-            _logger = logger;
-            _tokenHandler = tokenHandler;
         }
 
         [HttpPost]
@@ -44,7 +42,7 @@ namespace Zhoplix.Controllers
             
             var errors = await _authentication.SignUpUserAsync(model);
 
-            if (isSuccess)
+            if (errors is null)
             {
                 return Ok();
             }
@@ -59,7 +57,6 @@ namespace Zhoplix.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(LoginViewModel model)
         {
-            var regex = new Regex(@"^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$");
 
             var response = await _authentication.AuthenticateAsync(model);
 
@@ -89,7 +86,7 @@ namespace Zhoplix.Controllers
         {
             var response = await _authentication.RefreshTokensAsync(model);
 
-            if (isSuccess)
+            if (response != null)
             {
                 return Ok(response);
             }
