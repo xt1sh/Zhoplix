@@ -9,8 +9,8 @@ namespace Zhoplix.Models
     public class UserTitle
     {
         public int UserId { get; set; }
-        public int TitleId { get; set; }
         public User User { get; set; }
+        public int TitleId { get; set; }
         public Title Title { get; set; }
     }
 }

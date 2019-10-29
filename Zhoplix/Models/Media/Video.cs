@@ -9,6 +9,7 @@ namespace Zhoplix.Models
     public class Video
     {
         public string Id { get; set; }
+        public int EpisodeId { get; set; }
         public Episode Episode { get; set; }
         public string Location { get; set; }
         [NotMapped]

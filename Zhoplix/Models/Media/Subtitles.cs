@@ -9,6 +9,7 @@ namespace Zhoplix.Models
     {
         public int Id { get; set; }
         public string Language { get; set; }
+        public int EpisodeId { get; set; }
         public Episode Episode { get; set; }
     }
 }
