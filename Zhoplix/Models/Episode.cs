@@ -13,7 +13,6 @@ namespace Zhoplix.Models
         public int SeasonId { get; set; }
         public Season Season { get; set; }
         public IList<UserEpisode> UserEpisodes { get; set; }
-        public TimeSpan Duration { get; set; }
         public bool HasOpening => OpeningStart != null && OpeningFinish != null;
         public TimeSpan? OpeningStart { get; set; }
         public TimeSpan? OpeningFinish { get; set; }

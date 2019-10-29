@@ -9,16 +9,32 @@ using Zhoplix.ViewModels.Season;
 
 namespace Zhoplix.Services.CRUD
 {
-    public class SeasonService
+    public interface ISeasonService
+    {
+        Task<bool> CreateSeasonAsync(Season season);
+        Task<Season> CreateSeasonFromCreateViewModelAsync(CreateSeasonViewModel model);
+        Task<bool> DeleteSeasonAsync(int id);
+        Task<bool> DeleteSeasonAsync(Season season);
+        Task<IEnumerable<Season>> GetAllSeasonsAsync();
+        Task<Season> GetSeasonAsync(int id);
+        Task<Season> GetSeasonAsync(Season season);
+        Task<IEnumerable<Season>> GetSeasonPageAsync(int page, int pageSize);
+        Task<bool> UpdateSeasonAsync(Season season);
+    }
+
+    public class SeasonService : ISeasonService
     {
         private readonly ApplicationDbContext _context;
+        private readonly ITitleService _titleService;
         private readonly DbSet<Season> _seasonContext;
         private readonly IMapper _mapper;
 
         public SeasonService(ApplicationDbContext context,
+            ITitleService titleService,
             IMapper mapper)
         {
             _context = context;
+            _titleService = titleService;
             _seasonContext = _context.Seasons;
             _mapper = mapper;
         }
@@ -26,6 +42,14 @@ namespace Zhoplix.Services.CRUD
         public async Task<Season> CreateSeasonFromCreateViewModelAsync(CreateSeasonViewModel model)
         {
             var season = _mapper.Map<Season>(model);
+            var title = await _titleService.GetTitleAsync(model.TitleId);
+
+            if (title == null)
+                return null;
+
+            season.Title = title;
+            if (await CreateSeasonAsync(season))
+                return season;
 
             return null;
         }

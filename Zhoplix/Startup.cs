@@ -115,6 +115,7 @@ namespace Zhoplix
             services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
 
             services.AddTransient<ITitleService, TitleService>();
+            services.AddTransient<ISeasonService, SeasonService>();
 
             services.AddScoped<IAuthenticationService, AuthenticationService>();
             services.AddScoped<IMediaService, MediaService>();

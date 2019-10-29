@@ -25,29 +25,21 @@ namespace Zhoplix.Controllers
     public class AdminController : ControllerBase
     {
         private readonly ITitleService _titleService;
-        private readonly ApplicationDbContext _context;
-        private readonly DbSet<Title> _titleContext;
-        private readonly DbSet<Season> _seasonContext;
-        private readonly DbSet<Episode> _episodeContext;
-        private readonly DbSet<Genre> _genreContext;
+        private readonly ISeasonService _seasonService;
         private readonly IMapper _mapper;
         private readonly ILogger<AdminController> _logger;
         private readonly IMediaService _mediaService;
         private readonly IFfMpegProvider _ffMpeg;
 
         public AdminController(ITitleService titleService,
-            ApplicationDbContext context,
+            ISeasonService seasonService,
             IMapper mapper,
             ILogger<AdminController> logger,
             IMediaService mediaService,
             IFfMpegProvider ffMpeg)
         {
             _titleService = titleService;
-            _context = context;
-            _titleContext = _context.Titles;
-            _seasonContext = _context.Seasons;
-            _episodeContext = _context.Episodes;
-            _genreContext = _context.Genres;
+            _seasonService = seasonService;
             _mapper = mapper;
             _logger = logger;
             _mediaService = mediaService;
@@ -67,19 +59,15 @@ namespace Zhoplix.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateSeason(CreateSeasonViewModel model)
         {
-            var season = _mapper.Map<Season>(model);
-            await _seasonContext.AddAsync(season);
-            await _context.SaveChangesAsync();
+            var season = await _seasonService.CreateSeasonFromCreateViewModelAsync(model);
             return Created($"{HttpContext.Request.Scheme}://{HttpContext.Request.Host}/Season/{season.Id}", _mapper.Map<SeasonViewModel>(season));
         }
 
         [HttpPost]
         public async Task<IActionResult> CreateEpisode(CreateEpisodeViewModel model)
         {
-            var episode = _mapper.Map<Episode>(model);
-            await _episodeContext.AddAsync(episode);
-            await _context.SaveChangesAsync();
-            return Created($"{HttpContext.Request.Scheme}://{HttpContext.Request.Host}/Episode/{episode.Id}", _mapper.Map<SeasonViewModel>(episode));
+            //return Created($"{HttpContext.Request.Scheme}://{HttpContext.Request.Host}/Episode/{episode.Id}", _mapper.Map<SeasonViewModel>(episode));
+            return Ok();
         }
 
         [HttpPost]
