@@ -57,9 +57,7 @@ namespace Zhoplix.Services.CRUD
                 titleGenres.Add(new TitleGenre
                 {
                     Title = title,
-                    TitleId = title.Id,
                     Genre = genreFromContext,
-                    GenreId = genreFromContext.Id
                 });
             }
             title.Genres = titleGenres;

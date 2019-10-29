@@ -218,7 +218,7 @@ namespace Zhoplix.Migrations
                     Name = table.Column<string>(nullable: true),
                     Description = table.Column<string>(nullable: true),
                     ImageId = table.Column<string>(nullable: true),
-                    TitleId = table.Column<int>(nullable: true)
+                    TitleId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -228,7 +228,7 @@ namespace Zhoplix.Migrations
                         column: x => x.TitleId,
                         principalTable: "Titles",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -287,7 +287,7 @@ namespace Zhoplix.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(nullable: true),
                     Description = table.Column<string>(nullable: true),
-                    SeasonId = table.Column<int>(nullable: true),
+                    SeasonId = table.Column<int>(nullable: false),
                     Duration = table.Column<TimeSpan>(nullable: false),
                     OpeningStart = table.Column<TimeSpan>(nullable: true),
                     OpeningFinish = table.Column<TimeSpan>(nullable: true),
@@ -302,7 +302,7 @@ namespace Zhoplix.Migrations
                         column: x => x.SeasonId,
                         principalTable: "Seasons",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -313,7 +313,7 @@ namespace Zhoplix.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Language = table.Column<string>(nullable: true),
                     Translation = table.Column<string>(nullable: true),
-                    EpisodeId = table.Column<int>(nullable: true)
+                    EpisodeId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -323,7 +323,7 @@ namespace Zhoplix.Migrations
                         column: x => x.EpisodeId,
                         principalTable: "Episodes",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -333,7 +333,7 @@ namespace Zhoplix.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Language = table.Column<string>(nullable: true),
-                    EpisodeId = table.Column<int>(nullable: true)
+                    EpisodeId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -343,7 +343,7 @@ namespace Zhoplix.Migrations
                         column: x => x.EpisodeId,
                         principalTable: "Episodes",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -377,7 +377,7 @@ namespace Zhoplix.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(nullable: false),
-                    EpisodeId = table.Column<int>(nullable: true),
+                    EpisodeId = table.Column<int>(nullable: false),
                     Location = table.Column<string>(nullable: true),
                     Width = table.Column<int>(nullable: false),
                     Height = table.Column<int>(nullable: false),
@@ -394,7 +394,7 @@ namespace Zhoplix.Migrations
                         column: x => x.EpisodeId,
                         principalTable: "Episodes",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(

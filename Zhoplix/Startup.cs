@@ -113,12 +113,12 @@ namespace Zhoplix
             services.AddSingleton<IEmailSender, EmailSender>();
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
-            services.AddSingleton<IFfMpegProvider, FfMpegProvider>();
 
             services.AddTransient<ITitleService, TitleService>();
 
             services.AddScoped<IAuthenticationService, AuthenticationService>();
             services.AddScoped<IMediaService, MediaService>();
+            services.AddTransient<IFfMpegProvider, FfMpegProvider>();
             services.AddScoped<IUrlHelper>(x => {
                 var actionContext = x.GetRequiredService<IActionContextAccessor>().ActionContext;
                 var factory = x.GetRequiredService<IUrlHelperFactory>();

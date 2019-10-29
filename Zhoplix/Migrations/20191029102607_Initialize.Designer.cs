@@ -10,7 +10,7 @@ using Zhoplix;
 namespace Zhoplix.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20191028183810_Initialize")]
+    [Migration("20191029102607_Initialize")]
     partial class Initialize
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -162,7 +162,7 @@ namespace Zhoplix.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("EpisodeId")
+                    b.Property<int>("EpisodeId")
                         .HasColumnType("int");
 
                     b.Property<string>("Language")
@@ -203,7 +203,7 @@ namespace Zhoplix.Migrations
                     b.Property<TimeSpan?>("OpeningStart")
                         .HasColumnType("time");
 
-                    b.Property<int?>("SeasonId")
+                    b.Property<int>("SeasonId")
                         .HasColumnType("int");
 
                     b.Property<int>("ThumbnailsAmount")
@@ -339,7 +339,7 @@ namespace Zhoplix.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("TitleId")
+                    b.Property<int>("TitleId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -356,7 +356,7 @@ namespace Zhoplix.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("EpisodeId")
+                    b.Property<int>("EpisodeId")
                         .HasColumnType("int");
 
                     b.Property<string>("Language")
@@ -452,7 +452,7 @@ namespace Zhoplix.Migrations
                     b.Property<string>("Codec")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("EpisodeId")
+                    b.Property<int>("EpisodeId")
                         .HasColumnType("int");
 
                     b.Property<int>("Height")
@@ -535,14 +535,18 @@ namespace Zhoplix.Migrations
                 {
                     b.HasOne("Zhoplix.Models.Episode", "Episode")
                         .WithMany("Audios")
-                        .HasForeignKey("EpisodeId");
+                        .HasForeignKey("EpisodeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Zhoplix.Models.Episode", b =>
                 {
                     b.HasOne("Zhoplix.Models.Season", "Season")
                         .WithMany("Episodes")
-                        .HasForeignKey("SeasonId");
+                        .HasForeignKey("SeasonId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Zhoplix.Models.Rating", b =>
@@ -564,14 +568,18 @@ namespace Zhoplix.Migrations
                 {
                     b.HasOne("Zhoplix.Models.Title", "Title")
                         .WithMany("Seasons")
-                        .HasForeignKey("TitleId");
+                        .HasForeignKey("TitleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Zhoplix.Models.Subtitles", b =>
                 {
                     b.HasOne("Zhoplix.Models.Episode", "Episode")
                         .WithMany("Subtitles")
-                        .HasForeignKey("EpisodeId");
+                        .HasForeignKey("EpisodeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Zhoplix.Models.TitleGenre", b =>
@@ -623,7 +631,9 @@ namespace Zhoplix.Migrations
                 {
                     b.HasOne("Zhoplix.Models.Episode", "Episode")
                         .WithMany("Videos")
-                        .HasForeignKey("EpisodeId");
+                        .HasForeignKey("EpisodeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }
