@@ -21,7 +21,6 @@ export class AuthenticationService {
               @Inject('BASE_URL') private readonly originUrl: string) { }
 
   login(userCredentials: Login): Observable<HttpResponse<any>>  {
-    console.log(userCredentials.fingerPrint);
     return this.http.post<Login>(`${this.originUrl}Authentication/Login`, userCredentials,
                                 { observe: 'response' });
   }
@@ -31,9 +30,13 @@ export class AuthenticationService {
                                 { observe: 'response' });
   }
 
-  confirmEmail(userId:string, token:string): Observable<HttpResponse<any>> {
-    const fingerPrint = this.createFingerprint();
+  confirmEmail(userId:string, token:string, fingerPrint:string): Observable<HttpResponse<any>> {
     return this.http.post(`${this.originUrl}Authentication/ConfirmEmail`, {userId:userId, token:token, fingerPrint:fingerPrint},
+                                { observe: 'response'});
+  }
+
+  refreshTokens(refreshToken:string, fingerPrint:string): Observable<HttpResponse<any>> {
+    return this.http.post(`${this.originUrl}Authentication/RefreshTokens`, {refreshToken, fingerPrint},
                                 { observe: 'response'});
   }
 
@@ -50,12 +53,16 @@ export class AuthenticationService {
     localStorage.setItem('expires_in', expirationTime.toString());
     localStorage.setItem('access_token', authResult.body.accessToken);
     if (setRefresh) {
-      this.cookieService.set('refresh_token', authResult.body.refreshToken, 30);
+      this.cookieService.set('refresh_token', authResult.body.refreshToken, 30,  "/");
     }
   }
 
-  getToken(): string {
+  getAccessToken(): string {
     return localStorage.getItem('access_token');
+  }
+  
+  getRefreshToken(): string {
+    return this.cookieService.get('refresh_token');
   }
 
   get isLoggedIn(): boolean {

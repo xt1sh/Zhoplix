@@ -15,8 +15,10 @@ namespace Zhoplix.Services.AuthenticationService
     {
         Task<AccessTokenResponse> AuthenticateAsync(LoginViewModel model);
 
-        Task<IEnumerable<IdentityError>> CreateUserAsync(RegistrationViewModel model);
+        Task<IEnumerable<IdentityError>> SignUpUserAsync(RegistrationViewModel model);
 
-        Task<DefaultResponse> ConfirmUser(EmailConfirmationViewModel model);
+        Task<DefaultResponse> ConfirmUserAsync(EmailConfirmationViewModel model);
+
+        Task<DefaultResponse> RefreshTokensAsync(RefreshViewModel model);
     }
 }
