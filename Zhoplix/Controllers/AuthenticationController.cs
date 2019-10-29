@@ -35,6 +35,8 @@ namespace Zhoplix.Controllers
         public AuthenticationController(IAuthenticationService authentication)
         {
             _authentication = authentication;
+            _logger = logger;
+            _tokenHandler = tokenHandler;
         }
 
         [HttpPost]

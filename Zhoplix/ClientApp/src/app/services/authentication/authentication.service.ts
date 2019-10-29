@@ -18,6 +18,7 @@ export class AuthenticationService {
 
   public fingerPrint: string = '';
   public redirectUrl: string = '';
+
   constructor(private readonly http: HttpClient,
               private readonly cookieService: CookieService,
               @Inject('BASE_URL') private readonly originUrl: string) { }
