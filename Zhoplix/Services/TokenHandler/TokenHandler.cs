@@ -12,6 +12,7 @@ using Microsoft.IdentityModel.Tokens;
 using Zhoplix.Configurations;
 using System.Security.Cryptography;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
+using Zhoplix.Models.Identity;
 
 namespace Zhoplix.Services.TokenHandler
 {
@@ -25,14 +26,18 @@ namespace Zhoplix.Services.TokenHandler
             _jwtConfiguration = jwtConfiguration.Value;
         }
 
-        public Task<string> GenerateAccessTokenAsync(List<Claim> claims, IEnumerable<string> roles)
+        public Task<string> GenerateAccessTokenAsync(User user, IEnumerable<string> roles)
         {
 
             var key = Encoding.UTF8.GetBytes(_jwtConfiguration.Secret);
-
+            var claims = new List<Claim>
+            {
+                new Claim(JwtRegisteredClaimNames.Sub, user.UserName),
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new Claim("token_type", "access")
+            };
             claims.AddRange(from role in roles
                             select new Claim(ClaimsIdentity.DefaultRoleClaimType, role));
-            claims.Add(new Claim("token_type", "access"));
             
             var token = new JwtSecurityToken(
                 claims: claims,
@@ -43,11 +48,15 @@ namespace Zhoplix.Services.TokenHandler
             return Task.FromResult(new JwtSecurityTokenHandler().WriteToken(token));
         }
 
-        public Task<string> GenerateRefreshTokenAsync(List<Claim> claims)
+        public Task<string> GenerateRefreshTokenAsync(User user)
         {
             var key = Encoding.UTF8.GetBytes(_jwtConfiguration.Secret);
-
-            claims.Add(new Claim("token_type", "refresh"));
+            var claims = new List<Claim>
+            {
+                new Claim(JwtRegisteredClaimNames.Sub, user.UserName),
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new Claim("token_type", "refresh")
+            };
 
             var token = new JwtSecurityToken(
                 claims: claims,
@@ -56,7 +65,8 @@ namespace Zhoplix.Services.TokenHandler
             );
 
             return Task.FromResult(new JwtSecurityTokenHandler().WriteToken(token));
-
         }
+
+        public DateTime ValidTo(string token) => new JwtSecurityToken(token).ValidTo;
     }
 }
