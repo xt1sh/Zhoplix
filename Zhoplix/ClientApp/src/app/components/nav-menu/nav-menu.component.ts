@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
+import { AuthenticationService } from 'src/app/services/authentication/authentication.service';
 
 const routes: string[] = [];
 
@@ -20,12 +21,13 @@ export class NavMenuComponent implements OnInit {
   toShowSignIn$: Observable<boolean>;
   toShowSignIn: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
-  constructor(private readonly router: Router) {}
+  constructor(private readonly router: Router,
+              private readonly auth: AuthenticationService) {}
 
   ngOnInit() {
     this.toShow$ = this.getToShowValue;
     this.toShowSignIn$ = this.getToShowSignInValue;
-    this.router.events
+    const event = this.router.events
       .pipe(filter(event => event instanceof NavigationEnd))
       .subscribe(() => {
         this.toShow$ = this.getToShowValue;
@@ -39,7 +41,11 @@ export class NavMenuComponent implements OnInit {
   }
 
   get getToShowSignInValue() {
-    this.toShowSignIn.next(!this.router.url.includes("login"));
+    if(this.auth.isLoggedIn) {
+      this.toShowSignIn.next(false);
+    } else {
+      this.toShowSignIn.next(!this.router.url.includes("login"));
+    }
     return this.toShowSignIn.asObservable();
   }
 
