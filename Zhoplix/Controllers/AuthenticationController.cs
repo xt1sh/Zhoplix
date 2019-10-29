@@ -30,21 +30,15 @@ namespace Zhoplix.Controllers
         private readonly IAuthenticationService _authentication;
         private readonly UserManager<User> _userManager;
         private readonly IMapper _mapper;
-        private readonly ILogger<AuthenticationController> _logger;
-        private readonly ITokenHandler _tokenHandler;
 
         public AuthenticationController(UserManager<User> userManager,
             IMapper mapper,
-            IAuthenticationService authentication,
-            ITokenHandler tokenHandler,
-            ILogger<AuthenticationController> logger
+            IAuthenticationService authentication
         )
         {
             _userManager = userManager;
             _mapper = mapper;
             _authentication = authentication;
-            _logger = logger;
-            _tokenHandler = tokenHandler;
         }
 
         [HttpPost]

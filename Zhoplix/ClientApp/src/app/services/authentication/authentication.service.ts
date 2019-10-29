@@ -15,13 +15,13 @@ import fingerprint from 'fingerprintjs2';
 export class AuthenticationService {
 
   public redirectUrl: string = '';
-
   constructor(private readonly http: HttpClient,
               private readonly cookieService: CookieService,
               @Inject('BASE_URL') private readonly originUrl: string) { }
 
   login(userCredentials: Login): Observable<HttpResponse<any>>  {
-    return this.http.post<Login>(`${this.originUrl}Authentication/Login`, userCredentials,
+    const fingerPrint = this.createFingerprint();
+    return this.http.post<Login>(`${this.originUrl}Authentication/Login`, {userCredentials, fingerPrint:fingerPrint},
                                 { observe: 'response' });
   }
 
@@ -31,7 +31,8 @@ export class AuthenticationService {
   }
 
   confirmEmail(userId:string, token:string): Observable<HttpResponse<any>> {
-    return this.http.post(`${this.originUrl}Authentication/ConfirmEmail`, {userId:userId, token:token}, 
+    const fingerPrint = this.createFingerprint();
+    return this.http.post(`${this.originUrl}Authentication/ConfirmEmail`, {userId:userId, token:token, fingerPrint:fingerPrint}, 
                                 { observe: 'response'});
   }
 
@@ -65,10 +66,11 @@ export class AuthenticationService {
     return !jwtHelper.isTokenExpired(token);
   }
 
-  createFingerprint() {
+  createFingerprint(): string {
+    let fingerPrint = ' ';
     fingerprint.get((result) => {
-      console.log(result)
-      console.log(fingerprint.x64hash128(result.join('')));
-    })
+      fingerPrint = fingerprint.x64hash128(result.join(''));
+    });
+    return fingerPrint;
   }
 }

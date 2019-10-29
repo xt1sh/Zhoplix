@@ -13,6 +13,7 @@ namespace Zhoplix
         public DbSet<Episode> Episodes { get; set; }
         public DbSet<Genre> Genres { get; set; }
         public DbSet<Rating> Ratings { get; set; }
+        public DbSet<Session> Sessions { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
