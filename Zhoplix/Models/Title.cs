@@ -11,7 +11,7 @@ namespace Zhoplix.Models
         public int Id { get; set; }
         public string Name { get; set; }
         public IList<Season> Seasons { get; set; }
-        public IList<UserTitle> UserTitles { get; set; }
+        public IList<ProfileTitle> ProfileTitles { get; set; }
         public IList<TitleGenre> Genres { get; set; }
         public string Description { get; set; }
         [Range(0, 18)]

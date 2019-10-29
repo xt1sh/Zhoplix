@@ -11,6 +11,7 @@ using Microsoft.Extensions.Logging;
 using Zhoplix.Models;
 using Zhoplix.Models.Media;
 using Zhoplix.Services;
+using Zhoplix.Services.CRUD;
 using Zhoplix.Services.Media;
 using Zhoplix.ViewModels;
 using Zhoplix.ViewModels.Episode;
@@ -23,59 +24,36 @@ namespace Zhoplix.Controllers
     [ApiController]
     public class AdminController : ControllerBase
     {
-        private readonly ApplicationDbContext _context;
-        private readonly DbSet<Title> _titleContext;
-        private readonly DbSet<Season> _seasonContext;
-        private readonly DbSet<Episode> _episodeContext;
-        private readonly DbSet<Genre> _genreContext;
+        private readonly ITitleService _titleService;
+        private readonly ISeasonService _seasonService;
         private readonly IMapper _mapper;
         private readonly ILogger<AdminController> _logger;
         private readonly IMediaService _mediaService;
         private readonly IFfMpegProvider _ffMpeg;
+        private readonly IAvatarGenerator _avatarGenerator;
 
-        public AdminController(
-            ApplicationDbContext context,
+        public AdminController(ITitleService titleService,
+            ISeasonService seasonService,
             IMapper mapper,
             ILogger<AdminController> logger,
             IMediaService mediaService,
-            IFfMpegProvider ffMpeg)
+            IFfMpegProvider ffMpeg,
+            IAvatarGenerator avatarGenerator)
         {
-            _context = context;
-            _titleContext = _context.Titles;
-            _seasonContext = _context.Seasons;
-            _episodeContext = _context.Episodes;
-            _genreContext = _context.Genres;
+            _titleService = titleService;
+            _seasonService = seasonService;
             _mapper = mapper;
             _logger = logger;
             _mediaService = mediaService;
             _ffMpeg = ffMpeg;
+            _avatarGenerator = avatarGenerator;
         }
 
         [HttpPost]
         public async Task<IActionResult> CreateTitle(CreateTitleViewModel model)
         {
-            var title = _mapper.Map<Title>(model);
-            var titleGenres = new List<TitleGenre>();
-
-            foreach(var genrevm in model.Genres)
-            {
-                var genre = _mapper.Map<Genre>(genrevm);
-                var genreFromContext = await _genreContext.FirstOrDefaultAsync(x => x.Name == genre.Name);
-                if (genreFromContext == null)
-                    genreFromContext = genre;
-
-                titleGenres.Add(new TitleGenre
-                {
-                    Title = title,
-                    TitleId = title.Id,
-                    Genre = genreFromContext,
-                    GenreId = genreFromContext.Id
-                });
-            }
-            title.Genres = titleGenres;
-            await _titleContext.AddAsync(title);
-            
-            if (await _context.SaveChangesAsync() > 0 )
+            var title = await _titleService.CreateTitleFromCreateViewModelAsync(model);
+            if (title != null)
                 return Created($"{HttpContext.Request.Scheme}://{HttpContext.Request.Host}/Title/{title.Id}", _mapper.Map<TitleViewModel>(title));
 
             return BadRequest();
@@ -84,19 +62,15 @@ namespace Zhoplix.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateSeason(CreateSeasonViewModel model)
         {
-            var season = _mapper.Map<Season>(model);
-            await _seasonContext.AddAsync(season);
-            await _context.SaveChangesAsync();
+            var season = await _seasonService.CreateSeasonFromCreateViewModelAsync(model);
             return Created($"{HttpContext.Request.Scheme}://{HttpContext.Request.Host}/Season/{season.Id}", _mapper.Map<SeasonViewModel>(season));
         }
 
         [HttpPost]
         public async Task<IActionResult> CreateEpisode(CreateEpisodeViewModel model)
         {
-            var episode = _mapper.Map<Episode>(model);
-            await _episodeContext.AddAsync(episode);
-            await _context.SaveChangesAsync();
-            return Created($"{HttpContext.Request.Scheme}://{HttpContext.Request.Host}/Episode/{episode.Id}", _mapper.Map<SeasonViewModel>(episode));
+            //return Created($"{HttpContext.Request.Scheme}://{HttpContext.Request.Host}/Episode/{episode.Id}", _mapper.Map<SeasonViewModel>(episode));
+            return Ok();
         }
 
         [HttpPost]
@@ -143,6 +117,12 @@ namespace Zhoplix.Controllers
                 _ffMpeg.CreateThumbnails("C:\\Code\\ASP.NET\\Zhoplix\\Zhoplix\\wwwroot\\Videos\\Uploaded\\ElCamino\\ElCamino_120.mp4",
                     "C:\\Code\\ASP.NET\\Zhoplix\\Zhoplix\\wwwroot\\Videos\\Uploaded\\ElCamino\\Thumbnails");
             });
+            return Ok();
+        }
+
+        public async Task<IActionResult> CreateAvatar()
+        {
+            await Task.Run(() => _avatarGenerator.GenerateAvatar(7, 700));
             return Ok();
         }
     }

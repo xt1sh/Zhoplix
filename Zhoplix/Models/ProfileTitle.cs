@@ -6,11 +6,11 @@ using Zhoplix.Models.Identity;
 
 namespace Zhoplix.Models
 {
-    public class UserTitle
+    public class ProfileTitle
     {
-        public int UserId { get; set; }
+        public int ProfileId { get; set; }
+        public Profile Profile { get; set; }
         public int TitleId { get; set; }
-        public User User { get; set; }
         public Title Title { get; set; }
     }
 }

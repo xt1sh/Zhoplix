@@ -9,6 +9,6 @@ namespace Zhoplix.Models
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public List<TitleGenre> TitleGenres { get; set; }
+        public IList<TitleGenre> TitleGenres { get; set; }
     }
 }

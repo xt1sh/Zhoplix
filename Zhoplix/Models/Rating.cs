@@ -8,9 +8,9 @@ namespace Zhoplix.Models
 {
     public class Rating
     {
-        public int UserId { get; set; }
+        public int ProfileId { get; set; }
+        public Profile Profile { get; set; }
         public int TitleId { get; set; }
-        public User User { get; set; }
         public Title Title { get; set; }
         public bool Liked { get; set; }
     }

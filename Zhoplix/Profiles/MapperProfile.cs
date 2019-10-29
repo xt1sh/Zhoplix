@@ -12,7 +12,7 @@ using Zhoplix.ViewModels.Title;
 
 namespace Zhoplix.Profiles
 {
-    public class MapperProfile : Profile
+    public class MapperProfile : AutoMapper.Profile
     {
         public MapperProfile()
         {
@@ -24,7 +24,7 @@ namespace Zhoplix.Profiles
             // ViewModels
             CreateMap<RegistrationViewModel, User>();
             CreateMap<Title, TitleViewModel>();
-            CreateMap<GenreViewModel, Genre>().ReverseMap();
+            CreateMap<CreateGenreViewModel, Genre>().ReverseMap();
 
             // ChangeViewModels
 

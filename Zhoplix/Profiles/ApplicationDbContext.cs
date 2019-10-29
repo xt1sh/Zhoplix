@@ -13,6 +13,7 @@ namespace Zhoplix
         public DbSet<Episode> Episodes { get; set; }
         public DbSet<Genre> Genres { get; set; }
         public DbSet<Rating> Ratings { get; set; }
+        public DbSet<Profile> Profiles { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
@@ -23,25 +24,25 @@ namespace Zhoplix
         {
             base.OnModelCreating(builder);
 
-            builder.Entity<UserEpisode>()
-                .HasKey(bc => new { bc.UserId, bc.EpisodeId });
-            builder.Entity<UserEpisode>()
-                .HasOne(bc => bc.User)
-                .WithMany(b => b.UserEpisodes)
-                .HasForeignKey(bc => bc.UserId);
-            builder.Entity<UserEpisode>()
+            builder.Entity<ProfileEpisode>()
+                .HasKey(bc => new { bc.ProfileId, bc.EpisodeId });
+            builder.Entity<ProfileEpisode>()
+                .HasOne(bc => bc.Profile)
+                .WithMany(b => b.ProfileEpisodes)
+                .HasForeignKey(bc => bc.ProfileId);
+            builder.Entity<ProfileEpisode>()
                 .HasOne(bc => bc.Episode)
-                .WithMany(c => c.UserEpisodes)
+                .WithMany(c => c.ProfileEpisode)
                 .HasForeignKey(bc => bc.EpisodeId);
 
-            builder.Entity<UserTitle>()
-                .HasKey(k => new { k.UserId, k.TitleId });
+            builder.Entity<ProfileTitle>()
+                .HasKey(k => new { k.ProfileId, k.TitleId });
 
             builder.Entity<TitleGenre>()
                 .HasKey(k => new { k.TitleId, k.GenreId });
 
             builder.Entity<Rating>()
-                .HasKey(k => new { k.UserId, k.TitleId });
+                .HasKey(k => new { k.ProfileId, k.TitleId });
 
             builder.Entity<Genre>()
                 .HasIndex(x => x.Name)
