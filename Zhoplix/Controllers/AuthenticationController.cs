@@ -65,7 +65,7 @@ namespace Zhoplix.Controllers
 
             var response = await _authentication.AuthenticateAsync(model);
 
-            if (response is null)
+            if (response != null)
             {
                 return Ok(response);
             }

@@ -20,24 +20,20 @@ export class AuthenticationService {
               private readonly cookieService: CookieService,
               @Inject('BASE_URL') private readonly originUrl: string) { }
 
-  login(userCredentials: Login): any  {
-    
-    this.createFingerprint().subscribe(response => {
-      userCredentials.fingerPrint = response;
-      console.log(userCredentials.fingerPrint);
-      return this.http.post<Login>(`${this.originUrl}Authentication/Login`, userCredentials,
-                                  { observe: 'response' });
-    });
+  login(userCredentials: Login): Observable<HttpResponse<any>>  {
+    console.log(userCredentials.fingerPrint);
+    return this.http.post<Login>(`${this.originUrl}Authentication/Login`, userCredentials,
+                                { observe: 'response' });
   }
 
   signUp(userCredentials: Registration): Observable<HttpResponse<any>> {
-    return this.http.post<Registration>(`${this.originUrl}Authentication/Registration`, userCredentials, 
+    return this.http.post<Registration>(`${this.originUrl}Authentication/Registration`, userCredentials,
                                 { observe: 'response' });
   }
 
   confirmEmail(userId:string, token:string): Observable<HttpResponse<any>> {
     const fingerPrint = this.createFingerprint();
-    return this.http.post(`${this.originUrl}Authentication/ConfirmEmail`, {userId:userId, token:token, fingerPrint:fingerPrint}, 
+    return this.http.post(`${this.originUrl}Authentication/ConfirmEmail`, {userId:userId, token:token, fingerPrint:fingerPrint},
                                 { observe: 'response'});
   }
 
@@ -71,13 +67,17 @@ export class AuthenticationService {
     return !jwtHelper.isTokenExpired(token);
   }
 
-  createFingerprint(): Observable<string>{
-
+  createFingerprint(): Observable<string> {
     return new Observable(observer => {
       fingerprint.get((result) => {
-        return fingerprint.x64hash128(result.join(''));
+        const print = fingerprint.x64hash128(result.join(''));
+        if(!print) {
+          observer.error();
+        } else {
+          observer.next(print);
+        }
+        observer.complete();
       });
-    });  
-
+    });
   }
 }
