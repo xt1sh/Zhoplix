@@ -6,15 +6,17 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Zhoplix.Models.Identity;
 using Zhoplix.Services.AuthenticationService.Response;
+using Zhoplix.ViewModels;
+using Zhoplix.ViewModels.Authentication;
 
 namespace Zhoplix.Services.AuthenticationService
 {
     public interface IAuthenticationService
     {
-        Task<(bool, AccessTokenResponse)> AuthenticateAsync(User user, string password, bool rememberMe);
+        Task<AccessTokenResponse> AuthenticateAsync(LoginViewModel model);
 
-        Task<(bool, IEnumerable<IdentityError>)> CreateUserAsync(User user, string password);
+        Task<IEnumerable<IdentityError>> CreateUserAsync(RegistrationViewModel model);
 
-        Task<(bool, DefaultResponse)> ConfirmUser(User user, string token, string role);
+        Task<DefaultResponse> ConfirmUser(EmailConfirmationViewModel model);
     }
 }
