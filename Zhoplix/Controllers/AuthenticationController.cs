@@ -19,6 +19,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Logging;
 using Zhoplix.Services.AuthenticationService;
 using System.Text.RegularExpressions;
+using Org.BouncyCastle.Ocsp;
 using Zhoplix.Services.AuthenticationService.Response;
 
 namespace Zhoplix.Controllers
@@ -32,23 +33,21 @@ namespace Zhoplix.Controllers
         private readonly IMapper _mapper;
 
         public AuthenticationController(UserManager<User> userManager,
-            IMapper mapper,
+  
             IAuthenticationService authentication
         )
         {
-            _userManager = userManager;
-            _mapper = mapper;
+
             _authentication = authentication;
         }
 
         [HttpPost]
         public async Task<IActionResult> Registration(RegistrationViewModel model)
         {
-            var user = _mapper.Map<User>(model);
+            
+            var errors = await _authentication.CreateUserAsync(model);
 
-            var (isSuccess, errors) = await _authentication.CreateUserAsync(user, model.Password);
-
-            if (isSuccess)
+            if (errors is null)
             {
                 return Ok();
             }
@@ -63,15 +62,10 @@ namespace Zhoplix.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(LoginViewModel model)
         {
-            var regex = new Regex(@"^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$");
 
-            var user = regex.IsMatch(model.Login)
-                    ? await _userManager.FindByEmailAsync(model.Login)
-                    : await _userManager.FindByNameAsync(model.Login);
+            var response = await _authentication.AuthenticateAsync(model);
 
-            var (isSuccess, response) = await _authentication.AuthenticateAsync(user, model.Password, model.RememberMe);
-
-            if (isSuccess)
+            if (response is null)
             {
                 return Ok(response);
             }
@@ -82,20 +76,11 @@ namespace Zhoplix.Controllers
         [HttpPost]
         public async Task<IActionResult> ConfirmEmail(EmailConfirmationViewModel model)
         {
-            if (string.IsNullOrWhiteSpace(model.UserId) || string.IsNullOrWhiteSpace(model.Token))
-            {
-                return BadRequest();
-            }
 
-            var user = await _userManager.FindByIdAsync(model.UserId);
-            if (user == null)
-            {
-                return BadRequest();
-            }
 
-            var (isSuccess, response) = await _authentication.ConfirmUser(user, model.Token, "Member");
+            var response = await _authentication.ConfirmUser(model);
 
-            if (isSuccess)
+            if (response != null)
             {
                 return Ok(response);
             }

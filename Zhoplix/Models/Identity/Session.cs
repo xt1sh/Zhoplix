@@ -11,7 +11,6 @@ namespace Zhoplix.Models.Identity
         public int UserId { get; set; }
         public string RefreshToken { get; set; }
         public string Fingerprint { get; set; }
-        public string IP { get; set; }
         public DateTime CreatedAt { get; set; }
 
         public User User { get; set; }

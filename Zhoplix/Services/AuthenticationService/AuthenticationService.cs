@@ -5,7 +5,9 @@ using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Policy;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc.Routing;
@@ -15,6 +17,8 @@ using Zhoplix.Models.Identity;
 using Zhoplix.Services.AuthenticationService.Response;
 using Zhoplix.Services.TokenHandler;
 using Microsoft.EntityFrameworkCore;
+using Zhoplix.ViewModels;
+using Zhoplix.ViewModels.Authentication;
 
 namespace Zhoplix.Services.AuthenticationService
 {
@@ -24,10 +28,11 @@ namespace Zhoplix.Services.AuthenticationService
 
         public readonly ITokenHandler _tokenHandler;
         private readonly JwtConfiguration _jwtConfig;
-        private readonly DbSet<User> _userContext;
         private readonly ApplicationDbContext _context;
         private readonly IUrlHelper _url;
         private readonly IEmailSender _emailSender;
+        private readonly IMapper _mapper;
+        private readonly DbSet<Session> _sessionContext;
 
 
         public AuthenticationService(
@@ -36,20 +41,31 @@ namespace Zhoplix.Services.AuthenticationService
             IOptions<JwtConfiguration> jwtConfig,
             ApplicationDbContext context,
             IUrlHelper url,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            IMapper mapper
+        )
         {
             _userManager = userManager;
             _tokenHandler = tokenHandler;
             _jwtConfig = jwtConfig.Value;
             _context = context;
-            _userContext = _context.Users;
+            _sessionContext = context.Sessions;
             _url = url;
             _emailSender = emailSender;
+            _mapper = mapper;
+
         }
 
-        public async Task<(bool, AccessTokenResponse)> AuthenticateAsync(User user, string password, bool rememberMe)
+        public async Task<AccessTokenResponse> AuthenticateAsync(LoginViewModel model)
         {
-            if (user != null && await _userManager.CheckPasswordAsync(user, password))
+            var regex = new Regex(@"^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$");
+
+            var user = regex.IsMatch(model.Login)
+                ? await _userManager.FindByEmailAsync(model.Login)
+                : await _userManager.FindByNameAsync(model.Login);
+
+
+            if (user != null && await _userManager.CheckPasswordAsync(user, model.Password))
             {
                 var authClaims = new[]
 {
@@ -59,53 +75,59 @@ namespace Zhoplix.Services.AuthenticationService
 
                 var accessToken = await _tokenHandler.GenerateAccessTokenAsync(new List<Claim>(authClaims), _userManager.GetRolesAsync(user).Result);
 
-                if (rememberMe)
+                if (model.RememberMe)
                 {
                     var refreshToken = await _tokenHandler.GenerateRefreshTokenAsync(new List<Claim>(authClaims));
-                    user.RefreshToken = refreshToken;
-                    _userContext.Update(user);
-                    await _context.SaveChangesAsync();
+                    _sessionContext.Add(new Session
+                    {
+                        User = user,
+                        RefreshToken = refreshToken,
+                        Fingerprint = model.Fingerprint,
+                        CreatedAt = DateTime.Now
+                    });
 
-                    return (true, new DefaultResponse(accessToken, refreshToken, _jwtConfig.AccessExpirationTime));
+                    if (await _context.SaveChangesAsync() > 0)
+                        return new DefaultResponse(accessToken, refreshToken, _jwtConfig.AccessExpirationTime);
                 }
-
-                return (true, new AccessTokenResponse(accessToken, _jwtConfig.AccessExpirationTime));
+                else
+                {
+                    return new AccessTokenResponse(accessToken, _jwtConfig.AccessExpirationTime);
+                }
             }
 
-            return (false, null);
+            return null;
         }
 
-        public async Task<(bool, IEnumerable<IdentityError>)> CreateUserAsync(User user, string password)
+        public async Task<IEnumerable<IdentityError>> CreateUserAsync(RegistrationViewModel model)
         {
-            var result = await _userManager.CreateAsync(user, password); 
+            var user = _mapper.Map<User>(model);
+            var result = await _userManager.CreateAsync(user, model.Password); 
             if (result.Succeeded)   
             {
                 var emailConfirmationToken = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                var callbackUrl = _url.Action(
-                    "confirmEmail",
-                    "account",
-                    new
-                    {
-                        userId = user.Id, token = emailConfirmationToken
-                    },
-                    protocol: "http"
-                );
-                var htmlMessage = $"<a href='{callbackUrl}'>link</a>";
+                var htmlMessage = this.GenerateConfirmationMessage(user.Id, emailConfirmationToken);
 
                 await _emailSender.SendEmailAsync(user.Email, "Account confirmation", htmlMessage);
 
-                return (true, null);
+                return null;
             }
-            return (false, result.Errors);
+            return result.Errors;
         }
 
-        public async Task<(bool, DefaultResponse)> ConfirmUser(User user, string token, string role)
+        public async Task<DefaultResponse> ConfirmUser(EmailConfirmationViewModel model)
         {
-            var result = await _userManager.ConfirmEmailAsync(user, token);
+            if (string.IsNullOrWhiteSpace(model.UserId) || string.IsNullOrWhiteSpace(model.Token))
+                return null;
+
+            var user = await _userManager.FindByIdAsync(model.UserId);
+
+            if (user is null)
+                return null;
+
+            var result = await _userManager.ConfirmEmailAsync(user, model.Token);
             if (result.Succeeded)
             {
-                await _userManager.AddToRoleAsync(user, role);
-
+                await _userManager.AddToRoleAsync(user, "Member");
                 var authClaims = new[]
                 {
                     new Claim(JwtRegisteredClaimNames.Sub, user.UserName),
@@ -116,16 +138,36 @@ namespace Zhoplix.Services.AuthenticationService
                     _userManager.GetRolesAsync(user).Result);
                 var refreshToken = await _tokenHandler.GenerateRefreshTokenAsync(new List<Claim>(authClaims));
 
-                user.RefreshToken = refreshToken;
-                _userContext.Update(user);
-                await _context.SaveChangesAsync();
+                _sessionContext.Add(new Session
+                {
+                    User = user,
+                    RefreshToken = refreshToken,
+                    Fingerprint = model.Fingerprint,
+                    CreatedAt = DateTime.Now
+                });
 
-                return (true, new DefaultResponse(accessToken, refreshToken, _jwtConfig.AccessExpirationTime));
-
+                if (await _context.SaveChangesAsync() > 0)
+                    return new DefaultResponse(accessToken, refreshToken, _jwtConfig.AccessExpirationTime);
             }
 
-            return (false, null);
+            return null;
         }
+
+        public string GenerateConfirmationMessage(int userId, string token)
+        {
+            var callbackUrl = _url.Action(
+                "confirmEmail",
+                "account",
+                new
+                {
+                    userId = userId,
+                    token = token
+                },
+                protocol: "http"
+            );
+             return $"<a href='{callbackUrl}'>link</a>";
+        }
+
 
     }
 }

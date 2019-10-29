@@ -1,13 +1,14 @@
 import { Inject, Injectable } from '@angular/core';
 import { HttpClient, HttpResponse, HttpHeaders } from '@angular/common/http';
 import { Login } from 'src/app/models/login';
-import { Observable } from 'rxjs';
+import { Observable, Subscriber } from 'rxjs';
 import { CookieService } from 'ngx-cookie-service';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { CurrentUser } from 'src/app/models/current-user';
 import decode from 'jwt-decode';
 import { Registration } from 'src/app/models/registration';
 import fingerprint from 'fingerprintjs2';
+import { subscribeOn } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -15,14 +16,18 @@ import fingerprint from 'fingerprintjs2';
 export class AuthenticationService {
 
   public redirectUrl: string = '';
-  constructor(private readonly http: HttpClient,
+   constructor(private readonly http: HttpClient,
               private readonly cookieService: CookieService,
               @Inject('BASE_URL') private readonly originUrl: string) { }
 
-  login(userCredentials: Login): Observable<HttpResponse<any>>  {
-    const fingerPrint = this.createFingerprint();
-    return this.http.post<Login>(`${this.originUrl}Authentication/Login`, {userCredentials, fingerPrint:fingerPrint},
-                                { observe: 'response' });
+  login(userCredentials: Login): any  {
+    
+    this.createFingerprint().subscribe(response => {
+      userCredentials.fingerPrint = response;
+      console.log(userCredentials.fingerPrint);
+      return this.http.post<Login>(`${this.originUrl}Authentication/Login`, userCredentials,
+                                  { observe: 'response' });
+    });
   }
 
   signUp(userCredentials: Registration): Observable<HttpResponse<any>> {
@@ -66,11 +71,13 @@ export class AuthenticationService {
     return !jwtHelper.isTokenExpired(token);
   }
 
-  createFingerprint(): string {
-    let fingerPrint = ' ';
-    fingerprint.get((result) => {
-      fingerPrint = fingerprint.x64hash128(result.join(''));
-    });
-    return fingerPrint;
+  createFingerprint(): Observable<string>{
+
+    return new Observable(observer => {
+      fingerprint.get((result) => {
+        return fingerprint.x64hash128(result.join(''));
+      });
+    });  
+
   }
 }
