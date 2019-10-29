@@ -12,14 +12,12 @@ namespace Zhoplix.Models
         public string Description { get; set; }
         public int SeasonId { get; set; }
         public Season Season { get; set; }
-        public IList<UserEpisode> UserEpisodes { get; set; }
+        public IList<ProfileEpisode> ProfileEpisode { get; set; }
         public bool HasOpening => OpeningStart != null && OpeningFinish != null;
         public TimeSpan? OpeningStart { get; set; }
         public TimeSpan? OpeningFinish { get; set; }
         public int ThumbnailsAmount { get; set; }
         public TimeSpan? CreditsStart { get; set; }
         public IList<Video> Videos { get; set; }
-        public IList<Subtitles> Subtitles { get; set; }
-        public IList<Audio> Audios { get; set; }
     }
 }

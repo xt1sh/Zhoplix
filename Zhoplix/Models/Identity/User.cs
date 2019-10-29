@@ -8,9 +8,9 @@ namespace Zhoplix.Models.Identity
 {
     public class User : IdentityUser<int>
     {
-        public IList<UserTitle> UserTitles { get; set; }
-        public IList<UserEpisode> UserEpisodes { get; set; }
+        public override int Id { get; set; }
         public string RefreshToken { get; set; }
-        public IList<Rating> Ratings { get; set; }
+        public int ProfileId { get; set; }
+        public Profile Profile { get; set; }
     }
 }

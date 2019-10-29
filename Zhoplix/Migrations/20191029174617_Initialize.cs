@@ -42,7 +42,8 @@ namespace Zhoplix.Migrations
                     LockoutEnd = table.Column<DateTimeOffset>(nullable: true),
                     LockoutEnabled = table.Column<bool>(nullable: false),
                     AccessFailedCount = table.Column<int>(nullable: false),
-                    RefreshToken = table.Column<string>(nullable: true)
+                    RefreshToken = table.Column<string>(nullable: true),
+                    ProfileId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -76,6 +77,22 @@ namespace Zhoplix.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Titles", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "VideoInfo",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Duration = table.Column<TimeSpan>(nullable: false),
+                    WidthRatio = table.Column<float>(nullable: false),
+                    HeightRatio = table.Column<float>(nullable: false),
+                    Codec = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_VideoInfo", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -185,25 +202,18 @@ namespace Zhoplix.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Ratings",
+                name: "Profiles",
                 columns: table => new
                 {
-                    UserId = table.Column<int>(nullable: false),
-                    TitleId = table.Column<int>(nullable: false),
-                    Liked = table.Column<bool>(nullable: false)
+                    Id = table.Column<int>(nullable: false),
+                    ImagePath = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Ratings", x => new { x.UserId, x.TitleId });
+                    table.PrimaryKey("PK_Profiles", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Ratings_Titles_TitleId",
-                        column: x => x.TitleId,
-                        principalTable: "Titles",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Ratings_AspNetUsers_UserId",
-                        column: x => x.UserId,
+                        name: "FK_Profiles_AspNetUsers_Id",
+                        column: x => x.Id,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -256,25 +266,91 @@ namespace Zhoplix.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "UserTitle",
+                name: "Audio",
                 columns: table => new
                 {
-                    UserId = table.Column<int>(nullable: false),
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Language = table.Column<string>(nullable: true),
+                    Translation = table.Column<string>(nullable: true),
+                    VideoInfoId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Audio", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Audio_VideoInfo_VideoInfoId",
+                        column: x => x.VideoInfoId,
+                        principalTable: "VideoInfo",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Subtitles",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Language = table.Column<string>(nullable: true),
+                    VideoInfoId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Subtitles", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Subtitles_VideoInfo_VideoInfoId",
+                        column: x => x.VideoInfoId,
+                        principalTable: "VideoInfo",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ProfileTitle",
+                columns: table => new
+                {
+                    ProfileId = table.Column<int>(nullable: false),
                     TitleId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_UserTitle", x => new { x.UserId, x.TitleId });
+                    table.PrimaryKey("PK_ProfileTitle", x => new { x.ProfileId, x.TitleId });
                     table.ForeignKey(
-                        name: "FK_UserTitle_Titles_TitleId",
+                        name: "FK_ProfileTitle_Profiles_ProfileId",
+                        column: x => x.ProfileId,
+                        principalTable: "Profiles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ProfileTitle_Titles_TitleId",
                         column: x => x.TitleId,
                         principalTable: "Titles",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Ratings",
+                columns: table => new
+                {
+                    ProfileId = table.Column<int>(nullable: false),
+                    TitleId = table.Column<int>(nullable: false),
+                    Liked = table.Column<bool>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Ratings", x => new { x.ProfileId, x.TitleId });
                     table.ForeignKey(
-                        name: "FK_UserTitle_AspNetUsers_UserId",
-                        column: x => x.UserId,
-                        principalTable: "AspNetUsers",
+                        name: "FK_Ratings_Profiles_ProfileId",
+                        column: x => x.ProfileId,
+                        principalTable: "Profiles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Ratings_Titles_TitleId",
+                        column: x => x.TitleId,
+                        principalTable: "Titles",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -288,7 +364,6 @@ namespace Zhoplix.Migrations
                     Name = table.Column<string>(nullable: true),
                     Description = table.Column<string>(nullable: true),
                     SeasonId = table.Column<int>(nullable: false),
-                    Duration = table.Column<TimeSpan>(nullable: false),
                     OpeningStart = table.Column<TimeSpan>(nullable: true),
                     OpeningFinish = table.Column<TimeSpan>(nullable: true),
                     ThumbnailsAmount = table.Column<int>(nullable: false),
@@ -306,68 +381,27 @@ namespace Zhoplix.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Audio",
+                name: "ProfileEpisode",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Language = table.Column<string>(nullable: true),
-                    Translation = table.Column<string>(nullable: true),
-                    EpisodeId = table.Column<int>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Audio", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Audio_Episodes_EpisodeId",
-                        column: x => x.EpisodeId,
-                        principalTable: "Episodes",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Subtitles",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Language = table.Column<string>(nullable: true),
-                    EpisodeId = table.Column<int>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Subtitles", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Subtitles_Episodes_EpisodeId",
-                        column: x => x.EpisodeId,
-                        principalTable: "Episodes",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "UserEpisode",
-                columns: table => new
-                {
-                    UserId = table.Column<int>(nullable: false),
+                    ProfileId = table.Column<int>(nullable: false),
                     EpisodeId = table.Column<int>(nullable: false),
                     TimeStopped = table.Column<TimeSpan>(nullable: false),
                     Finished = table.Column<bool>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_UserEpisode", x => new { x.UserId, x.EpisodeId });
+                    table.PrimaryKey("PK_ProfileEpisode", x => new { x.ProfileId, x.EpisodeId });
                     table.ForeignKey(
-                        name: "FK_UserEpisode_Episodes_EpisodeId",
+                        name: "FK_ProfileEpisode_Episodes_EpisodeId",
                         column: x => x.EpisodeId,
                         principalTable: "Episodes",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_UserEpisode_AspNetUsers_UserId",
-                        column: x => x.UserId,
-                        principalTable: "AspNetUsers",
+                        name: "FK_ProfileEpisode_Profiles_ProfileId",
+                        column: x => x.ProfileId,
+                        principalTable: "Profiles",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -378,13 +412,10 @@ namespace Zhoplix.Migrations
                 {
                     Id = table.Column<string>(nullable: false),
                     EpisodeId = table.Column<int>(nullable: false),
+                    VideoInfoId = table.Column<int>(nullable: false),
                     Location = table.Column<string>(nullable: true),
                     Width = table.Column<int>(nullable: false),
-                    Height = table.Column<int>(nullable: false),
-                    WidthRatio = table.Column<float>(nullable: false),
-                    HeightRatio = table.Column<float>(nullable: false),
-                    Codec = table.Column<string>(nullable: true),
-                    Size = table.Column<long>(nullable: false)
+                    Height = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -393,6 +424,12 @@ namespace Zhoplix.Migrations
                         name: "FK_Video_Episodes_EpisodeId",
                         column: x => x.EpisodeId,
                         principalTable: "Episodes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Video_VideoInfo_VideoInfoId",
+                        column: x => x.VideoInfoId,
+                        principalTable: "VideoInfo",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -437,9 +474,9 @@ namespace Zhoplix.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Audio_EpisodeId",
+                name: "IX_Audio_VideoInfoId",
                 table: "Audio",
-                column: "EpisodeId");
+                column: "VideoInfoId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Episodes_SeasonId",
@@ -454,6 +491,16 @@ namespace Zhoplix.Migrations
                 filter: "[Name] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
+                name: "IX_ProfileEpisode_EpisodeId",
+                table: "ProfileEpisode",
+                column: "EpisodeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ProfileTitle_TitleId",
+                table: "ProfileTitle",
+                column: "TitleId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Ratings_TitleId",
                 table: "Ratings",
                 column: "TitleId");
@@ -464,9 +511,9 @@ namespace Zhoplix.Migrations
                 column: "TitleId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Subtitles_EpisodeId",
+                name: "IX_Subtitles_VideoInfoId",
                 table: "Subtitles",
-                column: "EpisodeId");
+                column: "VideoInfoId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_TitleGenre_GenreId",
@@ -474,19 +521,14 @@ namespace Zhoplix.Migrations
                 column: "GenreId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_UserEpisode_EpisodeId",
-                table: "UserEpisode",
-                column: "EpisodeId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_UserTitle_TitleId",
-                table: "UserTitle",
-                column: "TitleId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Video_EpisodeId",
                 table: "Video",
                 column: "EpisodeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Video_VideoInfoId",
+                table: "Video",
+                column: "VideoInfoId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -510,6 +552,12 @@ namespace Zhoplix.Migrations
                 name: "Audio");
 
             migrationBuilder.DropTable(
+                name: "ProfileEpisode");
+
+            migrationBuilder.DropTable(
+                name: "ProfileTitle");
+
+            migrationBuilder.DropTable(
                 name: "Ratings");
 
             migrationBuilder.DropTable(
@@ -519,25 +567,25 @@ namespace Zhoplix.Migrations
                 name: "TitleGenre");
 
             migrationBuilder.DropTable(
-                name: "UserEpisode");
-
-            migrationBuilder.DropTable(
-                name: "UserTitle");
-
-            migrationBuilder.DropTable(
                 name: "Video");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
+                name: "Profiles");
+
+            migrationBuilder.DropTable(
                 name: "Genres");
 
             migrationBuilder.DropTable(
-                name: "AspNetUsers");
+                name: "Episodes");
 
             migrationBuilder.DropTable(
-                name: "Episodes");
+                name: "VideoInfo");
+
+            migrationBuilder.DropTable(
+                name: "AspNetUsers");
 
             migrationBuilder.DropTable(
                 name: "Seasons");

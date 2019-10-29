@@ -12,7 +12,7 @@ using Zhoplix.ViewModels.Title;
 
 namespace Zhoplix.Profiles
 {
-    public class MapperProfile : Profile
+    public class MapperProfile : AutoMapper.Profile
     {
         public MapperProfile()
         {

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Zhoplix.Models.Media;
 
 namespace Zhoplix.Models
 {
@@ -10,7 +11,7 @@ namespace Zhoplix.Models
         public int Id { get; set; }
         public string Language { get; set; }
         public string Translation { get; set; }
-        public int EpisodeId { get; set; }
-        public Episode Episode { get; set; }
+        public int VideoInfoId { get; set; }
+        public VideoInfo VideoInfo { get; set; }
     }
 }

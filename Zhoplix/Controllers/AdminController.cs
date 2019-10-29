@@ -30,13 +30,15 @@ namespace Zhoplix.Controllers
         private readonly ILogger<AdminController> _logger;
         private readonly IMediaService _mediaService;
         private readonly IFfMpegProvider _ffMpeg;
+        private readonly IAvatarGenerator _avatarGenerator;
 
         public AdminController(ITitleService titleService,
             ISeasonService seasonService,
             IMapper mapper,
             ILogger<AdminController> logger,
             IMediaService mediaService,
-            IFfMpegProvider ffMpeg)
+            IFfMpegProvider ffMpeg,
+            IAvatarGenerator avatarGenerator)
         {
             _titleService = titleService;
             _seasonService = seasonService;
@@ -44,6 +46,7 @@ namespace Zhoplix.Controllers
             _logger = logger;
             _mediaService = mediaService;
             _ffMpeg = ffMpeg;
+            _avatarGenerator = avatarGenerator;
         }
 
         [HttpPost]
@@ -114,6 +117,12 @@ namespace Zhoplix.Controllers
                 _ffMpeg.CreateThumbnails("C:\\Code\\ASP.NET\\Zhoplix\\Zhoplix\\wwwroot\\Videos\\Uploaded\\ElCamino\\ElCamino_120.mp4",
                     "C:\\Code\\ASP.NET\\Zhoplix\\Zhoplix\\wwwroot\\Videos\\Uploaded\\ElCamino\\Thumbnails");
             });
+            return Ok();
+        }
+
+        public async Task<IActionResult> CreateAvatar()
+        {
+            await Task.Run(() => _avatarGenerator.GenerateAvatar(7, 700));
             return Ok();
         }
     }

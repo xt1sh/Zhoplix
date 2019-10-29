@@ -6,10 +6,10 @@ using Zhoplix.Models.Identity;
 
 namespace Zhoplix.Models
 {
-    public class UserEpisode
+    public class ProfileEpisode
     {
-        public int UserId { get; set; }
-        public User User { get; set; }
+        public int ProfileId { get; set; }
+        public Profile Profile { get; set; }
         public int EpisodeId { get; set; }
         public Episode Episode { get; set; }
         public TimeSpan TimeStopped { get; set; }

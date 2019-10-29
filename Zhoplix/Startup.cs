@@ -116,10 +116,11 @@ namespace Zhoplix
 
             services.AddTransient<ITitleService, TitleService>();
             services.AddTransient<ISeasonService, SeasonService>();
+            services.AddTransient<IFfMpegProvider, FfMpegProvider>();
 
             services.AddScoped<IAuthenticationService, AuthenticationService>();
             services.AddScoped<IMediaService, MediaService>();
-            services.AddTransient<IFfMpegProvider, FfMpegProvider>();
+            services.AddScoped<IAvatarGenerator, AvatarGenerator>();
             services.AddScoped<IUrlHelper>(x => {
                 var actionContext = x.GetRequiredService<IActionContextAccessor>().ActionContext;
                 var factory = x.GetRequiredService<IUrlHelperFactory>();
