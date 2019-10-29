@@ -19,7 +19,6 @@ using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Logging;
 using Zhoplix.Services.AuthenticationService;
 using System.Text.RegularExpressions;
-using Org.BouncyCastle.Ocsp;
 using Zhoplix.Services.AuthenticationService.Response;
 using Microsoft.AspNetCore.Authorization;
 
@@ -45,7 +44,7 @@ namespace Zhoplix.Controllers
             
             var errors = await _authentication.SignUpUserAsync(model);
 
-            if (errors is null)
+            if (isSuccess)
             {
                 return Ok();
             }
@@ -60,6 +59,7 @@ namespace Zhoplix.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(LoginViewModel model)
         {
+            var regex = new Regex(@"^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$");
 
             var response = await _authentication.AuthenticateAsync(model);
 
@@ -89,7 +89,7 @@ namespace Zhoplix.Controllers
         {
             var response = await _authentication.RefreshTokensAsync(model);
 
-            if (response != null)
+            if (isSuccess)
             {
                 return Ok(response);
             }

@@ -53,7 +53,7 @@ namespace Zhoplix.Services.AuthenticationService
             _tokenHandler = tokenHandler;
             _jwtConfig = jwtConfig.Value;
             _context = context;
-            _sessionContext = context.Sessions;
+            _userContext = _context.Users;
             _url = url;
             _emailSender = emailSender;
             _mapper = mapper;
@@ -186,8 +186,6 @@ namespace Zhoplix.Services.AuthenticationService
             );
              return $"<a href='{callbackUrl}'>link</a>";
         }
-
-
 
     }
 }
