@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthenticationService } from 'src/app/services/authentication/authentication.service';
+import { Tokens } from 'src/app/models/tokens';
 
 @Component({
   selector: 'app-confirmEmail',
@@ -9,7 +10,7 @@ export class ConfirmEmailComponent implements OnInit {
 
   userId: string;
   token: string;
-  
+
   constructor(private route: ActivatedRoute,
               private auth: AuthenticationService,
               private router: Router) {
@@ -21,14 +22,10 @@ export class ConfirmEmailComponent implements OnInit {
 }
 
   ngOnInit() {
-    
-    const confirmEmailObservable = this.auth.createFingerprint().subscribe(value => {
-    this.auth.confirmEmail(this.userId, this.token, value)
+    this.auth.confirmEmail(this.userId, this.token, this.auth.fingerPrint)
       .subscribe(res => {
-        this.auth.setToken(res);
+        this.auth.setTokens(res.body as Tokens);
       });
     this.router.navigate(['']);
-    });
   }
-
 }
