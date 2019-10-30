@@ -19,7 +19,7 @@ export class RegistrationComponent implements OnInit {
   registrationForm = this.formBuilder.group({
     username: [undefined, [Validators.required, Validators.pattern('^(?=.{3,20}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$')]],
     email: [undefined, [Validators.required, Validators.email]],
-    password: [undefined, [Validators.required, 
+    password: [undefined, [Validators.required,
       Validators.pattern('((?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{6,30})')]],
   });
 
@@ -32,7 +32,7 @@ export class RegistrationComponent implements OnInit {
               private auth: AuthenticationService,
               private readonly router: Router,
               private readonly route: ActivatedRoute) { }
-  
+
   ngOnInit() {
     this.currentSlide = 0;
     this.router.navigate(['signup/1']);
