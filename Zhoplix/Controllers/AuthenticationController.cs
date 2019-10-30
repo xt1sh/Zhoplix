@@ -19,42 +19,31 @@ using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Logging;
 using Zhoplix.Services.AuthenticationService;
 using System.Text.RegularExpressions;
+using Org.BouncyCastle.Ocsp;
 using Zhoplix.Services.AuthenticationService.Response;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Zhoplix.Controllers
 {
     [Route("[controller]/[action]")]
     [ApiController]
+    [AllowAnonymous]
     public class AuthenticationController : ControllerBase
     {
         private readonly IAuthenticationService _authentication;
-        private readonly UserManager<User> _userManager;
-        private readonly IMapper _mapper;
-        private readonly ILogger<AuthenticationController> _logger;
-        private readonly ITokenHandler _tokenHandler;
 
-        public AuthenticationController(UserManager<User> userManager,
-            IMapper mapper,
-            IAuthenticationService authentication,
-            ITokenHandler tokenHandler,
-            ILogger<AuthenticationController> logger
-        )
+        public AuthenticationController(IAuthenticationService authentication)
         {
-            _userManager = userManager;
-            _mapper = mapper;
             _authentication = authentication;
-            _logger = logger;
-            _tokenHandler = tokenHandler;
         }
 
         [HttpPost]
         public async Task<IActionResult> Registration(RegistrationViewModel model)
         {
-            var user = _mapper.Map<User>(model);
+            
+            var errors = await _authentication.SignUpUserAsync(model);
 
-            var (isSuccess, errors) = await _authentication.CreateUserAsync(user, model.Password);
-
-            if (isSuccess)
+            if (errors is null)
             {
                 return Ok();
             }
@@ -69,15 +58,10 @@ namespace Zhoplix.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(LoginViewModel model)
         {
-            var regex = new Regex(@"^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$");
 
-            var user = regex.IsMatch(model.Login)
-                    ? await _userManager.FindByEmailAsync(model.Login)
-                    : await _userManager.FindByNameAsync(model.Login);
+            var response = await _authentication.AuthenticateAsync(model);
 
-            var (isSuccess, response) = await _authentication.AuthenticateAsync(user, model.Password, model.RememberMe);
-
-            if (isSuccess)
+            if (response != null)
             {
                 return Ok(response);
             }
@@ -88,20 +72,22 @@ namespace Zhoplix.Controllers
         [HttpPost]
         public async Task<IActionResult> ConfirmEmail(EmailConfirmationViewModel model)
         {
-            if (string.IsNullOrWhiteSpace(model.UserId) || string.IsNullOrWhiteSpace(model.Token))
+            var response = await _authentication.ConfirmUserAsync(model);
+
+            if (response != null)
             {
-                return BadRequest();
+                return Ok(response);
             }
 
-            var user = await _userManager.FindByIdAsync(model.UserId);
-            if (user == null)
-            {
-                return BadRequest();
-            }
+            return BadRequest();
+        }
 
-            var (isSuccess, response) = await _authentication.ConfirmUser(user, model.Token, "Member");
+        [HttpPost]
+        public async Task<IActionResult> RefreshTokens(RefreshViewModel model)
+        {
+            var response = await _authentication.RefreshTokensAsync(model);
 
-            if (isSuccess)
+            if (response != null)
             {
                 return Ok(response);
             }

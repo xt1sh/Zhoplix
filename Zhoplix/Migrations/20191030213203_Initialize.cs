@@ -220,6 +220,28 @@ namespace Zhoplix.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Sessions",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<int>(nullable: false),
+                    RefreshToken = table.Column<string>(nullable: true),
+                    Fingerprint = table.Column<string>(nullable: true),
+                    CreatedAt = table.Column<DateTime>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Sessions", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Sessions_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Seasons",
                 columns: table => new
                 {
@@ -511,6 +533,11 @@ namespace Zhoplix.Migrations
                 column: "TitleId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Sessions_UserId",
+                table: "Sessions",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Subtitles_VideoInfoId",
                 table: "Subtitles",
                 column: "VideoInfoId");
@@ -559,6 +586,9 @@ namespace Zhoplix.Migrations
 
             migrationBuilder.DropTable(
                 name: "Ratings");
+
+            migrationBuilder.DropTable(
+                name: "Sessions");
 
             migrationBuilder.DropTable(
                 name: "Subtitles");

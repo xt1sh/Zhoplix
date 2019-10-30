@@ -14,6 +14,7 @@ namespace Zhoplix
         public DbSet<Genre> Genres { get; set; }
         public DbSet<Rating> Ratings { get; set; }
         public DbSet<Profile> Profiles { get; set; }
+        public DbSet<Session> Sessions { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
