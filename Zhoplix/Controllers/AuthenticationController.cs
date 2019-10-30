@@ -19,6 +19,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Logging;
 using Zhoplix.Services.AuthenticationService;
 using System.Text.RegularExpressions;
+using Org.BouncyCastle.Ocsp;
 using Zhoplix.Services.AuthenticationService.Response;
 using Microsoft.AspNetCore.Authorization;
 
