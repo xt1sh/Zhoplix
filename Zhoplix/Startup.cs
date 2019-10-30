@@ -30,6 +30,8 @@ using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Zhoplix.Services.EmailService;
 using Zhoplix.Services.Media;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Authorization;
 
 namespace Zhoplix
 {
@@ -130,7 +132,11 @@ namespace Zhoplix
                 });
             });
 
-            services.AddControllersWithViews();
+            services.AddControllersWithViews(conf =>
+            {
+                var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
+                conf.Filters.Add(new AuthorizeFilter(policy));
+            });
 
             services.Configure<FormOptions>(opt =>
             {
@@ -169,8 +175,10 @@ namespace Zhoplix
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "API V1");
             });
-            
+
+            app.UseAuthentication();
             app.UseAuthorization();
+            
             app.UseRouting();
             app.UseCors("EnableCORS");
             app.UseEndpoints(endpoints =>
