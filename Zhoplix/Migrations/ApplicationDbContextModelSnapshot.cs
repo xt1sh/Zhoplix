@@ -204,12 +204,6 @@ namespace Zhoplix.Migrations
                     b.Property<int>("ThumbnailsAmount")
                         .HasColumnType("int");
 
-                    b.Property<int>("ThumbnailsAmount")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ThumbnailsLocation")
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("Id");
 
                     b.HasIndex("SeasonId");
@@ -247,6 +241,32 @@ namespace Zhoplix.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Profiles");
+                });
+
+            modelBuilder.Entity("Zhoplix.Models.Identity.Session", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Fingerprint")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RefreshToken")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Sessions");
                 });
 
             modelBuilder.Entity("Zhoplix.Models.Identity.User", b =>
@@ -588,6 +608,15 @@ namespace Zhoplix.Migrations
                     b.HasOne("Zhoplix.Models.Identity.User", "User")
                         .WithOne("Profile")
                         .HasForeignKey("Zhoplix.Models.Identity.Profile", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Zhoplix.Models.Identity.Session", b =>
+                {
+                    b.HasOne("Zhoplix.Models.Identity.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
