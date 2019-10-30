@@ -3,6 +3,7 @@ import { Validators, FormBuilder } from '@angular/forms';
 import { AuthenticationService } from 'src/app/services/authentication/authentication.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Login } from 'src/app/models/login';
+import { Tokens } from 'src/app/models/tokens';
 
 
 @Component({
@@ -43,22 +44,18 @@ export class LoginComponent implements OnInit {
     let password = this.loginForm.controls['password'];
     if (this.loginForm.valid) {
       let login: Login = this.loginForm.value;
-      const loginObservable = this.auth.createFingerprint().subscribe(value => {
-        login.fingerPrint = value;
+        login.fingerPrint = this.auth.fingerPrint;
         this.auth.login(login)
           .subscribe(res => {
             this.incorrect = false;
-            this.auth.setToken(res, this.loginForm.controls['rememberMe'].value);
+            this.auth.setTokens(res.body as Tokens);
             this.ngZone.run(() => this.router.navigate([this.returnUrl])).then();
             this.loginSpinner = false;
-            loginObservable.unsubscribe();
           }, error => {
             this.incorrect = true;
             this.loginSpinner = false;
             password.reset();
-            loginObservable.unsubscribe();
           });
-      })
     }
     else {
       this.loginSpinner = false;

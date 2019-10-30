@@ -21,11 +21,13 @@ using Zhoplix.Services.AuthenticationService;
 using System.Text.RegularExpressions;
 using Org.BouncyCastle.Ocsp;
 using Zhoplix.Services.AuthenticationService.Response;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Zhoplix.Controllers
 {
     [Route("[controller]/[action]")]
     [ApiController]
+    [AllowAnonymous]
     public class AuthenticationController : ControllerBase
     {
         private readonly IAuthenticationService _authentication;
