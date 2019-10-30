@@ -1,0 +1,19 @@
+<form [formGroup]="form">
+    <div>
+        <input type="text" formControlName="name" placeholder="Name">
+    </div>
+    <div>
+        <input type="text" formControlName="description" placeholder="Description">
+    </div>
+    <ngx-select-dropdown formControlName="titleId" [list]="list"></ngx-select-dropdown>
+    <div>
+        <input #file type="file" (change)="uploadPhoto(file.files)">
+    </div>
+    <div *ngIf="!uploading">
+        <button (click)="onSubmit()">Submit</button>
+    </div>
+    <div *ngIf="uploading">
+        <p>Wait for upload to complete</p>
+        <button (click)="onSubmit()" disabled>Submit</button>
+    </div>
+</form>

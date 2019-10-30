@@ -50,6 +50,22 @@ namespace Zhoplix.Controllers
         }
 
         [HttpPost]
+        public async Task<IActionResult> GetTitlesPage(Page page)
+        {
+            var titles = await _titleService.GetTitlePageAsync(page);
+            var toShow = titles.Select(x => _mapper.Map<TitlePageViewModel>(x));
+            return Ok(toShow);
+        }
+
+        [HttpGet("{name}")]
+        public async Task<IActionResult> GetTitle(string name)
+        {
+            var title = await _titleService.GetTitleByNameAsync(name);
+            var toShow = _mapper.Map<TitlePageViewModel>(title);
+            return Ok(toShow);
+        }
+
+        [HttpPost]
         public async Task<IActionResult> CreateTitle(CreateTitleViewModel model)
         {
             var title = await _titleService.CreateTitleFromCreateViewModelAsync(model);

@@ -17,6 +17,7 @@ import { TokenInterceptor } from './services/authentication/token.interceptor';
 import { VgCoreModule } from 'videogular2/compiled/core';
 import { VgControlsModule } from 'videogular2/compiled/controls';
 import { VgBufferingModule } from 'videogular2/compiled/buffering';
+import { SelectDropDownModule } from "ngx-select-dropdown";
 
 
 import { AppComponent } from './app.component';
@@ -51,6 +52,7 @@ import { PlayerComponent } from './components/player/player/player.component';
     MDBBootstrapModule.forRoot(),
     HttpClientModule,
     ReactiveFormsModule,
+    SelectDropDownModule,
     CarouselModule,
     WavesModule,
     MatAutocompleteModule,

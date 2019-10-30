@@ -25,6 +25,7 @@ namespace Zhoplix.Profiles
             CreateMap<RegistrationViewModel, User>();
             CreateMap<Title, TitleViewModel>();
             CreateMap<CreateGenreViewModel, Genre>().ReverseMap();
+            CreateMap<Title, TitlePageViewModel>();
 
             // ChangeViewModels
 
