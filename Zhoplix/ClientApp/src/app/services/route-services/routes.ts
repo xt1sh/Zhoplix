@@ -10,6 +10,7 @@ import { CreateComponent } from "src/app/components/admin/create/create/create.c
 import { TitleComponent } from '../../components/admin/create/title/title.component';
 import { ConfirmEmailComponent } from "src/app/components/authentication/confirmEmail/confirmEmail.component";
 import { PlayerComponent } from "src/app/components/player/player/player.component";
+import { SeasonComponent } from '../../components/admin/create/season/season.component';
 
 export const ROUTES: Routes = [
   { path: '', component: HomeComponent, pathMatch: 'full'},
@@ -31,6 +32,9 @@ export const ROUTES: Routes = [
         children: [{
           path: 'title',
           component: TitleComponent
+        },{
+          path: 'season',
+          component: SeasonComponent
         }]
       }
     ]
