@@ -10,8 +10,8 @@ using Zhoplix;
 namespace Zhoplix.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20191029113909_Session")]
-    partial class Session
+    [Migration("20191031104328_Initialize")]
+    partial class Initialize
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -162,18 +162,18 @@ namespace Zhoplix.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("EpisodeId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Language")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Translation")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("VideoInfoId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("EpisodeId");
+                    b.HasIndex("VideoInfoId");
 
                     b.ToTable("Audio");
                 });
@@ -191,9 +191,6 @@ namespace Zhoplix.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<TimeSpan>("Duration")
-                        .HasColumnType("time");
-
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
@@ -203,7 +200,7 @@ namespace Zhoplix.Migrations
                     b.Property<TimeSpan?>("OpeningStart")
                         .HasColumnType("time");
 
-                    b.Property<int?>("SeasonId")
+                    b.Property<int>("SeasonId")
                         .HasColumnType("int");
 
                     b.Property<int>("ThumbnailsAmount")
@@ -233,6 +230,19 @@ namespace Zhoplix.Migrations
                         .HasFilter("[Name] IS NOT NULL");
 
                     b.ToTable("Genres");
+                });
+
+            modelBuilder.Entity("Zhoplix.Models.Identity.Profile", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ImagePath")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Profiles");
                 });
 
             modelBuilder.Entity("Zhoplix.Models.Identity.Session", b =>
@@ -305,6 +315,12 @@ namespace Zhoplix.Migrations
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
 
+                    b.Property<int>("ProfileId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("RefreshToken")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
 
@@ -328,9 +344,69 @@ namespace Zhoplix.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
+            modelBuilder.Entity("Zhoplix.Models.Media.VideoInfo", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Codec")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<TimeSpan>("Duration")
+                        .HasColumnType("time");
+
+                    b.Property<float>("HeightRatio")
+                        .HasColumnType("real");
+
+                    b.Property<float>("WidthRatio")
+                        .HasColumnType("real");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("VideoInfo");
+                });
+
+            modelBuilder.Entity("Zhoplix.Models.ProfileEpisode", b =>
+                {
+                    b.Property<int>("ProfileId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("EpisodeId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("Finished")
+                        .HasColumnType("bit");
+
+                    b.Property<TimeSpan>("TimeStopped")
+                        .HasColumnType("time");
+
+                    b.HasKey("ProfileId", "EpisodeId");
+
+                    b.HasIndex("EpisodeId");
+
+                    b.ToTable("ProfileEpisode");
+                });
+
+            modelBuilder.Entity("Zhoplix.Models.ProfileTitle", b =>
+                {
+                    b.Property<int>("ProfileId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TitleId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ProfileId", "TitleId");
+
+                    b.HasIndex("TitleId");
+
+                    b.ToTable("ProfileTitle");
+                });
+
             modelBuilder.Entity("Zhoplix.Models.Rating", b =>
                 {
-                    b.Property<int>("UserId")
+                    b.Property<int>("ProfileId")
                         .HasColumnType("int");
 
                     b.Property<int>("TitleId")
@@ -339,7 +415,7 @@ namespace Zhoplix.Migrations
                     b.Property<bool>("Liked")
                         .HasColumnType("bit");
 
-                    b.HasKey("UserId", "TitleId");
+                    b.HasKey("ProfileId", "TitleId");
 
                     b.HasIndex("TitleId");
 
@@ -362,7 +438,7 @@ namespace Zhoplix.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("TitleId")
+                    b.Property<int>("TitleId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -379,15 +455,15 @@ namespace Zhoplix.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("EpisodeId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Language")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("VideoInfoId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("EpisodeId");
+                    b.HasIndex("VideoInfoId");
 
                     b.ToTable("Subtitles");
                 });
@@ -431,74 +507,31 @@ namespace Zhoplix.Migrations
                     b.ToTable("TitleGenre");
                 });
 
-            modelBuilder.Entity("Zhoplix.Models.UserEpisode", b =>
-                {
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("EpisodeId")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("Finished")
-                        .HasColumnType("bit");
-
-                    b.Property<TimeSpan>("TimeStopped")
-                        .HasColumnType("time");
-
-                    b.HasKey("UserId", "EpisodeId");
-
-                    b.HasIndex("EpisodeId");
-
-                    b.ToTable("UserEpisode");
-                });
-
-            modelBuilder.Entity("Zhoplix.Models.UserTitle", b =>
-                {
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TitleId")
-                        .HasColumnType("int");
-
-                    b.HasKey("UserId", "TitleId");
-
-                    b.HasIndex("TitleId");
-
-                    b.ToTable("UserTitle");
-                });
-
             modelBuilder.Entity("Zhoplix.Models.Video", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("Codec")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("EpisodeId")
+                    b.Property<int>("EpisodeId")
                         .HasColumnType("int");
 
                     b.Property<int>("Height")
                         .HasColumnType("int");
 
-                    b.Property<float>("HeightRatio")
-                        .HasColumnType("real");
-
                     b.Property<string>("Location")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<long>("Size")
-                        .HasColumnType("bigint");
+                    b.Property<int>("VideoInfoId")
+                        .HasColumnType("int");
 
                     b.Property<int>("Width")
                         .HasColumnType("int");
 
-                    b.Property<float>("WidthRatio")
-                        .HasColumnType("real");
-
                     b.HasKey("Id");
 
                     b.HasIndex("EpisodeId");
+
+                    b.HasIndex("VideoInfoId");
 
                     b.ToTable("Video");
                 });
@@ -556,16 +589,29 @@ namespace Zhoplix.Migrations
 
             modelBuilder.Entity("Zhoplix.Models.Audio", b =>
                 {
-                    b.HasOne("Zhoplix.Models.Episode", "Episode")
+                    b.HasOne("Zhoplix.Models.Media.VideoInfo", "VideoInfo")
                         .WithMany("Audios")
-                        .HasForeignKey("EpisodeId");
+                        .HasForeignKey("VideoInfoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Zhoplix.Models.Episode", b =>
                 {
                     b.HasOne("Zhoplix.Models.Season", "Season")
                         .WithMany("Episodes")
-                        .HasForeignKey("SeasonId");
+                        .HasForeignKey("SeasonId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Zhoplix.Models.Identity.Profile", b =>
+                {
+                    b.HasOne("Zhoplix.Models.Identity.User", "User")
+                        .WithOne("Profile")
+                        .HasForeignKey("Zhoplix.Models.Identity.Profile", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Zhoplix.Models.Identity.Session", b =>
@@ -577,17 +623,47 @@ namespace Zhoplix.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Zhoplix.Models.Rating", b =>
+            modelBuilder.Entity("Zhoplix.Models.ProfileEpisode", b =>
                 {
-                    b.HasOne("Zhoplix.Models.Title", "Title")
-                        .WithMany("Ratings")
-                        .HasForeignKey("TitleId")
+                    b.HasOne("Zhoplix.Models.Episode", "Episode")
+                        .WithMany("ProfileEpisode")
+                        .HasForeignKey("EpisodeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Zhoplix.Models.Identity.User", "User")
+                    b.HasOne("Zhoplix.Models.Identity.Profile", "Profile")
+                        .WithMany("ProfileEpisodes")
+                        .HasForeignKey("ProfileId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Zhoplix.Models.ProfileTitle", b =>
+                {
+                    b.HasOne("Zhoplix.Models.Identity.Profile", "Profile")
+                        .WithMany("ProfileTitles")
+                        .HasForeignKey("ProfileId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Zhoplix.Models.Title", "Title")
+                        .WithMany("ProfileTitles")
+                        .HasForeignKey("TitleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Zhoplix.Models.Rating", b =>
+                {
+                    b.HasOne("Zhoplix.Models.Identity.Profile", "Profile")
                         .WithMany("Ratings")
-                        .HasForeignKey("UserId")
+                        .HasForeignKey("ProfileId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Zhoplix.Models.Title", "Title")
+                        .WithMany("Ratings")
+                        .HasForeignKey("TitleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -596,14 +672,18 @@ namespace Zhoplix.Migrations
                 {
                     b.HasOne("Zhoplix.Models.Title", "Title")
                         .WithMany("Seasons")
-                        .HasForeignKey("TitleId");
+                        .HasForeignKey("TitleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Zhoplix.Models.Subtitles", b =>
                 {
-                    b.HasOne("Zhoplix.Models.Episode", "Episode")
+                    b.HasOne("Zhoplix.Models.Media.VideoInfo", "VideoInfo")
                         .WithMany("Subtitles")
-                        .HasForeignKey("EpisodeId");
+                        .HasForeignKey("VideoInfoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Zhoplix.Models.TitleGenre", b =>
@@ -621,41 +701,19 @@ namespace Zhoplix.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Zhoplix.Models.UserEpisode", b =>
-                {
-                    b.HasOne("Zhoplix.Models.Episode", "Episode")
-                        .WithMany("UserEpisodes")
-                        .HasForeignKey("EpisodeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Zhoplix.Models.Identity.User", "User")
-                        .WithMany("UserEpisodes")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Zhoplix.Models.UserTitle", b =>
-                {
-                    b.HasOne("Zhoplix.Models.Title", "Title")
-                        .WithMany("UserTitles")
-                        .HasForeignKey("TitleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Zhoplix.Models.Identity.User", "User")
-                        .WithMany("UserTitles")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("Zhoplix.Models.Video", b =>
                 {
                     b.HasOne("Zhoplix.Models.Episode", "Episode")
                         .WithMany("Videos")
-                        .HasForeignKey("EpisodeId");
+                        .HasForeignKey("EpisodeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Zhoplix.Models.Media.VideoInfo", "VideoInfo")
+                        .WithMany("Videos")
+                        .HasForeignKey("VideoInfoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }
