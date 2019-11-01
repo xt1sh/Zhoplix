@@ -228,7 +228,8 @@ namespace Zhoplix.Migrations
                     RefreshToken = table.Column<string>(nullable: true),
                     Fingerprint = table.Column<string>(nullable: true),
                     CreatedAt = table.Column<DateTime>(nullable: false),
-                    UpdatedAt = table.Column<DateTime>(nullable: false)
+                    UpdatedAt = table.Column<DateTime>(nullable: false),
+                    ExpiresAt = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {

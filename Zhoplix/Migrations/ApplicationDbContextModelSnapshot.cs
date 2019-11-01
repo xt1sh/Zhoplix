@@ -253,6 +253,9 @@ namespace Zhoplix.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
+                    b.Property<DateTime>("ExpiresAt")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Fingerprint")
                         .HasColumnType("nvarchar(max)");
 

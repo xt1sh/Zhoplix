@@ -70,14 +70,14 @@ namespace Zhoplix.Services.AuthenticationService
                 : await _userManager.FindByNameAsync(model.Login);
 
 
-            if (user == null || !await _userManager.CheckPasswordAsync(user, model.Password))
+            if (user == null || !_userManager.CheckPasswordAsync(user, model.Password).Result)
                 return null;
 
             var session =
                 _sessionContext.FirstOrDefaultAsync(s => (s.UserId == user.Id) && (s.Fingerprint == model.Fingerprint)).Result;
 
             if (session != null)
-                return null;
+                return null;    
 
             var accessToken = await _tokenHandler.GenerateAccessTokenAsync(user, _userManager.GetRolesAsync(user).Result);
 
@@ -90,7 +90,8 @@ namespace Zhoplix.Services.AuthenticationService
                     RefreshToken = refreshToken,
                     Fingerprint = model.Fingerprint,
                     CreatedAt = DateTime.Now,
-                    UpdatedAt = DateTime.Now
+                    UpdatedAt = DateTime.Now,
+                    ExpiresAt = DateTime.Now.AddSeconds(_jwtConfig.RefreshExpirationTime)
                 });
 
                 if (await _context.SaveChangesAsync() > 0)
@@ -143,7 +144,9 @@ namespace Zhoplix.Services.AuthenticationService
                     User = user,
                     RefreshToken = refreshToken,
                     Fingerprint = model.Fingerprint,
-                    CreatedAt = DateTime.Now
+                    CreatedAt = DateTime.Now,
+                    UpdatedAt = DateTime.Now,
+                    ExpiresAt = DateTime.Now.AddSeconds(_jwtConfig.RefreshExpirationTime)
                 });
 
                 if (await _context.SaveChangesAsync() > 0)
@@ -155,8 +158,22 @@ namespace Zhoplix.Services.AuthenticationService
 
         public async Task<DefaultResponse> RefreshTokensAsync(RefreshViewModel model)
         {
+            if (string.IsNullOrWhiteSpace(model.RefreshToken) || string.IsNullOrWhiteSpace(model.Fingerprint))
+                return null;
+
             var session = await _sessionContext.FirstOrDefaultAsync(s => s.RefreshToken == model.RefreshToken);
-            if (DateTime.Now > _tokenHandler.ValidTo(model.RefreshToken) || session.Fingerprint != model.Fingerprint)
+
+            if (session is null)
+                return null;
+
+            if (session.ExpiresAt < DateTime.Now)
+            {
+                _sessionContext.Remove(session);
+                await _context.SaveChangesAsync();
+                return null;
+            }
+
+            if (session.Fingerprint != model.Fingerprint)
                 return null;
             
 

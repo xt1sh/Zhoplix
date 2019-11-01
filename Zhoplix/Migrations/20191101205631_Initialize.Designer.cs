@@ -10,7 +10,7 @@ using Zhoplix;
 namespace Zhoplix.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20191101192440_Initialize")]
+    [Migration("20191101205631_Initialize")]
     partial class Initialize
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -253,6 +253,9 @@ namespace Zhoplix.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("ExpiresAt")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Fingerprint")
