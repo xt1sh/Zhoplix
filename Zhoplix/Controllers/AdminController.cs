@@ -22,7 +22,6 @@ namespace Zhoplix.Controllers
 {
     [Route("[controller]/[action]")]
     [ApiController]
-    [AllowAnonymous]
     public class AdminController : ControllerBase
     {
         private readonly ITitleService _titleService;

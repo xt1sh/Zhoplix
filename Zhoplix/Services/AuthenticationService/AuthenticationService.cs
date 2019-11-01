@@ -70,30 +70,35 @@ namespace Zhoplix.Services.AuthenticationService
                 : await _userManager.FindByNameAsync(model.Login);
 
 
-            if (user != null && await _userManager.CheckPasswordAsync(user, model.Password))
+            if (user == null || !await _userManager.CheckPasswordAsync(user, model.Password))
+                return null;
+
+            var session =
+                _sessionContext.FirstOrDefaultAsync(s => (s.UserId == user.Id) && (s.Fingerprint == model.Fingerprint)).Result;
+
+            if (session != null)
+                return null;
+
+            var accessToken = await _tokenHandler.GenerateAccessTokenAsync(user, _userManager.GetRolesAsync(user).Result);
+
+            if (model.RememberMe)
             {
-                
-
-                var accessToken = await _tokenHandler.GenerateAccessTokenAsync(user, _userManager.GetRolesAsync(user).Result);
-
-                if (model.RememberMe)
+                var refreshToken = await _tokenHandler.GenerateRefreshTokenAsync(user);
+                _sessionContext.Add(new Session
                 {
-                    var refreshToken = await _tokenHandler.GenerateRefreshTokenAsync(user);
-                    _sessionContext.Add(new Session
-                    {
-                        User = user,
-                        RefreshToken = refreshToken,
-                        Fingerprint = model.Fingerprint,
-                        CreatedAt = DateTime.Now
-                    });
+                    User = user,
+                    RefreshToken = refreshToken,
+                    Fingerprint = model.Fingerprint,
+                    CreatedAt = DateTime.Now,
+                    UpdatedAt = DateTime.Now
+                });
 
-                    if (await _context.SaveChangesAsync() > 0)
-                        return new DefaultResponse(accessToken, refreshToken, _jwtConfig.AccessExpirationTime);
-                }
-                else
-                {
-                    return new AccessTokenResponse(accessToken, _jwtConfig.AccessExpirationTime);
-                }
+                if (await _context.SaveChangesAsync() > 0)
+                    return new DefaultResponse(accessToken, refreshToken, _jwtConfig.AccessExpirationTime);
+            }
+            else
+            {
+                return new AccessTokenResponse(accessToken, _jwtConfig.AccessExpirationTime);
             }
 
             return null;
@@ -154,17 +159,14 @@ namespace Zhoplix.Services.AuthenticationService
             if (DateTime.Now > _tokenHandler.ValidTo(model.RefreshToken) || session.Fingerprint != model.Fingerprint)
                 return null;
             
-            _sessionContext.Remove(session);
+
             var user = await _userManager.FindByIdAsync(session.UserId.ToString());
             var accessToken = await _tokenHandler.GenerateAccessTokenAsync(user, _userManager.GetRolesAsync(user).Result);
             var refreshToken = await _tokenHandler.GenerateRefreshTokenAsync(user);
-            _sessionContext.Add(new Session
-            {
-                User = user,
-                RefreshToken = model.RefreshToken,
-                Fingerprint = model.Fingerprint,
-                CreatedAt = DateTime.Now
-            });
+
+            session.RefreshToken = refreshToken;
+            session.UpdatedAt = DateTime.Now;
+            _sessionContext.Update(session);
 
             if (await _context.SaveChangesAsync() > 0)
                 return new DefaultResponse(accessToken, refreshToken, _jwtConfig.AccessExpirationTime);
