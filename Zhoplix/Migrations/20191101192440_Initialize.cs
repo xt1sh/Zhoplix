@@ -42,7 +42,6 @@ namespace Zhoplix.Migrations
                     LockoutEnd = table.Column<DateTimeOffset>(nullable: true),
                     LockoutEnabled = table.Column<bool>(nullable: false),
                     AccessFailedCount = table.Column<int>(nullable: false),
-                    RefreshToken = table.Column<string>(nullable: true),
                     ProfileId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
@@ -228,7 +227,8 @@ namespace Zhoplix.Migrations
                     UserId = table.Column<int>(nullable: false),
                     RefreshToken = table.Column<string>(nullable: true),
                     Fingerprint = table.Column<string>(nullable: true),
-                    CreatedAt = table.Column<DateTime>(nullable: false)
+                    CreatedAt = table.Column<DateTime>(nullable: false),
+                    UpdatedAt = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {

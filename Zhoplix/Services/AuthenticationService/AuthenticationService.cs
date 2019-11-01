@@ -34,7 +34,7 @@ namespace Zhoplix.Services.AuthenticationService
         private readonly IUrlHelper _url;
         private readonly IEmailSender _emailSender;
         private readonly IMapper _mapper;
-        private readonly ILogger<AdminController> _logger;
+        private readonly ILogger _logger;
         private readonly DbSet<Session> _sessionContext;
 
 
@@ -45,7 +45,7 @@ namespace Zhoplix.Services.AuthenticationService
             ApplicationDbContext context,
             IUrlHelper url,
             IEmailSender emailSender,
-            ILogger<AdminController> logger,
+            ILogger<AuthenticationService> logger,
             IMapper mapper
         )
         {

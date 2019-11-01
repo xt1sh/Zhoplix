@@ -33,6 +33,7 @@ using Zhoplix.Services.Media;
 using Zhoplix.Services.CRUD;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
+using Zhoplix.Data;
 
 namespace Zhoplix
 {
@@ -41,15 +42,14 @@ namespace Zhoplix
         private readonly JwtConfiguration JwtConfiguration;
 
         private readonly PasswordConfiguration PasswordConfiguration;
-        private readonly ILogger<Startup> _logger;
 
 
-        public Startup(IConfiguration configuration, ILogger<Startup> logger)
+
+        public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
             JwtConfiguration = Configuration.GetSection("Bearer").Get<JwtConfiguration>();
             PasswordConfiguration = Configuration.GetSection("Password").Get<PasswordConfiguration>();
-            _logger = logger;
         }
 
 
@@ -206,25 +206,8 @@ namespace Zhoplix
                 }
             });
 
-            SeedRoles(serviceProvider);
+            DataInitializer.Initialize(serviceProvider, serviceProvider.GetRequiredService<ILogger<DataInitializer>>());
         }
 
-        private void SeedRoles(IServiceProvider serviceProvider)
-        {
-            var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole<int>>>();
-
-            string[] roleNames = new[] {"Admin", "Moderator", "Member"};
-
-            foreach (var roleName in roleNames)
-            {
-                var isRoleExist = roleManager.RoleExistsAsync(roleName);
-                isRoleExist.Wait();
-                if (!isRoleExist.Result)
-                {
-                    var roleResult = roleManager.CreateAsync(new IdentityRole<int>(roleName)).Result;
-                    _logger.LogInformation($"Create {roleName}: {roleResult.Succeeded}");
-                }
-            }
-        }
     }
 }

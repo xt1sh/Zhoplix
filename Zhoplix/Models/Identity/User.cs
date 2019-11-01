@@ -9,7 +9,6 @@ namespace Zhoplix.Models.Identity
     public class User : IdentityUser<int>
     {
         public override int Id { get; set; }
-        public string RefreshToken { get; set; }
         public int ProfileId { get; set; }
         public Profile Profile { get; set; }
     }
