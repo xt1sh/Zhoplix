@@ -3,6 +3,7 @@ import { Observable, BehaviorSubject } from 'rxjs';
 import { Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import { AuthenticationService } from 'src/app/services/authentication/authentication.service';
+import { ProfileService } from 'src/app/services/profile/profile.service';
 
 const routes: string[] = [];
 
@@ -22,16 +23,18 @@ export class NavMenuComponent implements OnInit {
   toShowSignIn: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   toShowProfileMenu$: Observable<boolean>;
   toShowProfileMenu: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-
+  avatar: string;
 
   constructor(private readonly router: Router,
-              private readonly auth: AuthenticationService) {
+              private readonly auth: AuthenticationService,
+              private readonly profile: ProfileService) {
               }
 
   ngOnInit() {
     this.toShow$ = this.getToShowValue;
     this.toShowSignIn$ = this.getToShowSignInValue;
     this.toShowProfileMenu$ = this.getToShowProfileMenu;
+    this.avatar = this.profile.getProfileImage();
     const event = this.router.events
       .pipe(filter(event => event instanceof NavigationEnd))
       .subscribe(() => {

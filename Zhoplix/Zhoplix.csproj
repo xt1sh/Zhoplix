@@ -48,14 +48,21 @@
 
   <ItemGroup>
     <Folder Include="Controllers\" />
+    <Folder Include="Images\Avatars\04d8e9e2-0ec2-4c6d-96d7-9710c64c2f1e\" />
     <Folder Include="Services\Repository\" />
     <Folder Include="ViewModels\Media\" />
     <Folder Include="wwwroot\background\" />
+    <Folder Include="wwwroot\Images\Avatars\035b9af8-bbef-4a81-902a-5a7ae20057c1\" />
+    <Folder Include="wwwroot\Images\Avatars\0bd86df2-7788-4c16-b735-e475072e1db4\" />
     <Folder Include="wwwroot\Images\Avatars\1488a6e9-3a5e-46f3-a2cb-729bc2913bdf\" />
     <Folder Include="wwwroot\Images\Avatars\1520ecad-e046-49c4-8819-c3abb933ad88\" />
+    <Folder Include="wwwroot\Images\Avatars\c8cd8079-aed7-4aa9-baa3-667ef054f47d\" />
     <Folder Include="wwwroot\Images\Avatars\ccc57e1b-77c7-4029-bdf6-4e593881add5\" />
     <Folder Include="wwwroot\Images\Avatars\dbd0d019-137f-422b-8552-f4f5c62217c4\" />
     <Folder Include="wwwroot\Images\Avatars\e2c2a8a4-ea8a-4461-a96a-016a8e32ab02\" />
+    <Folder Include="wwwroot\Images\Avatars\e5af2193-ac0f-4b98-93e5-8cdb4fc38f94\" />
+    <Folder Include="wwwroot\Images\Avatars\fe364cb9-72ec-4c61-b97a-a7d6ce959c1c\" />
+    <Folder Include="wwwroot\Images\Avatars\ff9c69ff-940e-47da-82fb-5ae087e4e44e\" />
   </ItemGroup>
 
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">

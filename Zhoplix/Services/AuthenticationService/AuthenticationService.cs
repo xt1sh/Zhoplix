@@ -2,15 +2,12 @@
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Security.Claims;
-using System.Security.Policy;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using AutoMapper;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity.UI.Services;
-using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.Mvc;
 using Zhoplix.Configurations;
 using Zhoplix.Models.Identity;
@@ -18,9 +15,10 @@ using Zhoplix.Services.AuthenticationService.Response;
 using Zhoplix.Services.TokenHandler;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using Zhoplix.Controllers;
+using Zhoplix.Services.ProfileManager;
 using Zhoplix.ViewModels;
 using Zhoplix.ViewModels.Authentication;
+using Profile = AutoMapper.Profile;
 
 namespace Zhoplix.Services.AuthenticationService
 {
@@ -36,12 +34,14 @@ namespace Zhoplix.Services.AuthenticationService
         private readonly IMapper _mapper;
         private readonly ILogger _logger;
         private readonly DbSet<Session> _sessionContext;
+        private readonly IProfileManager _profileManager;
 
 
         public AuthenticationService(
             UserManager<User> userManager,
             ITokenHandler tokenHandler,
             IOptions<JwtConfiguration> jwtConfig,
+            IProfileManager profileManager,
             ApplicationDbContext context,
             IUrlHelper url,
             IEmailSender emailSender,
@@ -51,6 +51,7 @@ namespace Zhoplix.Services.AuthenticationService
         {
             _userManager = userManager;
             _tokenHandler = tokenHandler;
+            _profileManager = profileManager;
             _jwtConfig = jwtConfig.Value;
             _context = context;
             _sessionContext = _context.Sessions;
@@ -77,7 +78,7 @@ namespace Zhoplix.Services.AuthenticationService
                 (s.UserId == user.Id) && (s.Fingerprint == model.Fingerprint)
                 );
 
-            var accessToken = await _tokenHandler.GenerateAccessTokenAsync(user, _userManager.GetRolesAsync(user).Result);
+            var accessToken = await GenerateAccessWithClaims(user);
 
 
             if (session != null)
@@ -126,22 +127,23 @@ namespace Zhoplix.Services.AuthenticationService
             return result.Errors;
         }
 
-        public async Task<(DefaultResponse, int)> ConfirmUserAsync(EmailConfirmationViewModel model)
+        public async Task<DefaultResponse> ConfirmUserAsync(EmailConfirmationViewModel model)
         {
             if (string.IsNullOrWhiteSpace(model.UserId) || string.IsNullOrWhiteSpace(model.Token))
-                return (null, -1);
+                return null;
 
             var user = await _userManager.FindByIdAsync(model.UserId);
 
             if (user is null)
-                return (null, -1);
+                return null;
 
             var result = await _userManager.ConfirmEmailAsync(user, model.Token);
             if (result.Succeeded)
             {
                 await _userManager.AddToRoleAsync(user, "Member");
+                _ = await _profileManager.CreateProfileAsync(user.Id);
 
-                var accessToken = await _tokenHandler.GenerateAccessTokenAsync(user, _userManager.GetRolesAsync(user).Result);
+                var accessToken = await GenerateAccessWithClaims(user);
                 var refreshToken = await _tokenHandler.GenerateRefreshTokenAsync(user);
 
                 _sessionContext.Add(new Session
@@ -155,10 +157,10 @@ namespace Zhoplix.Services.AuthenticationService
                 });
 
                 if (await _context.SaveChangesAsync() > 0)
-                    return (new DefaultResponse(accessToken, refreshToken, _jwtConfig.AccessExpirationTime), user.Id);
+                    return new DefaultResponse(accessToken, refreshToken, _jwtConfig.AccessExpirationTime);
             }
 
-            return (null, -1);
+            return null;
         }
 
         public async Task<DefaultResponse> RefreshTokensAsync(RefreshViewModel model)
@@ -180,7 +182,7 @@ namespace Zhoplix.Services.AuthenticationService
             
 
             var user = await _userManager.FindByIdAsync(session.UserId.ToString());
-            var accessToken = await _tokenHandler.GenerateAccessTokenAsync(user, _userManager.GetRolesAsync(user).Result);
+            var accessToken = await GenerateAccessWithClaims(user);
             var refreshToken = await _tokenHandler.GenerateRefreshTokenAsync(user);
 
             session.RefreshToken = refreshToken;
@@ -223,7 +225,18 @@ namespace Zhoplix.Services.AuthenticationService
              return $"<a href='{callbackUrl}'>link</a>";
         }
 
+        public async Task<string> GenerateAccessWithClaims(User user)
+        {
+            var profile = await _profileManager.GetProfileByIdAsync(user.Id);
+            var claims = new List<Claim>
+            {
+                new Claim("avatar", profile.ImagePath)
+            };
+            claims.AddRange(from role in await _userManager.GetRolesAsync(user)
+                select new Claim(ClaimsIdentity.DefaultRoleClaimType, role));
 
+            return await _tokenHandler.GenerateAccessTokenAsync(user, claims);
+        }
 
     }
 }
