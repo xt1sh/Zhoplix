@@ -10,7 +10,7 @@ const routes: string[] = [];
 @Component({
   selector: "app-nav-menu",
   templateUrl: "./nav-menu.component.html",
-  styleUrls: ["./nav-menu.component.css"]
+  styleUrls: ["./nav-menu.component.scss"]
 })
 export class NavMenuComponent implements OnInit {
   zhoplixLogoSrcLarge = "Logos/zhoplix_empty_167.png";

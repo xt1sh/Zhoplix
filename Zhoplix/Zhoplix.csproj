@@ -41,14 +41,17 @@
 
   <ItemGroup>
     <!-- Don't publish the SPA source files, but do show them in the project files list -->
+    <Compile Remove="Images\**" />
     <Content Remove="$(SpaRoot)**" />
+    <Content Remove="Images\**" />
+    <EmbeddedResource Remove="Images\**" />
     <None Remove="$(SpaRoot)**" />
+    <None Remove="Images\**" />
     <None Include="$(SpaRoot)**" Exclude="$(SpaRoot)node_modules\**" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Controllers\" />
-    <Folder Include="Images\Avatars\04d8e9e2-0ec2-4c6d-96d7-9710c64c2f1e\" />
     <Folder Include="Services\Repository\" />
     <Folder Include="ViewModels\Media\" />
     <Folder Include="wwwroot\background\" />

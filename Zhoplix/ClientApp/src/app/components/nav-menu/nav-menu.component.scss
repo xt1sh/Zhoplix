@@ -1,6 +1,7 @@
 
 .navbar {
   padding-top: 20px;
+  position: relative;
 }
 
 .navbar-main {
@@ -29,6 +30,27 @@ a {
 }
 /* Profile */
 
+.avatar-img {
+  display: flex;
+}
+
+.avatar {
+  width: 45px;
+  height: 45px;
+}
+
 .dropdown-item {
-  color:black;
+  color: white;
+}
+
+.dropdown-item:hover {
+  background-color: rgba(0, 0, 0, 0.3);
+}
+.dropdown-menu {
+  background-color: rgba(0, 0, 0, 0.75);
+  border: 1 solid white;
+  border-radius: 0;
+  margin-top: 20px;
+  right: 0;
+  left: auto;
 }
