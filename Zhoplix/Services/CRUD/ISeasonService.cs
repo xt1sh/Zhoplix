@@ -48,6 +48,12 @@ namespace Zhoplix.Services.CRUD
                 return null;
 
             season.Title = title;
+
+            var existSeason = _seasonContext.FirstOrDefault(x => x.TitleId == season.TitleId && x.Name == season.Name);
+
+            if (existSeason != null)
+                return null;
+
             if (await CreateSeasonAsync(season))
                 return season;
 

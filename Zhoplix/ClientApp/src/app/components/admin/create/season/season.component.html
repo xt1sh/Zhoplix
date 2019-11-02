@@ -5,7 +5,9 @@
     <div>
         <input type="text" formControlName="description" placeholder="Description">
     </div>
-    <ngx-select-dropdown formControlName="titleId" [list]="list"></ngx-select-dropdown>
+    <select-dropdown formControlName="title" [config]="config"
+                     [options]="titlesList" (searchChange)="this.searchChange.next($event)">
+    </select-dropdown>
     <div>
         <input #file type="file" (change)="uploadPhoto(file.files)">
     </div>

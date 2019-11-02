@@ -1,7 +1,7 @@
 import { Injectable, Inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpResponse, HttpHeaders, HttpClient, HttpEventType } from '@angular/common/http';
-import { TitleView } from '../../components/admin/create/season/season.component';
+import { TitlePageView } from 'src/app/components/admin/create/season/season.component';
 
 @Injectable({
   providedIn: 'root'
@@ -24,11 +24,15 @@ export class AdminService {
     return this.http.post<any>(`${this.originUrl}Admin/CreateEpisode`, episode, { observe: 'response' });
   }
 
-  getTitleViewByName(name: string): Observable<HttpResponse<TitleView>> {
-    return this.http.get<TitleView>(`${this.originUrl}Admin/GetTitle/${name}`, { observe: 'response'});
+  getTitleViewByName(name: string): Observable<HttpResponse<string>> {
+    return this.http.get<string>(`${this.originUrl}Admin/GetTitle/${name}`, { observe: 'response'});
   }
 
-  getTitlesPage(pageNumber, pageSize): Observable<HttpResponse<any>> {
-    return this.http.post<any>(`${this.originUrl}Admin/GetTitlesPage`, {pageNumber, pageSize}, { observe: 'response' });
+  getTitlesPage(pageNumber: number, pageSize: number): Observable<HttpResponse<Array<TitlePageView>>> {
+    return this.http.get<Array<TitlePageView>>(`${this.originUrl}Admin/GetTitlesPage/${pageNumber}/${pageSize}`, { observe: 'response' });
+  }
+
+  findTitles(name: string): Observable<HttpResponse<Array<TitlePageView>>> {
+    return this.http.get<Array<TitlePageView>>(`${this.originUrl}Admin/FindTitles/${name}`, { observe: 'response' });
   }
 }
