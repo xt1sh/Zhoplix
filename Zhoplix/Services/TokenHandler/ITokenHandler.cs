@@ -11,6 +11,6 @@ namespace Zhoplix.Services.TokenHandler
     {
         Task<string> GenerateAccessTokenAsync(User user, IEnumerable<string> roles);
         Task<string> GenerateRefreshTokenAsync(User user);
-        DateTime ValidTo(string token);
+
     }
 }

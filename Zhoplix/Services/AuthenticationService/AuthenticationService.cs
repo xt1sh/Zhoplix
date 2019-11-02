@@ -70,16 +70,21 @@ namespace Zhoplix.Services.AuthenticationService
                 : await _userManager.FindByNameAsync(model.Login);
 
 
-            if (user == null || !_userManager.CheckPasswordAsync(user, model.Password).Result)
+            if (user == null || !await _userManager.CheckPasswordAsync(user, model.Password))
                 return null;
 
-            var session =
-                _sessionContext.FirstOrDefaultAsync(s => (s.UserId == user.Id) && (s.Fingerprint == model.Fingerprint)).Result;
-
-            if (session != null)
-                return null;    
+            var session = await _sessionContext.FirstOrDefaultAsync(s => 
+                (s.UserId == user.Id) && (s.Fingerprint == model.Fingerprint)
+                );
 
             var accessToken = await _tokenHandler.GenerateAccessTokenAsync(user, _userManager.GetRolesAsync(user).Result);
+
+
+            if (session != null)
+            {
+                _sessionContext.Remove(session);
+                await _context.SaveChangesAsync();
+            }
 
             if (model.RememberMe)
             {
@@ -101,7 +106,7 @@ namespace Zhoplix.Services.AuthenticationService
             {
                 return new AccessTokenResponse(accessToken, _jwtConfig.AccessExpirationTime);
             }
-
+            
             return null;
         }
 
@@ -121,15 +126,15 @@ namespace Zhoplix.Services.AuthenticationService
             return result.Errors;
         }
 
-        public async Task<DefaultResponse> ConfirmUserAsync(EmailConfirmationViewModel model)
+        public async Task<(DefaultResponse, int)> ConfirmUserAsync(EmailConfirmationViewModel model)
         {
             if (string.IsNullOrWhiteSpace(model.UserId) || string.IsNullOrWhiteSpace(model.Token))
-                return null;
+                return (null, -1);
 
             var user = await _userManager.FindByIdAsync(model.UserId);
 
             if (user is null)
-                return null;
+                return (null, -1);
 
             var result = await _userManager.ConfirmEmailAsync(user, model.Token);
             if (result.Succeeded)
@@ -150,10 +155,10 @@ namespace Zhoplix.Services.AuthenticationService
                 });
 
                 if (await _context.SaveChangesAsync() > 0)
-                    return new DefaultResponse(accessToken, refreshToken, _jwtConfig.AccessExpirationTime);
+                    return (new DefaultResponse(accessToken, refreshToken, _jwtConfig.AccessExpirationTime), user.Id);
             }
 
-            return null;
+            return (null, -1);
         }
 
         public async Task<DefaultResponse> RefreshTokensAsync(RefreshViewModel model)
@@ -166,15 +171,12 @@ namespace Zhoplix.Services.AuthenticationService
             if (session is null)
                 return null;
 
-            if (session.ExpiresAt < DateTime.Now)
+            if (session.ExpiresAt < DateTime.Now || session.Fingerprint != model.Fingerprint)
             {
                 _sessionContext.Remove(session);
                 await _context.SaveChangesAsync();
                 return null;
             }
-
-            if (session.Fingerprint != model.Fingerprint)
-                return null;
             
 
             var user = await _userManager.FindByIdAsync(session.UserId.ToString());
@@ -191,6 +193,21 @@ namespace Zhoplix.Services.AuthenticationService
             return null;
         }
 
+        public async Task<bool> SignOutAsync(string username, string fingerprint)
+        {
+            if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(fingerprint))
+                return false;
+
+            var session = await _sessionContext.FirstOrDefaultAsync(s => (s.User.UserName == username) && (s.Fingerprint == fingerprint));
+            if (session is null)
+                return true;
+
+            _sessionContext.Remove(session);
+            if (await _context.SaveChangesAsync() > 0)
+                return true;
+
+            return false;
+        }
         public string GenerateConfirmationMessage(int userId, string token)
         {
             var callbackUrl = _url.Action(

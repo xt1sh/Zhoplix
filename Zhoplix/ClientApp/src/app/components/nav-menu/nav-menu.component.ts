@@ -20,18 +20,24 @@ export class NavMenuComponent implements OnInit {
   toShow: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   toShowSignIn$: Observable<boolean>;
   toShowSignIn: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  toShowProfileMenu$: Observable<boolean>;
+  toShowProfileMenu: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+
 
   constructor(private readonly router: Router,
-              private readonly auth: AuthenticationService) {}
+              private readonly auth: AuthenticationService) {
+              }
 
   ngOnInit() {
     this.toShow$ = this.getToShowValue;
     this.toShowSignIn$ = this.getToShowSignInValue;
+    this.toShowProfileMenu$ = this.getToShowProfileMenu;
     const event = this.router.events
       .pipe(filter(event => event instanceof NavigationEnd))
       .subscribe(() => {
         this.toShow$ = this.getToShowValue;
         this.toShowSignIn$ = this.getToShowSignInValue;
+        this.toShowProfileMenu$ = this.getToShowProfileMenu;
       });
   }
 
@@ -47,6 +53,13 @@ export class NavMenuComponent implements OnInit {
       this.toShowSignIn.next(!this.router.url.includes("login"));
     }
     return this.toShowSignIn.asObservable();
+  }
+
+  get getToShowProfileMenu() {
+    if(this.auth.isLoggedIn) {
+      this.toShowProfileMenu.next(true);
+    } 
+    return this.toShowProfileMenu.asObservable();
   }
 
   collapse() {
