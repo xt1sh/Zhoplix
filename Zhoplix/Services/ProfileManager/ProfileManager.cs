@@ -23,8 +23,6 @@ namespace Zhoplix.Services.ProfileManager
         }
         public async Task<Profile> CreateProfileAsync(int userId)
         {
-            if (userId == -1)
-                return null;
 
             var imageId = _avatarGenerator.GenerateAvatar(12, 120);
             var imagePath = Path.Combine(_avatarGenerator.ImagePath, imageId, $"{imageId}.png");

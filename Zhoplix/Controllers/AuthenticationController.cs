@@ -68,7 +68,7 @@ namespace Zhoplix.Controllers
         {
             var (response, userId) = await _authentication.ConfirmUserAsync(model);
 
-            if (response != null)
+            if (response != null && userId != -1)
             {
                 var profile = await _profileManager.CreateProfileAsync(userId);
                 return Ok(response);
