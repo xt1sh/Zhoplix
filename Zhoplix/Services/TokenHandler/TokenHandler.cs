@@ -67,6 +67,5 @@ namespace Zhoplix.Services.TokenHandler
             return Task.FromResult(new JwtSecurityTokenHandler().WriteToken(token));
         }
 
-        public DateTime ValidTo(string token) => new JwtSecurityToken(token).ValidTo;
     }
 }
