@@ -23,12 +23,10 @@ namespace Zhoplix.Controllers
     public class AuthenticationController : ControllerBase
     {
         private readonly IAuthenticationService _authentication;
-        private readonly IProfileManager _profileManager;
 
-        public AuthenticationController(IAuthenticationService authentication, IProfileManager profileManager)
+        public AuthenticationController(IAuthenticationService authentication)
         {
             _authentication = authentication;
-            _profileManager = profileManager;
         }
 
         [HttpPost]
@@ -66,11 +64,10 @@ namespace Zhoplix.Controllers
         [HttpPost]
         public async Task<IActionResult> ConfirmEmail(EmailConfirmationViewModel model)
         {
-            var (response, userId) = await _authentication.ConfirmUserAsync(model);
+            var response = await _authentication.ConfirmUserAsync(model);
 
-            if (response != null && userId != -1)
+            if (response != null)
             {
-                var profile = await _profileManager.CreateProfileAsync(userId);
                 return Ok(response);
             }
 

@@ -18,6 +18,7 @@ import { VgCoreModule } from 'videogular2/compiled/core';
 import { VgControlsModule } from 'videogular2/compiled/controls';
 import { VgBufferingModule } from 'videogular2/compiled/buffering';
 import { SelectDropDownModule } from "ngx-select-dropdown";
+import { JwtModule } from "@auth0/angular-jwt";
 
 
 import { AppComponent } from './app.component';
@@ -85,7 +86,12 @@ import { PlayerComponent } from './components/player/player/player.component';
     FormsModule,
     VgCoreModule,
     VgControlsModule,
-    VgBufferingModule,
+    VgBufferingModule,    
+    JwtModule.forRoot(  {
+      config: {
+      whitelistedDomains: ["*", ]
+      }
+    }),
     RouterModule.forRoot(ROUTES)
   ],
   providers: [

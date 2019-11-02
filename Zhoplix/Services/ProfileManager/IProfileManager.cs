@@ -9,5 +9,6 @@ namespace Zhoplix.Services.ProfileManager
     public interface IProfileManager
     {
         Task<Profile> CreateProfileAsync(int userId);
+        Task<Profile> GetProfileByIdAsync(int userId);
     }
 }

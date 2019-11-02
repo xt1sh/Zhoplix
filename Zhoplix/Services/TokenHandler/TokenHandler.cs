@@ -26,21 +26,20 @@ namespace Zhoplix.Services.TokenHandler
             _jwtConfiguration = jwtConfiguration.Value;
         }
 
-        public Task<string> GenerateAccessTokenAsync(User user, IEnumerable<string> roles)
+        public Task<string> GenerateAccessTokenAsync(User user, IList<Claim> claims)
         {
 
             var key = Encoding.UTF8.GetBytes(_jwtConfiguration.Secret);
-            var claims = new List<Claim>
+            var authClaims = new List<Claim>
             {
                 new Claim(JwtRegisteredClaimNames.Sub, user.UserName),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 new Claim("token_type", "access")
             };
-            claims.AddRange(from role in roles
-                            select new Claim(ClaimsIdentity.DefaultRoleClaimType, role));
+            authClaims.AddRange(claims);
             
             var token = new JwtSecurityToken(
-                claims: claims,
+                claims: authClaims,
                 expires: DateTime.Now.AddSeconds(_jwtConfiguration.AccessExpirationTime),
                 signingCredentials: new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256)
             );
