@@ -12,6 +12,7 @@ using Microsoft.Extensions.Logging;
 using Zhoplix.Services.AuthenticationService;
 using Microsoft.AspNetCore.Authorization;
 using System.Text.Json;
+using Zhoplix.Services.ProfileManager;
 
 
 namespace Zhoplix.Controllers
@@ -22,10 +23,12 @@ namespace Zhoplix.Controllers
     public class AuthenticationController : ControllerBase
     {
         private readonly IAuthenticationService _authentication;
+        private readonly IProfileManager _profileManager;
 
-        public AuthenticationController(IAuthenticationService authentication)
+        public AuthenticationController(IAuthenticationService authentication, IProfileManager profileManager)
         {
             _authentication = authentication;
+            _profileManager = profileManager;
         }
 
         [HttpPost]
@@ -63,10 +66,11 @@ namespace Zhoplix.Controllers
         [HttpPost]
         public async Task<IActionResult> ConfirmEmail(EmailConfirmationViewModel model)
         {
-            var response = await _authentication.ConfirmUserAsync(model);
+            var (response, userId) = await _authentication.ConfirmUserAsync(model);
 
             if (response != null)
             {
+                var profile = await _profileManager.CreateProfileAsync(userId);
                 return Ok(response);
             }
 

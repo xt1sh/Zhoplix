@@ -126,15 +126,15 @@ namespace Zhoplix.Services.AuthenticationService
             return result.Errors;
         }
 
-        public async Task<DefaultResponse> ConfirmUserAsync(EmailConfirmationViewModel model)
+        public async Task<(DefaultResponse, int)> ConfirmUserAsync(EmailConfirmationViewModel model)
         {
             if (string.IsNullOrWhiteSpace(model.UserId) || string.IsNullOrWhiteSpace(model.Token))
-                return null;
+                return (null, -1);
 
             var user = await _userManager.FindByIdAsync(model.UserId);
 
             if (user is null)
-                return null;
+                return (null, -1);
 
             var result = await _userManager.ConfirmEmailAsync(user, model.Token);
             if (result.Succeeded)
@@ -155,10 +155,10 @@ namespace Zhoplix.Services.AuthenticationService
                 });
 
                 if (await _context.SaveChangesAsync() > 0)
-                    return new DefaultResponse(accessToken, refreshToken, _jwtConfig.AccessExpirationTime);
+                    return (new DefaultResponse(accessToken, refreshToken, _jwtConfig.AccessExpirationTime), user.Id);
             }
 
-            return null;
+            return (null, -1);
         }
 
         public async Task<DefaultResponse> RefreshTokensAsync(RefreshViewModel model)

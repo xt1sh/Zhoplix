@@ -1,3 +1,4 @@
+
 .navbar {
   padding-top: 20px;
 }
@@ -25,4 +26,9 @@ a {
   border-radius: 3px;
   font-size: 1rem;
   float: right;
+}
+/* Profile */
+
+.dropdown-item {
+  color:black;
 }

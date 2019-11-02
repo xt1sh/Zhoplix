@@ -51,6 +51,11 @@
     <Folder Include="Services\Repository\" />
     <Folder Include="ViewModels\Media\" />
     <Folder Include="wwwroot\background\" />
+    <Folder Include="wwwroot\Images\Avatars\1488a6e9-3a5e-46f3-a2cb-729bc2913bdf\" />
+    <Folder Include="wwwroot\Images\Avatars\1520ecad-e046-49c4-8819-c3abb933ad88\" />
+    <Folder Include="wwwroot\Images\Avatars\ccc57e1b-77c7-4029-bdf6-4e593881add5\" />
+    <Folder Include="wwwroot\Images\Avatars\dbd0d019-137f-422b-8552-f4f5c62217c4\" />
+    <Folder Include="wwwroot\Images\Avatars\e2c2a8a4-ea8a-4461-a96a-016a8e32ab02\" />
   </ItemGroup>
 
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">

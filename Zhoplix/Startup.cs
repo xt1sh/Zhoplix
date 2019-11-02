@@ -34,6 +34,7 @@ using Zhoplix.Services.CRUD;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Zhoplix.Data;
+using Zhoplix.Services.ProfileManager;
 
 namespace Zhoplix
 {
@@ -123,6 +124,7 @@ namespace Zhoplix
             services.AddScoped<IAuthenticationService, AuthenticationService>();
             services.AddScoped<IMediaService, MediaService>();
             services.AddScoped<IAvatarGenerator, AvatarGenerator>();
+            services.AddScoped<IProfileManager, ProfileManager>();
             services.AddScoped<IUrlHelper>(x => {
                 var actionContext = x.GetRequiredService<IActionContextAccessor>().ActionContext;
                 var factory = x.GetRequiredService<IUrlHelperFactory>();
