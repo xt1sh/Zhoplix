@@ -89,7 +89,7 @@ import { PlayerComponent } from './components/player/player/player.component';
     VgBufferingModule,    
     JwtModule.forRoot(  {
       config: {
-      whitelistedDomains: ["*", ]
+      whitelistedDomains: ["*"]
       }
     }),
     RouterModule.forRoot(ROUTES)
