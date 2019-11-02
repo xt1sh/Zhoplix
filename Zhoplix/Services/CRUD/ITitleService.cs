@@ -21,7 +21,8 @@ namespace Zhoplix.Services.CRUD
         Task<Title> GetTitleAsync(int id);
         Task<Title> GetTitleAsync(Title title);
         Task<Title> GetTitleByNameAsync(string titleName);
-        Task<IEnumerable<Title>> GetTitlePageAsync(Page page);
+        Task<IList<Title>> FindTitlesAsync(string name);
+        Task<IEnumerable<Title>> GetTitlePageAsync(int pageNumber, int pageSize);
         Task<bool> UpdateTitleAsync(Title title);
     }
 
@@ -89,8 +90,11 @@ namespace Zhoplix.Services.CRUD
         public async Task<Title> GetTitleByNameAsync(string titleName) =>
             await _titleContext.FirstOrDefaultAsync(x => x.Name == titleName);
 
-        public async Task<IEnumerable<Title>> GetTitlePageAsync(Page page) =>
-            await _titleContext.Skip(page.PageNumber * (page.PageSize - 1)).Take(page.PageSize).ToListAsync();
+        public async Task<IList<Title>> FindTitlesAsync(string name) =>
+            await _titleContext.Where(x => EF.Functions.Like(x.Name, $"%{name}%")).Take(20).ToListAsync();
+
+        public async Task<IEnumerable<Title>> GetTitlePageAsync(int pageNumber, int pageSize) =>
+            await _titleContext.Skip(pageNumber * (pageSize - 1)).Take(pageSize).ToListAsync();
 
         public async Task<bool> UpdateTitleAsync(Title title)
         {

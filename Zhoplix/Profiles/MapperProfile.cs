@@ -20,12 +20,13 @@ namespace Zhoplix.Profiles
             CreateMap<CreateTitleViewModel, Title>().ForMember(x => x.Genres, t => t.Ignore());
             CreateMap<CreateSeasonViewModel, Season>();
             CreateMap<CreateEpisodeViewModel, Episode>();
+            CreateMap<CreateGenreViewModel, Genre>().ReverseMap();
 
             // ViewModels
             CreateMap<RegistrationViewModel, User>();
             CreateMap<Title, TitleViewModel>();
-            CreateMap<CreateGenreViewModel, Genre>().ReverseMap();
             CreateMap<Title, TitlePageViewModel>();
+            CreateMap<Season, SeasonViewModel>();
 
             // ChangeViewModels
 

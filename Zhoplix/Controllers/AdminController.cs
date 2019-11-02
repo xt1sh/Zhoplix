@@ -49,10 +49,10 @@ namespace Zhoplix.Controllers
             _avatarGenerator = avatarGenerator;
         }
 
-        [HttpPost]
-        public async Task<IActionResult> GetTitlesPage(Page page)
+        [HttpGet("{pageNumber}/{pageSize}")]
+        public async Task<IActionResult> GetTitlesPage(int pageNumber, int pageSize)
         {
-            var titles = await _titleService.GetTitlePageAsync(page);
+            var titles = await _titleService.GetTitlePageAsync(pageNumber, pageSize);
             var toShow = titles.Select(x => _mapper.Map<TitlePageViewModel>(x));
             return Ok(toShow);
         }
@@ -62,6 +62,14 @@ namespace Zhoplix.Controllers
         {
             var title = await _titleService.GetTitleByNameAsync(name);
             var toShow = _mapper.Map<TitlePageViewModel>(title);
+            return Ok(toShow);
+        }
+
+        [HttpGet("{name}")]
+        public async Task<IActionResult> FindTitles(string name)
+        {
+            var titles = await _titleService.FindTitlesAsync(name);
+            var toShow = titles.Select(x => _mapper.Map<TitlePageViewModel>(x));
             return Ok(toShow);
         }
 

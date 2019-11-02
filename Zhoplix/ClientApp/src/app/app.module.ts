@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
-import { MDBBootstrapModule } from 'angular-bootstrap-md';
+import { MDBBootstrapModule, DropdownModule } from 'angular-bootstrap-md';
 import { CarouselModule, WavesModule } from 'angular-bootstrap-md';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CookieService } from 'ngx-cookie-service';
@@ -17,7 +17,6 @@ import { TokenInterceptor } from './services/authentication/token.interceptor';
 import { VgCoreModule } from 'videogular2/compiled/core';
 import { VgControlsModule } from 'videogular2/compiled/controls';
 import { VgBufferingModule } from 'videogular2/compiled/buffering';
-import { SelectDropDownModule } from "ngx-select-dropdown";
 import { JwtModule } from "@auth0/angular-jwt";
 
 
@@ -34,6 +33,10 @@ import { CreateComponent } from './components/admin/create/create/create.compone
 import { TitleComponent } from './components/admin/create/title/title.component';
 import { ConfirmEmailComponent } from './components/authentication/confirmEmail/confirmEmail.component';
 import { PlayerComponent } from './components/player/player/player.component';
+import { SeasonComponent } from './components/admin/create/season/season.component';
+import { ArrayFilterPipe } from './pipes/filter-by/filter-by.pipe';
+import { LimitToPipe } from './pipes/limit-to/limit-to.pipe';
+import { SelectDropDownComponent } from './components/dropdown/select-dropdown.component';
 
 @NgModule({
   declarations: [
@@ -46,14 +49,17 @@ import { PlayerComponent } from './components/player/player/player.component';
     CreateComponent,
     ConfirmEmailComponent,
     TitleComponent,
-    PlayerComponent
+    PlayerComponent,
+    SeasonComponent,
+    SelectDropDownComponent,
+    LimitToPipe,
+    ArrayFilterPipe
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
     MDBBootstrapModule.forRoot(),
     HttpClientModule,
     ReactiveFormsModule,
-    SelectDropDownModule,
     CarouselModule,
     WavesModule,
     MatAutocompleteModule,
@@ -86,7 +92,7 @@ import { PlayerComponent } from './components/player/player/player.component';
     FormsModule,
     VgCoreModule,
     VgControlsModule,
-    VgBufferingModule,    
+    VgBufferingModule,
     JwtModule.forRoot(  {
       config: {
       whitelistedDomains: ["*", ]

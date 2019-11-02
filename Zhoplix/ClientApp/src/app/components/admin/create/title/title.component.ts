@@ -13,7 +13,6 @@ export class TitleComponent implements OnInit {
 
   type: string;
   form: any;
-  progress: number;
   message: string;
   uploading: boolean;
 
@@ -33,9 +32,6 @@ export class TitleComponent implements OnInit {
       imageId: '',
     });
     this.addGenre();
-    this.media.getProgress().subscribe(value => {
-      this.progress = value;
-    });
   }
 
   addGenre() {
