@@ -60,9 +60,7 @@ namespace Zhoplix.Services.Media
 
             var id = Guid.NewGuid().ToString();
 
-            var offset = resolutionSize / 20;
-
-            using (var image = new Image<Rgba32>(resolutionSize + offset * 2, resolutionSize + offset * 2))
+            using (var image = new Image<Rgba32>(resolutionSize, resolutionSize))
             {
                 var pixelSize = resolutionSize / size;
                 var pixeli = -1;
@@ -77,24 +75,14 @@ namespace Zhoplix.Services.Media
                         if (j % pixelSize == 0)
                             pixelj++;
 
-                        image[i + offset, j + offset] = (pixels[pixeli][pixelj]) switch
-                        {
-                            0 => Rgba32.WhiteSmoke,
-                            1 => color,
-                            _ => Rgba32.WhiteSmoke,
-                        };
+                        if (pixels[pixeli][pixelj] == 1)
+                            image[i, j] = color;
                     }
                     pixelj = -1;
                 }
 
                 Directory.CreateDirectory(Path.Combine(ImagePath, id));
 
-                image.Save(Path.Combine(ImagePath, id, $"{id}.png"));
-            }
-
-            using (var image = Image.Load(Path.Combine(ImagePath, id, $"{id}.png")))
-            {
-                image.Mutate(x => x.BackgroundColor(Rgba32.WhiteSmoke));
                 image.Save(Path.Combine(ImagePath, id, $"{id}.png"));
             }
 
