@@ -15,16 +15,16 @@
       <div *ngIf="toShowSignIn$ | async as toShow" class="sign-in-button">
         <a [routerLink]="['login']" class="sign-in-link">Sign In</a>
       </div>
-      <div *ngIf="toShowProfileMenu$ | async as toShow" class="dropdown" mdbDropdown>
-        <a mdbDropdownToggle mdbWavesEffect type="button" class="dropdown-toggle waves-light" mdbWavesEffect>
-          <img [src]="avatar" alt=""
-               class="img-fluid rounded-circle z-depth-0" ></a>
-        <div class="dropdown-menu dropdown-primary">
+      <div *ngIf="toShowProfileMenu$ | async as toShow" class="btn-group" mdbDropdown>
+          <a mdbDropdownToggle  class="dropdown-toggle waves-light" mdbWavesEffect>
+              <img [src]="avatar" alt="" class="avatar">
+            </a>
+        <div class="dropdown-menu ">
           <a class="dropdown-item" href="#">Action</a>
           <a class="dropdown-item" href="#">Another action</a>
           <a class="dropdown-item" href="#">Something else here</a>
           <div class="divider dropdown-divider"></div>
-          <a class="dropdown-item" href="#">Separated link</a>
+          <a class="dropdown-item" href="#">Sign out of Zhoplix</a>
         </div>
       </div>
     </nav>
