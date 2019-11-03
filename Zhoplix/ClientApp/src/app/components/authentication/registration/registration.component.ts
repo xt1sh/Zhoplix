@@ -34,6 +34,7 @@ export class RegistrationComponent implements OnInit {
               private readonly route: ActivatedRoute) { }
 
   ngOnInit() {
+
     this.currentSlide = 0;
     this.router.navigate(['signup/1']);
     this.router.events.subscribe(val => {

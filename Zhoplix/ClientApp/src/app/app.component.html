@@ -1,8 +1,4 @@
 <body>
-  <div class="login-background">
-    <img *ngIf="imgSrc !== ''" [src]="imgSrc">
-    <div *ngIf="url == 'login'" class="background-blur"></div>
-  </div>
   <app-nav-menu></app-nav-menu>
   <div class="route-wrapper">
     <router-outlet></router-outlet>

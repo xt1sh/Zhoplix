@@ -5,31 +5,18 @@
 
 
 .route-wrapper {
-  position: relative;
-}
-
-.login-background .background-blur {
-  position: inherit;
-  min-width: 100%;
-  min-height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-}
-
-.login-background {
-  background-size: cover;
-  overflow: hidden;
   position: absolute;
   width: 100%;
   height: 100%;
-  display: block;
-  background-color: white;
 }
 
-.login-background img {
-  object-fit:cover;
+
+
+header {
+  width: 100%;
   position: absolute;
-  height: 100%;
-  min-width: 100%;
+  height: 70px;
+  z-index: 9999;
 }
 
 a:-webkit-any-link {
@@ -37,11 +24,6 @@ a:-webkit-any-link {
   text-decoration: none;
 }
 
-
-.navbar-main {
-  background: none;
-  height: 90px;
-}
 
 .mat-form-field-flex{
   background-color: #333;
