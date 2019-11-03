@@ -37,6 +37,7 @@ import { SeasonComponent } from './components/admin/create/season/season.compone
 import { ArrayFilterPipe } from './pipes/filter-by/filter-by.pipe';
 import { LimitToPipe } from './pipes/limit-to/limit-to.pipe';
 import { SelectDropDownComponent } from './components/dropdown/select-dropdown.component';
+import { SignOutComponent } from './components/authentication/sign-out/sign-out.component';
 
 @NgModule({
   declarations: [
@@ -49,6 +50,7 @@ import { SelectDropDownComponent } from './components/dropdown/select-dropdown.c
     CreateComponent,
     ConfirmEmailComponent,
     TitleComponent,
+    SignOutComponent,
     PlayerComponent,
     SeasonComponent,
     SelectDropDownComponent,

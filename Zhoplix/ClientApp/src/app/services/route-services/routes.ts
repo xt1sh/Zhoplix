@@ -11,6 +11,7 @@ import { TitleComponent } from '../../components/admin/create/title/title.compon
 import { ConfirmEmailComponent } from "src/app/components/authentication/confirmEmail/confirmEmail.component";
 import { PlayerComponent } from "src/app/components/player/player/player.component";
 import { SeasonComponent } from '../../components/admin/create/season/season.component';
+import { SignOutComponent } from "src/app/components/authentication/sign-out/sign-out.component";
 
 export const ROUTES: Routes = [
   { path: '', component: HomeComponent, pathMatch: 'full'},
@@ -19,6 +20,7 @@ export const ROUTES: Routes = [
   { path: 'signup', redirectTo: 'signup/1'},
   { path: 'account/confirmEmail', component: ConfirmEmailComponent },
   { path: 'player', component: PlayerComponent, pathMatch: 'full' },
+  { path: 'signout', component: SignOutComponent, pathMatch: 'full'},
   {
     path: 'admin',
     component: AdminComponent,
