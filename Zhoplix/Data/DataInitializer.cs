@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Zhoplix.Models.Identity;
+using Zhoplix.Services.ProfileManager;
 
 namespace Zhoplix.Data
 {
@@ -16,11 +17,9 @@ namespace Zhoplix.Data
 
         public  static void Initialize(IServiceProvider serviceProvider, ILogger logger)
         {
-            //using (var context = new ApplicationDbContext(serviceProvider.GetService<DbContextOptions<ApplicationDbContext>>()))
-            //{
-            //}
+
             SeedRoles(serviceProvider.GetService<RoleManager<IdentityRole<int>>>(), logger);
-            SeedUsers(serviceProvider.GetService<UserManager<User>>(), logger);
+            SeedUsers(serviceProvider.GetService<UserManager<User>>(), serviceProvider.GetService<IProfileManager>(), logger);
         }
 
         public static void SeedRoles(RoleManager<IdentityRole<int>> roleManager, ILogger logger)
@@ -38,7 +37,7 @@ namespace Zhoplix.Data
             }
         }
 
-        public static void SeedUsers(UserManager<User> userManager, ILogger logger)
+        public static void SeedUsers(UserManager<User> userManager, IProfileManager profileManager, ILogger logger)
         {
             var superUser = new User
             {
@@ -53,6 +52,7 @@ namespace Zhoplix.Data
                 if (result.Succeeded)
                 {
                     userManager.AddToRoleAsync(superUser, "Admin").Wait();
+                    profileManager.CreateProfileAsync(superUser.Id).Wait();
                     logger.LogInformation($"Create Admin: Success");
                 }
                 else
