@@ -59,7 +59,10 @@ export class NavMenuComponent implements OnInit {
   }
 
   get getToShowProfileMenu() {
-    if(this.auth.isLoggedIn) {
+    if(!this.auth.isLoggedIn) {
+      this.toShowProfileMenu.next(false);
+    }
+    else {
       this.toShowProfileMenu.next(true);
     } 
     return this.toShowProfileMenu.asObservable();
