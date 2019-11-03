@@ -22,7 +22,7 @@ export class LoginComponent implements OnInit {
   returnUrl: string;
   loginSpinner: boolean;
   incorrect: boolean;
-
+  imgSrc = 'background/background.jpg';
   constructor(private formBuilder: FormBuilder,
      private auth: AuthenticationService,
      private router: Router,
