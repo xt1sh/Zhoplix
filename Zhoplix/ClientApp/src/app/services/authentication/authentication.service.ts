@@ -44,6 +44,11 @@ export class AuthenticationService {
                         }));
   }
 
+  signOut(fingerprint:string) {
+    return this.http.post<any>(`${this.originUrl}Authentication/SignOut`, {fingerprint:fingerprint},
+                                { observe: 'response'});
+  }
+
   getCurrentUser(): CurrentUser {
     let user: CurrentUser;
     const tokenPayload = decode(localStorage.getItem('access_token'));
@@ -67,6 +72,20 @@ export class AuthenticationService {
 
   getRefreshToken(): string {
     return this.cookieService.get('refresh_token');
+  }
+
+  deleteAccessToken(): void {
+    localStorage.removeItem('access_token');
+    localStorage.removeItem('expires_in');
+  }
+
+  deleteRefreshToken(): void {
+    this.cookieService.delete('refresh_token', '/');
+  }
+
+  deleteTokens(): void {
+    this.deleteAccessToken();
+    this.deleteRefreshToken();
   }
 
   get isLoggedIn(): boolean {

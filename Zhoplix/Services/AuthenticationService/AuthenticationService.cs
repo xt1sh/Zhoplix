@@ -210,6 +210,7 @@ namespace Zhoplix.Services.AuthenticationService
 
             return false;
         }
+
         public string GenerateConfirmationMessage(int userId, string token)
         {
             var callbackUrl = _url.Action(
