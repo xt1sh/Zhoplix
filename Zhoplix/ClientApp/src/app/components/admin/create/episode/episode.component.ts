@@ -1,29 +1,34 @@
 import { Component, OnInit } from '@angular/core';
+import { IdName } from 'src/app/models/admin/id-name';
+import { Subject } from 'rxjs';
 import { FormBuilder } from '@angular/forms';
-import { MediaUploadService } from 'src/app/services/media/media-upload.service';
 import { AdminService } from 'src/app/services/admin/admin.service';
+import { MediaUploadService } from 'src/app/services/media/media-upload.service';
 import { MatSnackBar } from '@angular/material';
 import { Router } from '@angular/router';
-import * as _ from 'lodash';
-import { interval, BehaviorSubject, Subject } from 'rxjs';
-import { delay, debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { distinctUntilChanged, debounceTime } from 'rxjs/operators';
 import { CreateSeason } from 'src/app/models/admin/create-season';
-import { IdName } from 'src/app/models/admin/id-name';
+import * as _ from 'lodash';
+import { CreateTitle } from 'src/app/models/admin/create-title';
+import { CreateEpisode } from 'src/app/models/admin/create-episode';
 
 @Component({
-  selector: "app-season",
-  templateUrl: "./season.component.html"
+  selector: 'app-episode',
+  templateUrl: './episode.component.html',
 })
-export class SeasonComponent implements OnInit {
+export class EpisodeComponent implements OnInit {
 
   form: any;
   message: string;
   uploading: boolean;
   titlesList: Array<IdName>;
+  seasonsList: Array<IdName>;
   titlesToShow: Array<IdName>;
   pageNumber: number;
-  config: any;
+  titleConfig: any;
+  seasonConfig: any;
   searchChange: Subject<string>;
+  progress: number;
 
   constructor(
     private readonly fb: FormBuilder,
@@ -39,7 +44,7 @@ export class SeasonComponent implements OnInit {
     this.titlesToShow = new Array<IdName>();
     this.pageNumber = 1;
     this.uploading = false;
-    this.config = {
+    this.titleConfig = {
       displayKey: 'name',
       search: true,
       height: 'auto',
@@ -50,17 +55,21 @@ export class SeasonComponent implements OnInit {
       searchPlaceholder:'Choose title',
       searchOnKey: 'name',
     }
+    this.seasonConfig = Object.create(this.titleConfig);
+    this.seasonConfig.search = false;
+    this.seasonConfig.searchPlaceholder = 'Choose season';
     this.getTitlePage();
     this.form = this.fb.group({
       name: '',
       description: '',
       title: [],
-      imageId: ''
+      season: [],
+      videoIds: []
     });
     this.searchChange.pipe(
       debounceTime(500),
       distinctUntilChanged())
-    .subscribe(value => this.search(value));
+    .subscribe(value => this.searchTitle(value));
   }
 
   getTitlePage() {
@@ -71,9 +80,9 @@ export class SeasonComponent implements OnInit {
     });
   }
 
-  search(value) {
-    if(value) {
-      this.admin.findTitles(value).subscribe(result => {
+  searchTitle(titleName) {
+    if(titleName) {
+      this.admin.findTitles(titleName).subscribe(result => {
         this.titlesList = this.titlesList.concat(result.body);
         this.titlesList = _.uniqWith(this.titlesList, _.isEqual);
         this.titlesToShow = result.body;
@@ -81,24 +90,46 @@ export class SeasonComponent implements OnInit {
     }
   }
 
-  uploadPhoto(files) {
+  uploadVideo(files) {
     this.uploading = true;
-    this.media.uploadPhoto(files[0]);
-    this.media.getMessage().subscribe(value => {
-      if(value) {
-        this.form.controls['imageId'].setValue(value);
+    this.media.uploadVideo(files[0]);
+    this.media.getProgress().subscribe(value => {
+
+      if (value < 99) {
+        this.progress = value;
+      } else {
+        this.progress = 99;
+      }
+    });
+    this.media.getBody().subscribe(value => {
+      if (value) {
+        this.form.controls['videoIds'].setValue(value);
+        this.progress = 100;
         this.uploading = false;
       }
     });
   }
 
+  onTitleChange(event) {
+    this.seasonsList = [];
+    if (event) {
+      this.admin.getAllSeasonOfTitle(event.value.id).subscribe(result => {
+        this.seasonsList = result.body;
+      }, () => {
+        this.seasonsList = [];
+      })
+    }
+  }
+
   onSubmit() {
-    let season: CreateSeason = this.form.value;
-    season.titleId = +this.form.controls['title'].value.id;
-    this.admin.createSeason(season).subscribe(() => {
-      this.snack.open(`Season "${season.name}" was successfully created`,
+    let episode: CreateEpisode = this.form.value;
+    episode.seasonId = +this.form.controls['season'].value.id;
+    console.log(episode);
+    this.admin.createEpisode(episode).subscribe(() => {
+      this.snack.open(`Episode "${episode.name}" was successfully created`,
         'OK', {duration: 3000, panelClass: ['snack-success']});
       this.router.navigateByUrl('/admin/create');
     })
   }
+
 }

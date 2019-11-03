@@ -11,18 +11,18 @@ namespace Zhoplix.Services.Media
     public interface IFfMpegProvider
     {
         string ConvertToMp4(string filePath);
-        string CreateThumbnails(string filePath, string newPath);
+        string CreateThumbnails(string filePath);
         string ResizeVideo(string filePath, int width, int height = -1);
     }
 
     public class FfMpegProvider : IFfMpegProvider
     {
-        public string CreateThumbnails(string filePath, string newPath)
+        public string CreateThumbnails(string filePath)
         {
-            Directory.CreateDirectory(newPath);
+            Directory.CreateDirectory(Path.Combine(Path.GetDirectoryName(filePath), "Thumbnails"));
             var durationInSecs = double.Parse(ProcessCommand($"ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 {filePath}"));
             var secondsForThumbnail = (int) Math.Log10(durationInSecs);
-            var command = $"ffmpeg -i {filePath} -f image2 -bt 20M -vf fps=1/{secondsForThumbnail} {newPath}/%d.png";
+            var command = $"ffmpeg -i {filePath} -f image2 -bt 20M -vf fps=1/{secondsForThumbnail} {Path.GetDirectoryName(filePath)}/Thumbnails/%d.png";
             return ProcessCommand(command);
         }
 
@@ -35,8 +35,10 @@ namespace Zhoplix.Services.Media
         public string ResizeVideo(string filePath, int width, int height = -1)
         {
             var newPath = Path.Combine(Path.GetDirectoryName(filePath), Path.GetFileNameWithoutExtension(filePath));
+
             var command = $"ffmpeg -i {filePath} -filter:v scale={width}:{height} -c:a copy {newPath}_{width}.mp4";
-            return ProcessCommand(command);
+            ProcessCommand(command);
+            return $"{newPath}_{width}";
         }
 
         private string ProcessCommand(string command)
