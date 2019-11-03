@@ -96,11 +96,10 @@ namespace Zhoplix.Services
         {
             try
             {
-                Directory.CreateDirectory(UploadVideosPath);
-
                 if (file.Length > 0)
                 {
                     var fullPath = Path.Combine(UploadVideosPath, id, id + ".mp4");
+                    Directory.CreateDirectory(Path.Combine(UploadVideosPath, id));
                     using var stream = new FileStream(fullPath, FileMode.Create);
                     await Task.Run(() => { file.CopyTo(stream); });
                 }

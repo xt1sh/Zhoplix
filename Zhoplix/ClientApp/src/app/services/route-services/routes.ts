@@ -12,6 +12,7 @@ import { ConfirmEmailComponent } from "src/app/components/authentication/confirm
 import { PlayerComponent } from "src/app/components/player/player/player.component";
 import { SeasonComponent } from '../../components/admin/create/season/season.component';
 import { SignOutComponent } from "src/app/components/authentication/sign-out/sign-out.component";
+import { EpisodeComponent } from "src/app/components/admin/create/episode/episode.component";
 
 export const ROUTES: Routes = [
   { path: '', component: HomeComponent, pathMatch: 'full'},
@@ -37,6 +38,9 @@ export const ROUTES: Routes = [
         },{
           path: 'season',
           component: SeasonComponent
+        },{
+          path: 'episode',
+          component: EpisodeComponent
         }]
       }
     ]
