@@ -117,6 +117,7 @@ namespace Zhoplix.Services.AuthenticationService
             var result = await _userManager.CreateAsync(user, model.Password); 
             if (result.Succeeded)   
             {
+                _ = await _profileManager.CreateProfileAsync(user.Id);
                 var emailConfirmationToken = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                 var htmlMessage = this.GenerateConfirmationMessage(user.Id, emailConfirmationToken);
 
@@ -141,7 +142,6 @@ namespace Zhoplix.Services.AuthenticationService
             if (result.Succeeded)
             {
                 await _userManager.AddToRoleAsync(user, "Member");
-                _ = await _profileManager.CreateProfileAsync(user.Id);
 
                 var accessToken = await GenerateAccessWithClaims(user);
                 var refreshToken = await _tokenHandler.GenerateRefreshTokenAsync(user);
