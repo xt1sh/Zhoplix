@@ -27,27 +27,27 @@ namespace Zhoplix.Controllers
     {
         private readonly ITitleService _titleService;
         private readonly ISeasonService _seasonService;
+        private readonly IEpisodeService _episodeService;
         private readonly IMapper _mapper;
         private readonly ILogger<AdminController> _logger;
         private readonly IMediaService _mediaService;
         private readonly IFfMpegProvider _ffMpeg;
-        private readonly IAvatarGenerator _avatarGenerator;
 
         public AdminController(ITitleService titleService,
             ISeasonService seasonService,
+            IEpisodeService episodeService,
             IMapper mapper,
             ILogger<AdminController> logger,
             IMediaService mediaService,
-            IFfMpegProvider ffMpeg,
-            IAvatarGenerator avatarGenerator)
+            IFfMpegProvider ffMpeg)
         {
             _titleService = titleService;
             _seasonService = seasonService;
+            _episodeService = episodeService;
             _mapper = mapper;
             _logger = logger;
             _mediaService = mediaService;
             _ffMpeg = ffMpeg;
-            _avatarGenerator = avatarGenerator;
         }
 
         [HttpGet("{pageNumber}/{pageSize}")]
@@ -107,8 +107,8 @@ namespace Zhoplix.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateEpisode(CreateEpisodeViewModel model)
         {
-            //return Created($"{HttpContext.Request.Scheme}://{HttpContext.Request.Host}/Episode/{episode.Id}", _mapper.Map<SeasonViewModel>(episode));
-            return Ok();
+            var episode = await _episodeService.CreateEpisodeFromCreateViewModelAsync(model);
+            return Created($"{HttpContext.Request.Scheme}://{HttpContext.Request.Host}/Episode/{episode.Id}", _mapper.Map<EpisodeViewModel>(episode));
         }
 
         [HttpPost]
@@ -117,17 +117,18 @@ namespace Zhoplix.Controllers
         {
             var file = Request.Form.Files[0];
             var id = Guid.NewGuid().ToString();
-            var ids = new List<string>() { id };
+            var videoPath = Path.Combine(_mediaService.UploadVideosPath, id);
+            var paths = new List<string>() { Path.Combine(videoPath, $"{id}.mp4") };
             if (!await _mediaService.UploadVideo(file, id))
                 return BadRequest();
 
-            var resizedVideoId = await Task.FromResult(_ffMpeg.ResizeVideo(Path.Combine(_mediaService.UploadVideosPath, id, id + ".mp4"), 120));
+            var resizedVideoPath = await Task.FromResult(_ffMpeg.ResizeVideo(Path.Combine(videoPath, id + ".mp4"), 120));
 
-            ids.Add(resizedVideoId);
+            paths.Add(resizedVideoPath);
 
-            _ = await Task.FromResult(_ffMpeg.CreateThumbnails(Path.Combine(_mediaService.UploadVideosPath, id, resizedVideoId + ".mp4")));
+            await Task.Run(() => _ffMpeg.CreateThumbnails(Path.Combine(_mediaService.UploadVideosPath, id, resizedVideoPath)));
 
-            return Ok(ids);
+            return Ok(paths);
         }
 
         [HttpPost]

@@ -10,7 +10,7 @@ using Zhoplix;
 namespace Zhoplix.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20191101205631_Initialize")]
+    [Migration("20191105184930_Initialize")]
     partial class Initialize
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -189,6 +189,9 @@ namespace Zhoplix.Migrations
                         .HasColumnType("time");
 
                     b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Location")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")

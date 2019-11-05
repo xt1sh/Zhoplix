@@ -16,6 +16,7 @@ namespace Zhoplix.Models
         public bool HasOpening => OpeningStart != null && OpeningFinish != null;
         public TimeSpan? OpeningStart { get; set; }
         public TimeSpan? OpeningFinish { get; set; }
+        public string Location { get; set; }
         public int ThumbnailsAmount { get; set; }
         public TimeSpan? CreditsStart { get; set; }
         public IList<Video> Videos { get; set; }

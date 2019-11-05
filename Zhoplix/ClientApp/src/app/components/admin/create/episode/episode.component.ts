@@ -64,7 +64,7 @@ export class EpisodeComponent implements OnInit {
       description: '',
       title: [],
       season: [],
-      videoIds: []
+      videoPaths: []
     });
     this.searchChange.pipe(
       debounceTime(500),
@@ -103,7 +103,7 @@ export class EpisodeComponent implements OnInit {
     });
     this.media.getBody().subscribe(value => {
       if (value) {
-        this.form.controls['videoIds'].setValue(value);
+        this.form.controls['videoPaths'].setValue(value);
         this.progress = 100;
         this.uploading = false;
       }
@@ -124,12 +124,10 @@ export class EpisodeComponent implements OnInit {
   onSubmit() {
     let episode: CreateEpisode = this.form.value;
     episode.seasonId = +this.form.controls['season'].value.id;
-    console.log(episode);
     this.admin.createEpisode(episode).subscribe(() => {
       this.snack.open(`Episode "${episode.name}" was successfully created`,
         'OK', {duration: 3000, panelClass: ['snack-success']});
       this.router.navigateByUrl('/admin/create');
     })
   }
-
 }

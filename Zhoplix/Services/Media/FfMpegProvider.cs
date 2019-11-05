@@ -12,6 +12,14 @@ namespace Zhoplix.Services.Media
     {
         string ConvertToMp4(string filePath);
         string CreateThumbnails(string filePath);
+        /// <summary>
+        /// Creates resized copy of video
+        /// </summary>
+        /// <param name="filePath">Path to origin video file</param>
+        /// <param name="width">New video width in pixels</param>
+        /// <param name="height">Optional. New video height in pixels. If default 
+        ///                      aspect ratio will be the same as origin</param>
+        /// <returns>Full path of new video</returns>
         string ResizeVideo(string filePath, int width, int height = -1);
     }
 
@@ -34,11 +42,11 @@ namespace Zhoplix.Services.Media
 
         public string ResizeVideo(string filePath, int width, int height = -1)
         {
-            var newPath = Path.Combine(Path.GetDirectoryName(filePath), Path.GetFileNameWithoutExtension(filePath));
+            var newPath = Path.Combine(Path.GetDirectoryName(filePath), $"{Path.GetFileNameWithoutExtension(filePath)}_{width}.mp4");
 
-            var command = $"ffmpeg -i {filePath} -filter:v scale={width}:{height} -c:a copy {newPath}_{width}.mp4";
+            var command = $"ffmpeg -i {filePath} -filter:v scale={width}:{height} -c:a copy {newPath}";
             ProcessCommand(command);
-            return $"{newPath}_{width}";
+            return newPath;
         }
 
         private string ProcessCommand(string command)
