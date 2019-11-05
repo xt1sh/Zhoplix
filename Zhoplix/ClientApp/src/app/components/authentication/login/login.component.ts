@@ -27,7 +27,7 @@ export class LoginComponent implements OnInit {
      private auth: AuthenticationService,
      private router: Router,
      private route: ActivatedRoute,
-     private readonly ngZone: NgZone) { }
+     private ngZone: NgZone) { }
 
   ngOnInit() {
     if(this.auth.isLoggedIn) {

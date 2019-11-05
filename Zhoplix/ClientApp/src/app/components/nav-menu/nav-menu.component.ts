@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, NgZone } from '@angular/core';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
@@ -27,7 +27,8 @@ export class NavMenuComponent implements OnInit {
 
   constructor(private readonly router: Router,
               private readonly auth: AuthenticationService,
-              private readonly profile: ProfileService) {
+              private readonly profile: ProfileService,
+              private readonly ngZone: NgZone) {
               }
 
   ngOnInit() {
@@ -66,6 +67,13 @@ export class NavMenuComponent implements OnInit {
       this.toShowProfileMenu.next(true);
     } 
     return this.toShowProfileMenu.asObservable();
+  }
+  signOut() {
+      this.auth.signOut(this.auth.fingerPrint);
+      this.auth.deleteTokens();
+      this.ngZone.run(() => this.router.navigate(['']));
+      
+  
   }
 
   collapse() {

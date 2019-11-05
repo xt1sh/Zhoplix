@@ -37,7 +37,7 @@ import { SeasonComponent } from './components/admin/create/season/season.compone
 import { ArrayFilterPipe } from './pipes/filter-by/filter-by.pipe';
 import { LimitToPipe } from './pipes/limit-to/limit-to.pipe';
 import { SelectDropDownComponent } from './components/dropdown/select-dropdown.component';
-import { SignOutComponent } from './components/authentication/sign-out/sign-out.component';
+import { ProfileSettingsComponent } from './components/user-profile/profile-settings/profile-settings.component';
 import { EpisodeComponent } from './components/admin/create/episode/episode.component';
 
 @NgModule({
@@ -51,12 +51,12 @@ import { EpisodeComponent } from './components/admin/create/episode/episode.comp
     CreateComponent,
     ConfirmEmailComponent,
     TitleComponent,
-    SignOutComponent,
     PlayerComponent,
     SeasonComponent,
     EpisodeComponent,
     SelectDropDownComponent,
     LimitToPipe,
+    ProfileSettingsComponent,
     ArrayFilterPipe
   ],
   imports: [
