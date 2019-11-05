@@ -38,6 +38,7 @@ import { ArrayFilterPipe } from './pipes/filter-by/filter-by.pipe';
 import { LimitToPipe } from './pipes/limit-to/limit-to.pipe';
 import { SelectDropDownComponent } from './components/dropdown/select-dropdown.component';
 import { SignOutComponent } from './components/authentication/sign-out/sign-out.component';
+import { EpisodeComponent } from './components/admin/create/episode/episode.component';
 
 @NgModule({
   declarations: [
@@ -53,6 +54,7 @@ import { SignOutComponent } from './components/authentication/sign-out/sign-out.
     SignOutComponent,
     PlayerComponent,
     SeasonComponent,
+    EpisodeComponent,
     SelectDropDownComponent,
     LimitToPipe,
     ArrayFilterPipe

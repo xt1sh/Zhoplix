@@ -3,23 +3,38 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Zhoplix.Models;
+using Zhoplix.Models.Media;
 using Zhoplix.ViewModels.Episode;
 
 namespace Zhoplix.Services.CRUD
 {
-    public class EpisodeService
+    public interface IEpisodeService
+    {
+        Task<bool> CreateEpisodeAsync(Episode episode);
+        Task<Episode> CreateEpisodeFromCreateViewModelAsync(CreateEpisodeViewModel model);
+        Task<bool> DeleteEpisodeAsync(Episode episode);
+        Task<bool> DeleteEpisodeAsync(int id);
+        Task<IEnumerable<Episode>> GetAllEpisodesAsync();
+        Task<Episode> GetEpisodeAsync(Episode episode);
+        Task<Episode> GetEpisodeAsync(int id);
+        Task<IEnumerable<Episode>> GetEpisodePageAsync(int page, int pageSize);
+        Task<bool> UpdateEpisodeAsync(Episode episode);
+    }
+
+    public class EpisodeService : IEpisodeService
     {
         private readonly ApplicationDbContext _context;
         private readonly DbSet<Episode> _episodeContext;
-        private readonly SeasonService _seasonService;
+        private readonly ISeasonService _seasonService;
         private readonly IMapper _mapper;
         private readonly ILogger<EpisodeService> _logger;
 
         public EpisodeService(ApplicationDbContext context,
-            SeasonService seasonService,
+            ISeasonService seasonService,
             IMapper mapper,
             ILogger<EpisodeService> logger)
         {
@@ -32,7 +47,27 @@ namespace Zhoplix.Services.CRUD
 
         public async Task<Episode> CreateEpisodeFromCreateViewModelAsync(CreateEpisodeViewModel model)
         {
-            
+            var episode = _mapper.Map<Episode>(model);
+            var season = await _seasonService.GetSeasonAsync(model.SeasonId);
+            episode.Season = season;
+            var videoInfo = new VideoInfo();
+
+            var videos = model.VideoPaths.Select(path => new Video()
+            {
+                Id = Path.GetFileNameWithoutExtension(path),
+                Location = path,
+                VideoInfo = videoInfo
+            }).ToList();
+
+            episode.Location = Path.GetDirectoryName(videos.First().Location);
+
+            var filesCount = Directory.GetFiles(Path.Combine(episode.Location, "Thumbnails"), "*", SearchOption.TopDirectoryOnly).Length;
+
+            episode.ThumbnailsAmount = filesCount;
+            episode.Videos = videos;
+
+            if (await CreateEpisodeAsync(episode))
+                return episode;
 
             return null;
         }

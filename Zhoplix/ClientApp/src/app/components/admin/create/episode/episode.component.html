@@ -1,0 +1,27 @@
+<form [formGroup]="form">
+  <div>
+      <input type="text" formControlName="name" placeholder="Name">
+  </div>
+  <div>
+      <input type="text" formControlName="description" placeholder="Description">
+  </div>
+  <select-dropdown formControlName="title" [config]="titleConfig" (change)="onTitleChange($event)"
+                   [options]="titlesList" (searchChange)="this.searchChange.next($event)">
+  </select-dropdown>
+  <select-dropdown formControlName="season" [config]="seasonConfig"
+                   [options]="seasonsList" (searchChange)="this.searchChange.next($event)">
+  </select-dropdown>
+  <div>
+      <input #file type="file" (change)="uploadVideo(file.files)">
+  </div>
+  <div *ngIf="uploading">
+    <p>{{progress}}%</p>
+  </div>
+  <div *ngIf="!uploading">
+      <button (click)="onSubmit()">Submit</button>
+  </div>
+  <div *ngIf="uploading">
+      <p>Wait for upload to complete</p>
+      <button (click)="onSubmit()" disabled>Submit</button>
+  </div>
+</form>

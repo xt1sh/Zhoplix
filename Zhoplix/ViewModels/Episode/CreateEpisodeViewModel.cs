@@ -12,8 +12,7 @@ namespace Zhoplix.ViewModels.Episode
         public int SeasonId { get; set; }
         public TimeSpan? OpeningStart { get; set; }
         public TimeSpan? OpeningFinish { get; set; }
-        public int ThumbnailsAmount { get; set; }
         public TimeSpan? CreditsStart { get; set; }
-        public IList<string> VideoIds { get; set; }
+        public IList<string> VideoPaths { get; set; }
     }
 }

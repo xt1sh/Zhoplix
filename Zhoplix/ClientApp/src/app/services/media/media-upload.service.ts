@@ -1,4 +1,4 @@
-import { Injectable, Inject } from '@angular/core';
+import { Injectable, Inject, OnInit } from '@angular/core';
 import { HttpRequest, HttpClient, HttpEventType, HttpHeaders } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
 
@@ -9,12 +9,14 @@ export class MediaUploadService {
 
   progress: BehaviorSubject<number>;
   message: BehaviorSubject<string>;
+  body: BehaviorSubject<any>;
 
   constructor(@Inject('BASE_URL') private readonly originUrl: string,
               private readonly http: HttpClient) {
-                this.progress = new BehaviorSubject<number>(-1);
-                this.message = new BehaviorSubject<string>('');
-              }
+    this.progress = new BehaviorSubject<number>(-1);
+    this.message = new BehaviorSubject<string>('');
+    this.body = new BehaviorSubject<any>(null);
+    }
 
   getProgress(): Observable<number> {
     return this.progress.asObservable();
@@ -22,6 +24,10 @@ export class MediaUploadService {
 
   getMessage(): Observable<string> {
     return this.message.asObservable();
+  }
+
+  getBody(): Observable<any> {
+    return this.body.asObservable();
   }
 
   uploadVideo(video) {
@@ -41,7 +47,7 @@ export class MediaUploadService {
       if (event.type === HttpEventType.UploadProgress)
         this.progress.next(Math.round(100 * event.loaded / event.total));
       else if (event.type === HttpEventType.Response) {
-        //this.message.next(event.body.toString());
+        this.body.next(event.body);
       }
     });
   }

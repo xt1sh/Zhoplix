@@ -119,6 +119,7 @@ namespace Zhoplix
 
             services.AddTransient<ITitleService, TitleService>();
             services.AddTransient<ISeasonService, SeasonService>();
+            services.AddTransient<IEpisodeService, EpisodeService>();
             services.AddTransient<IFfMpegProvider, FfMpegProvider>();
 
             services.AddScoped<IAuthenticationService, AuthenticationService>();

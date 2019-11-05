@@ -27,6 +27,8 @@ namespace Zhoplix.Profiles
             CreateMap<Title, TitleViewModel>();
             CreateMap<Title, TitlePageViewModel>();
             CreateMap<Season, SeasonViewModel>();
+            CreateMap<Season, SeasonIdName>();
+            CreateMap<Episode, EpisodeViewModel>();
 
             // ChangeViewModels
 

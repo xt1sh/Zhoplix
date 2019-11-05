@@ -389,6 +389,7 @@ namespace Zhoplix.Migrations
                     SeasonId = table.Column<int>(nullable: false),
                     OpeningStart = table.Column<TimeSpan>(nullable: true),
                     OpeningFinish = table.Column<TimeSpan>(nullable: true),
+                    Location = table.Column<string>(nullable: true),
                     ThumbnailsAmount = table.Column<int>(nullable: false),
                     CreditsStart = table.Column<TimeSpan>(nullable: true)
                 },

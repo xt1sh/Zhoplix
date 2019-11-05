@@ -15,7 +15,7 @@ namespace Zhoplix.Services.CRUD
         Task<Season> CreateSeasonFromCreateViewModelAsync(CreateSeasonViewModel model);
         Task<bool> DeleteSeasonAsync(int id);
         Task<bool> DeleteSeasonAsync(Season season);
-        Task<IEnumerable<Season>> GetAllSeasonsAsync();
+        Task<IEnumerable<Season>> GetAllSeasonsOfTitleAsync(int titleId);
         Task<Season> GetSeasonAsync(int id);
         Task<Season> GetSeasonAsync(Season season);
         Task<IEnumerable<Season>> GetSeasonPageAsync(int page, int pageSize);
@@ -66,8 +66,8 @@ namespace Zhoplix.Services.CRUD
             return await SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<Season>> GetAllSeasonsAsync() =>
-            await _context.Seasons.ToListAsync();
+        public async Task<IEnumerable<Season>> GetAllSeasonsOfTitleAsync(int titleId) =>
+            await _context.Seasons.Where(x => x.TitleId == titleId).ToListAsync();
 
         public async Task<Season> GetSeasonAsync(int id) =>
             await _seasonContext.FirstOrDefaultAsync(x => x.Id == id);

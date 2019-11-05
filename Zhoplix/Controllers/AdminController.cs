@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -26,27 +27,27 @@ namespace Zhoplix.Controllers
     {
         private readonly ITitleService _titleService;
         private readonly ISeasonService _seasonService;
+        private readonly IEpisodeService _episodeService;
         private readonly IMapper _mapper;
         private readonly ILogger<AdminController> _logger;
         private readonly IMediaService _mediaService;
         private readonly IFfMpegProvider _ffMpeg;
-        private readonly IAvatarGenerator _avatarGenerator;
 
         public AdminController(ITitleService titleService,
             ISeasonService seasonService,
+            IEpisodeService episodeService,
             IMapper mapper,
             ILogger<AdminController> logger,
             IMediaService mediaService,
-            IFfMpegProvider ffMpeg,
-            IAvatarGenerator avatarGenerator)
+            IFfMpegProvider ffMpeg)
         {
             _titleService = titleService;
             _seasonService = seasonService;
+            _episodeService = episodeService;
             _mapper = mapper;
             _logger = logger;
             _mediaService = mediaService;
             _ffMpeg = ffMpeg;
-            _avatarGenerator = avatarGenerator;
         }
 
         [HttpGet("{pageNumber}/{pageSize}")]
@@ -73,6 +74,19 @@ namespace Zhoplix.Controllers
             return Ok(toShow);
         }
 
+        [HttpGet("{titleId}")]
+        public async Task<IActionResult> GetAllSeasonsOfTitle(int titleId)
+        {
+            var seasons = await _seasonService.GetAllSeasonsOfTitleAsync(titleId);
+
+            if (seasons == null)
+                return Ok(null);
+
+            var toShow = seasons.Select(x => _mapper.Map<SeasonIdName>(x));
+
+            return Ok(toShow);
+        }
+
         [HttpPost]
         public async Task<IActionResult> CreateTitle(CreateTitleViewModel model)
         {
@@ -93,8 +107,8 @@ namespace Zhoplix.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateEpisode(CreateEpisodeViewModel model)
         {
-            //return Created($"{HttpContext.Request.Scheme}://{HttpContext.Request.Host}/Episode/{episode.Id}", _mapper.Map<SeasonViewModel>(episode));
-            return Ok();
+            var episode = await _episodeService.CreateEpisodeFromCreateViewModelAsync(model);
+            return Created($"{HttpContext.Request.Scheme}://{HttpContext.Request.Host}/Episode/{episode.Id}", _mapper.Map<EpisodeViewModel>(episode));
         }
 
         [HttpPost]
@@ -103,10 +117,18 @@ namespace Zhoplix.Controllers
         {
             var file = Request.Form.Files[0];
             var id = Guid.NewGuid().ToString();
-            if (await _mediaService.UploadVideo(file, id))
-                return Ok(new { id });
+            var videoPath = Path.Combine(_mediaService.UploadVideosPath, id);
+            var paths = new List<string>() { Path.Combine(videoPath, $"{id}.mp4") };
+            if (!await _mediaService.UploadVideo(file, id))
+                return BadRequest();
 
-            return BadRequest();
+            var resizedVideoPath = await Task.FromResult(_ffMpeg.ResizeVideo(Path.Combine(videoPath, id + ".mp4"), 120));
+
+            paths.Add(resizedVideoPath);
+
+            await Task.Run(() => _ffMpeg.CreateThumbnails(Path.Combine(_mediaService.UploadVideosPath, id, resizedVideoPath)));
+
+            return Ok(paths);
         }
 
         [HttpPost]
@@ -117,37 +139,6 @@ namespace Zhoplix.Controllers
             //await _mediaService.CreateResizedPhoto(photo, 0.1f, "small");
             //await _mediaService.CreateResizedPhoto(photo, 0.5f, "medium");
             return Ok(new { photo.PhotoId });
-        }
-
-        [HttpDelete]
-        public IActionResult DeletePhoto(DeletePhoto photo)
-        {
-            _mediaService.DeletePhoto(photo.Name);
-            return Ok();
-        }
-
-        [HttpDelete]
-        public IActionResult DeleteAllPhotos(DeleteAllPhotos id)
-        {
-            _mediaService.DeleteAllPhotosWithId(id.Id);
-            return Ok();
-        }
-
-        public async Task<IActionResult> CreateThumbnails()
-        {
-            await Task.Run(() => 
-            {
-                _ffMpeg.ResizeVideo("C:\\Code\\ASP.NET\\Zhoplix\\Zhoplix\\wwwroot\\Videos\\Uploaded\\ElCamino\\ElCamino.mp4", 120);
-                _ffMpeg.CreateThumbnails("C:\\Code\\ASP.NET\\Zhoplix\\Zhoplix\\wwwroot\\Videos\\Uploaded\\ElCamino\\ElCamino_120.mp4",
-                    "C:\\Code\\ASP.NET\\Zhoplix\\Zhoplix\\wwwroot\\Videos\\Uploaded\\ElCamino\\Thumbnails");
-            });
-            return Ok();
-        }
-
-        public async Task<IActionResult> CreateAvatar()
-        {
-            await Task.Run(() => _avatarGenerator.GenerateAvatar(7, 700));
-            return Ok();
         }
     }
 }

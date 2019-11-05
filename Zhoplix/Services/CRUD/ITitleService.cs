@@ -94,7 +94,7 @@ namespace Zhoplix.Services.CRUD
             await _titleContext.Where(x => EF.Functions.Like(x.Name, $"%{name}%")).Take(20).ToListAsync();
 
         public async Task<IEnumerable<Title>> GetTitlePageAsync(int pageNumber, int pageSize) =>
-            await _titleContext.Skip(pageNumber * (pageSize - 1)).Take(pageSize).ToListAsync();
+            await _titleContext.Skip(pageSize * (pageNumber - 1)).Take(pageSize).ToListAsync();
 
         public async Task<bool> UpdateTitleAsync(Title title)
         {
