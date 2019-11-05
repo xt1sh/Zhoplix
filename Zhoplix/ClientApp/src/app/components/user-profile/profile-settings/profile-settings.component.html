@@ -1,0 +1,150 @@
+<div class="profile-setting-background"></div>
+<div class="profile-settings-body">
+    <div class="account-container">
+        <div>
+            <h1 class="account-header">Account</h1>
+            <hr>
+            <div class="account-content">
+                <div class="account-section clearfix">
+                    <header class="account-section-header">
+                        <h2 class="account-section-heading">
+                            MEBMERSHIP & BILLING
+                            <a class="cancel-membership-button" href="#">Cancel Membership</a>
+                        </h2>
+                    </header>
+                    <section class="account-section-content">
+                        <div class="clearfix">
+                            <div class="account-subsection"> 
+                                <div class="account-section-group">
+                                    <div class="account-section-item account-email">{{email}}</div>
+                                    <div class="account-section-item account-password">Password: *******</div>
+                                    <div class="account-section-item account-phone">Phone: {{phone}}</div>
+                                </div>
+                                <div class="account-section-group">
+                                    <div class="account-section-item"><a href="#" class="account-section-link">Change account email</a></div>
+                                    <div class="account-section-item"><a href="#" class="account-section-link">Change password</a></div>
+                                    <div class="account-section-item"><a href="#" class="account-section-link">Change phone number</a></div>
+                                </div>
+                            </div>
+                        </div>
+                            <div class="account-subsection">
+                                <div class="card-credentials">
+                                    <div class="account-section-group">
+                                        <div class="account-section-item">
+                                            <div class="payment-type">
+                                                <span class="icon-payment">
+                                                    <span class="text-payment">VISA</span>
+                                                </span>
+                                                <span class="number">•••• •••• •••• 6916</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="account-section-group">
+                                    <div class="account-section-item"><a href="#" class="account-section-link">Update payment info</a></div>
+                                    <div class="account-section-item"><a href="#" class="account-section-link">Billing details</a></div>
+                                </div>
+                            </div>
+                    </section>
+                </div>
+                <div class="account-section clearfix">
+                    <header class="account-section-header">
+                        <h2 class="account-section-heading">
+                            PLAN DETAILS
+                        </h2>
+                    </header>
+                    <section class="account-section-content">
+                        <div class="account-subsection"> 
+                            <div class="account-section-group">
+                                <div class="account-section-item">
+                                    <b>Standart</b>
+                                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="512" height="512" viewBox="0 0 512 512">
+                                            <path d="M443.955 118.405h-375.941c-29.788 0-54.067 24.279-54.067 54.057v167.024c0 29.819 24.279 54.118 54.067 54.118h375.941c29.819 0 54.098-24.3 54.098-54.118v-167.024c0.010-29.778-24.269-54.057-54.098-54.057zM478.218 172.462v167.024c0 18.903-15.38 34.243-34.263 34.243h-375.941c-18.883 0-34.233-15.339-34.233-34.243v-167.024c0-18.862 15.35-34.243 34.233-34.243h375.941c18.882 0 34.263 15.381 34.263 34.243z" fill="#000000"/>
+                                            <path d="M343.337 174.203h-71.783v163.584h70.421c52.5 0 86.805-23.644 86.805-85.197 0-53.873-32.717-78.387-85.442-78.387zM336.558 299.602h-11.356v-87.245h10.178c28.662 0 39.783 9.083 39.783 43.202 0 30.884-13.639 44.042-38.605 44.042z" fill="#000000"/>
+                                            <path d="M187.505 229.376h-50.667v-55.173h-53.627v163.574h53.627v-63.396h50.667v63.396h53.617v-163.574h-53.617z" fill="#000000"/>
+                                        </svg>
+                                </div>
+                            </div>
+                            <div class="account-section-group">
+                                <div class="account-section-item"><a href="#" class="account-section-link">Change plan</a></div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+                <div class="account-section clearfix">
+                    <header class="account-section-header">
+                        <h2 class="account-section-heading">
+                            SETTINGS
+                        </h2>
+                    </header>
+                    <section class="account-section-content">
+                        <div class="account-subsection"> 
+                            <div class="account-section-group">
+                                <div class="account-section-item">
+                                    <a href="" class="account-section-link">Recent device streaming activity</a>
+                                </div>
+                                <div class="account-section-item">
+                                    <a href="" class="account-section-link">Sign out of all devices</a>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+                <div class="account-section">
+                    <header class="account-section-header">
+                        <h2 class="account-section-heading">
+                            MY PROFILE
+                        </h2>
+                    </header>
+                    <section class="account-section-content">
+                        <div class="account-subsection"> 
+                            <div class="account-profile">
+                                <div class="account-section-item">
+                                    <div class="account-section-profile">
+                                        <div class="profile-icon">
+                                            <img class="avatar-image" [src]="avatar" alt="">
+                                        </div>
+                                        <div class="account-credentials">
+                                            <span>{{username}}</span>
+                                            <div class="profile-email">{{email}}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="account-section-group last">
+                                    <div class="account-section-manage-profile">
+                                        <div class="account-section-item">
+                                            <a href="" class="account-section-link">Manage profile</a>
+                                        </div>
+                                    </div>
+                                    <div class="account-section-item">
+                                        <a href="" class="account-section-link">Communication settings</a>
+                                    </div>
+                                    <div class="account-section-item">
+                                        <a href="" class="account-section-link">Marketing communications</a>        
+                                    </div>
+                                    <div class="account-section-item">
+                                        <a href="" class="account-section-link">Language</a>
+                                    </div>
+                                    <div class="account-section-item">
+                                        <a href="" class="account-section-link">Playback settings</a> 
+                                    </div>
+                                    <div class="account-section-item">
+                                        <a href="" class="account-section-link">Subtitle appearance</a>
+                                    </div>
+                                </div>
+                                <div class="left-align">
+                                    <div class="account-section-item">
+                                        <a href="" class="account-section-link">Viewing activity</a>
+                                    </div>
+                                    <div class="account-section-item">
+                                        <a href="" class="account-section-link">Ratings</a>     
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                <div>
+            </div>
+        </div>
+    </div>
+</div>

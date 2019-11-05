@@ -133,21 +133,5 @@ namespace Zhoplix.Controllers
             return Ok();
         }
 
-        public async Task<IActionResult> CreateThumbnails()
-        {
-            await Task.Run(() => 
-            {
-                _ffMpeg.ResizeVideo("C:\\Code\\ASP.NET\\Zhoplix\\Zhoplix\\wwwroot\\Videos\\Uploaded\\ElCamino\\ElCamino.mp4", 120);
-                _ffMpeg.CreateThumbnails("C:\\Code\\ASP.NET\\Zhoplix\\Zhoplix\\wwwroot\\Videos\\Uploaded\\ElCamino\\ElCamino_120.mp4",
-                    "C:\\Code\\ASP.NET\\Zhoplix\\Zhoplix\\wwwroot\\Videos\\Uploaded\\ElCamino\\Thumbnails");
-            });
-            return Ok();
-        }
-
-        public async Task<IActionResult> CreateAvatar()
-        {
-            await Task.Run(() => _avatarGenerator.GenerateAvatar(7, 700));
-            return Ok();
-        }
     }
 }

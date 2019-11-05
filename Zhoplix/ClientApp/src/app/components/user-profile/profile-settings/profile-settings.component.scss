@@ -1,0 +1,206 @@
+hr {
+    margin-bottom: 0;
+}
+
+svg {
+    height: 35px;
+    width: 30px;
+    margin-left: 10px;
+}
+
+.profile-setting-background {
+    background-size: cover;
+    overflow: hidden;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: block;
+    background-color: #f3f3f3;
+}
+
+.profile-settings-body {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    margin: 100px 30px 0;
+}
+
+.account-container {
+    width: 95%;
+    max-width: 1024px;
+    font-size: 1em;
+}
+
+.account-header {
+    font-weight: normal;
+}
+
+ .clearfix::after {
+    content: ' ';
+    display: block;
+    height: 0;
+    overflow: hidden;
+    clear: both;
+    border-top: 1px solid;
+    border-color: rgb(158, 155, 155);
+
+}
+
+.account-section-header {
+    width: 270px;
+    background-color: transparent;
+    padding-top: 15px;
+}
+
+.account-section-heading {
+    font-size: 1.125em;
+    color: #999;
+    font-weight: normal;
+    padding: 0;
+    margin-top: 2px;
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.cancel-membership-button {
+    position: relative;
+    max-width: 200px;
+    display: block;
+    width: auto;
+    margin: 20px 10px 10px 0;
+    font-size: 13px;
+    padding: 12px 2em;
+    min-width: 98px;
+    min-height: 37px;
+    padding-left: 1em;
+    padding-right: 1em;
+    color: black;
+    text-align: center;
+    line-height: 1em;
+    background-color: #dddddd;
+    box-shadow: 0 1px 0 rgba(0, 0, 0, 0.2);
+    border-radius: 3px;
+}
+
+.cancel-membership-button:hover {
+    background-color: #e6e6e6;
+}
+
+.account-section-content {
+    padding-left: 270px;
+}
+
+.account-subsection {
+    padding-top: 15px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.account-section-group {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.account-section-group + .account-section-group {
+    align-items: flex-end;
+}
+
+.card-credentials + .account-section-group {
+    align-items: flex-end;
+}
+
+.account-section-item {
+    margin-bottom: 10px;
+}
+
+.account-section-link {
+    color: #0080FF;
+    display: inline;
+    padding-right: 0;
+    border-top: none;
+}
+
+.account-section-link:hover {
+    text-decoration: underline;
+}
+.account-email {
+    font-weight: bold;
+}
+
+.account-password {
+    color: #999;
+}
+
+.account-phone {
+    color: #999;
+}
+
+.payment-type {
+    font-weight: bold;
+}
+
+.icon-payment {
+    margin-right: 5px;
+}
+
+.text-payment {
+    font-style: normal;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+    margin-right: 5px;
+}
+
+.account-section-profile {
+    display: flex;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+.account-profile {
+    width: 100%;
+    position: relative;
+}
+
+.profile-icon {
+    display: table-cell;
+    vertical-align: middle;
+}
+
+ .avatar-image {
+    width: 40px;
+ }
+
+
+.account-credentials {
+    margin-left: 5px;
+}
+
+.account-credentials > span {
+    font-weight: bold;
+}
+
+.account-section-manage-profile {
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+
+.last {
+    float: left;
+    width: 50%;
+}
+
+.left-align {
+    align-items: flex-start;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+::ng-deep header {
+    background-color: black;
+}
+

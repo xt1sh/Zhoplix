@@ -45,8 +45,8 @@ export class AuthenticationService {
   }
 
   signOut(fingerprint:string) {
-    return this.http.post<any>(`${this.originUrl}Authentication/SignOut`, {fingerprint:fingerprint},
-                                { observe: 'response'});
+    this.http.post<any>(`${this.originUrl}Authentication/SignOut`, {fingerprint:fingerprint},
+                                ).subscribe();
   }
 
   getCurrentUser(): CurrentUser {

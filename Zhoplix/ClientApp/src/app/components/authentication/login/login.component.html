@@ -8,7 +8,7 @@
       <form class="login-form-body" [formGroup]="loginForm" autocomplete="off" novalidate (ngSubmit)="onSubmit()" fxLayout="column wrap"
       fxLayoutAlign="center center" fxLayoutGap="10px">
       <mat-card-content>
-        <mat-error class="incorrect" *ngIf="incorrect">Пошел нахуй</mat-error>
+        <mat-error class="incorrect" *ngIf="incorrect">Wrong login or password</mat-error>
         <mat-form-field class="login-field">
           <input matInput class="login-input-field" type="text" placeholder="Email or username" formControlName="login" id="login" >
           <mat-error *ngIf="loginForm.controls['login'].hasError('required')">Login is required</mat-error>
