@@ -1,20 +1,28 @@
 
 .navbar {
   position: relative;
+  height: 100%;
 }
 
 .navbar-main {
+  height: 100%;
   position: relative;
   width: 100%;
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  margin: 0 3.5rem;
+  margin: 0 1.5rem;
   background: none;
 }
 
 a {
+  color: white;
+}
+
+a:not([href]):not([tabindex]),
+a:not([href]):not([tabindex]):focus, 
+a:not([href]):not([tabindex]):hover {
   color: white;
 }
 
@@ -34,8 +42,8 @@ a {
 }
 
 .avatar {
-  width: 45px;
-  height: 45px;
+  width: 32px;
+  margin: 5px;
 }
 
 .dropdown-item {
@@ -43,7 +51,7 @@ a {
 }
 
 .dropdown-item:hover {
-  background-color: rgba(0, 0, 0, 0.3);
+  background-color: red;
 }
 .dropdown-menu {
   background-color: rgba(0, 0, 0, 0.9);
@@ -53,4 +61,8 @@ a {
   right: 0;
   font-size: 13px;
   left: auto;
+}
+
+.dropdown-toggle::after {
+  vertical-align: middle;
 }
