@@ -40,11 +40,11 @@ namespace Zhoplix.Services.Media
             return ProcessCommand($"ffmpeg -i {filePath} -c copy {newPath}.mp4");
         }
 
-        public string ResizeVideo(string filePath, int width, int height = -1)
+        public string ResizeVideo(string filePath, int width, int height = -2)
         {
             var newPath = Path.Combine(Path.GetDirectoryName(filePath), $"{Path.GetFileNameWithoutExtension(filePath)}_{width}.mp4");
 
-            var command = $"ffmpeg -i {filePath} -filter:v scale={width}:{height} -c:a copy {newPath}";
+            var command = $"ffmpeg -i {filePath} -filter:v scale=\"{width}:trunc(ow/a/2)*2\" -c:a copy {newPath}";
             ProcessCommand(command);
             return newPath;
         }

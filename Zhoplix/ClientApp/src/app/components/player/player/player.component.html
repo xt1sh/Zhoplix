@@ -1,4 +1,3 @@
-<div class="player-background"></div>
 <div class="player">
   <vg-player (onPlayerReady)="onPlayerReady($event)">
     <vg-buffering></vg-buffering>
@@ -17,7 +16,7 @@
     </vg-controls>
     <div class="video-player">
       <video #media (click)="onVideoClick()" (dblclick)="onVideoDclick()" [vgMedia]="media" id="singleVideo" preload="auto" crossorigin>
-        <source [src]="video.src" type="{{ video.type }}" />
+        <source [src]="currentVideoSrc" type="video/mp4"/>
       </video>
       <div class="thumbnail" id="thumbnail">
         <img *ngIf="isMouseOver" [src]="thumbSrc">

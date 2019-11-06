@@ -7,6 +7,7 @@ using Zhoplix.Models;
 using Zhoplix.Models.Identity;
 using Zhoplix.ViewModels;
 using Zhoplix.ViewModels.Episode;
+using Zhoplix.ViewModels.Media;
 using Zhoplix.ViewModels.Season;
 using Zhoplix.ViewModels.Title;
 
@@ -29,6 +30,8 @@ namespace Zhoplix.Profiles
             CreateMap<Season, SeasonViewModel>();
             CreateMap<Season, SeasonIdName>();
             CreateMap<Episode, EpisodeViewModel>();
+            CreateMap<Episode, EpisodeForPlayerViewModel>();
+            CreateMap<Video, VideoForPlayerViewModel>();
 
             // ChangeViewModels
 
