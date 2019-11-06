@@ -115,6 +115,10 @@ svg {
     margin-bottom: 10px;
 }
 
+a:not([href]):not([tabindex]), a:not([href]):not([tabindex]):focus, a:not([href]):not([tabindex]):hover{
+    color: #0080FF;
+}
+
 .account-section-link {
     color: #0080FF;
     display: inline;

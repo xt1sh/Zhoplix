@@ -10,7 +10,9 @@ export class AppComponent implements OnInit {
 
   title = 'app';
   constructor(private readonly router: Router,
-              private readonly auth: AuthenticationService) {}
+              private readonly auth: AuthenticationService) {
+                this.auth.createFingerprint().subscribe(value => this.auth.fingerPrint = value);
+              }
 
   ngOnInit() {
   }

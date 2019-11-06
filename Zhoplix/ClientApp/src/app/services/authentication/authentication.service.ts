@@ -49,6 +49,10 @@ export class AuthenticationService {
                                 ).subscribe();
   }
 
+  signOutOfAll() {
+    this.http.post<any>(`${this.originUrl}Authentication/SignOutOfAll`, {}).subscribe();
+  }
+
   getCurrentUser(): CurrentUser {
     let user: CurrentUser;
     const tokenPayload = decode(localStorage.getItem('access_token'));

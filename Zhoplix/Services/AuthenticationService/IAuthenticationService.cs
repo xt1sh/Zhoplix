@@ -22,5 +22,7 @@ namespace Zhoplix.Services.AuthenticationService
         Task<DefaultResponse> RefreshTokensAsync(RefreshViewModel model);
 
         Task<bool> SignOutAsync(string username, string fingerprint);
+
+        Task<bool> SignOutOfAllAsync(string username);
     }
 }
