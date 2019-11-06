@@ -104,6 +104,20 @@ namespace Zhoplix.Controllers
 
             return BadRequest();
         }
+
+        [HttpPost]
+        [Authorize]
+        public async Task<IActionResult> SignOutOfAll()
+        {
+            var result = await _authentication.SignOutOfAllAsync(HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+
+            if (result)
+            {
+                return Ok();
+            }
+
+            return BadRequest();
+        }
     }
  
 }

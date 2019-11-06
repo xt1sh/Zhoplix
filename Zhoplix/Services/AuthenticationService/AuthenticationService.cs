@@ -211,6 +211,20 @@ namespace Zhoplix.Services.AuthenticationService
             return false;
         }
 
+        public async Task<bool> SignOutOfAllAsync(string username)
+        {
+            var user = await _userManager.FindByNameAsync(username);
+            if (user is null)
+                return false;
+
+            _sessionContext.RemoveRange(_sessionContext.Where(s => s.UserId == user.Id).ToList());
+
+            if (await _context.SaveChangesAsync() > 0)
+                return true;
+
+            return false;
+        }
+
         public string GenerateConfirmationMessage(int userId, string token)
         {
             var callbackUrl = _url.Action(
