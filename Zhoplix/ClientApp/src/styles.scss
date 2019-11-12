@@ -11,7 +11,6 @@
 }
 
 
-
 header {
   width: 100%;
   position: absolute;
@@ -89,12 +88,16 @@ a:-webkit-any-link {
   padding: 8px 20px 0px;
 }
 
-.mat-checkbox-checked.mat-accent .mat-checkbox-background, .mat-checkbox-indeterminate.mat-accent .mat-checkbox-background {
-  background-color: white;
+.mat-checkbox-frame {
+  border-color: rgb(163, 163, 163);
 }
 
 .mat-progress-spinner circle, .mat-spinner circle {
   stroke: #a71b1b;
+}
+
+.mat-form-field-appearance-legacy .mat-form-field-underline {
+  background-color: transparent;
 }
 
 .snack-success {

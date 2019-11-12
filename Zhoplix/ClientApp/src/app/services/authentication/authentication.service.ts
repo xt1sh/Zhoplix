@@ -53,6 +53,14 @@ export class AuthenticationService {
     this.http.post<any>(`${this.originUrl}Authentication/SignOutOfAll`, {}).subscribe();
   }
 
+  restorePassword(identifier: string) {
+    return this.http.post<any>(`${this.originUrl}Authentication/ResetPassword`, {identifier:identifier});
+  }
+
+  verifyPasswordResetCode(userId: string, code: string, fingerprint: string) {
+    return this.http.post<any>(`${this.originUrl}Authentication/VerifyPaswordResetCode`, {userId:userId, code:code, fingerprint:fingerprint});
+  }
+
   getCurrentUser(): CurrentUser {
     let user: CurrentUser;
     const tokenPayload = decode(localStorage.getItem('access_token'));

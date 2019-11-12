@@ -111,6 +111,38 @@ namespace Zhoplix.Services.AuthenticationService
             return null;
         }
 
+        public async Task<AccessTokenResponse> AuthenticateAsync(User user, string fingerprint)
+        {
+            var session = await _sessionContext.FirstOrDefaultAsync(s =>
+                (s.UserId == user.Id) && (s.Fingerprint == fingerprint)
+                );
+
+            var accessToken = await GenerateAccessWithClaims(user);
+
+
+            if (session != null)
+            {
+                _sessionContext.Remove(session);
+                await _context.SaveChangesAsync();
+            }
+
+            var refreshToken = await _tokenHandler.GenerateRefreshTokenAsync(user);
+            _sessionContext.Add(new Session
+            {
+                User = user,
+                RefreshToken = refreshToken,
+                Fingerprint = fingerprint,
+                CreatedAt = DateTime.Now,
+                UpdatedAt = DateTime.Now,
+                ExpiresAt = DateTime.Now.AddSeconds(_jwtConfig.RefreshExpirationTime)
+            });
+
+            if (await _context.SaveChangesAsync() > 0)
+                return new DefaultResponse(accessToken, refreshToken, _jwtConfig.AccessExpirationTime);
+
+            return null;
+        }
+
         public async Task<IEnumerable<IdentityError>> SignUpUserAsync(RegistrationViewModel model)
         {
             var user = _mapper.Map<User>(model);
@@ -237,7 +269,7 @@ namespace Zhoplix.Services.AuthenticationService
                 },
                 protocol: "http"
             );
-             return $"<a href='{callbackUrl}'>link</a>";
+             return $"<a href='{callbackUrl}'>Confirm Email</a>";
         }
 
         public async Task<string> GenerateAccessWithClaims(User user)

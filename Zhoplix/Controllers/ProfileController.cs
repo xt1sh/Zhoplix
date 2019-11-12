@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Zhoplix.Models.Identity;
 using Zhoplix.Services.ProfileManager;
+using Zhoplix.ViewModels.Authentication;
 
 namespace Zhoplix.Controllers
 {
@@ -49,5 +50,6 @@ namespace Zhoplix.Controllers
 
             return BadRequest();
         }
+
     }
 }

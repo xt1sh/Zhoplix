@@ -12,8 +12,7 @@ using Microsoft.Extensions.Logging;
 using Zhoplix.Services.AuthenticationService;
 using Microsoft.AspNetCore.Authorization;
 using System.Text.Json;
-using Zhoplix.Services.ProfileManager;
-
+using Zhoplix.Services.RecoveryService;
 
 namespace Zhoplix.Controllers
 {
@@ -23,10 +22,13 @@ namespace Zhoplix.Controllers
     public class AuthenticationController : ControllerBase
     {
         private readonly IAuthenticationService _authentication;
+        private readonly IRecoveryService _recovery;
 
-        public AuthenticationController(IAuthenticationService authentication)
+        public AuthenticationController(IAuthenticationService authentication,
+                                        IRecoveryService recovery)
         {
             _authentication = authentication;
+            _recovery = recovery;
         }
 
         [HttpPost]
@@ -91,6 +93,8 @@ namespace Zhoplix.Controllers
         [Authorize]
         public async Task<IActionResult> SignOut(IDictionary<string, string> data)
         {
+            if (!data.Keys.Contains("fingerprint"))
+                return BadRequest();
 
             var result = await _authentication.SignOutAsync(
                 HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value,
@@ -115,6 +119,36 @@ namespace Zhoplix.Controllers
             {
                 return Ok();
             }
+
+            return BadRequest();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ResetPassword(IDictionary<string, string> data)
+        {
+            if (!data.Keys.Contains("identifier"))
+                return BadRequest();
+
+            bool result = await _recovery.SendResetPasswordMessageAsync(data["identifier"]);
+
+            if (result)
+                return Ok();
+
+            return NotFound();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> VerifyPaswordResetCode(ResetCodeViewModel model)
+        {
+            var user = await _recovery.VerifyPasswordResetCodeAsync(model);
+
+            if (user is null)
+                return BadRequest();
+
+            var response = await _authentication.AuthenticateAsync(user, model.Fingerprint);
+
+            if (response != null)
+                return Ok(response);
 
             return BadRequest();
         }

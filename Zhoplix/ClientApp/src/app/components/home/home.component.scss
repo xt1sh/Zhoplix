@@ -7,3 +7,7 @@
     display: block;
     background-color: #141414;
 }
+
+::ng-deep header {
+    background-color: transparent;
+}

@@ -15,6 +15,8 @@ namespace Zhoplix.Services.AuthenticationService
     {
         Task<AccessTokenResponse> AuthenticateAsync(LoginViewModel model);
 
+        Task<AccessTokenResponse> AuthenticateAsync(User user, string fingerprint);
+
         Task<IEnumerable<IdentityError>> SignUpUserAsync(RegistrationViewModel model);
 
         Task<DefaultResponse> ConfirmUserAsync(EmailConfirmationViewModel model);
@@ -24,5 +26,6 @@ namespace Zhoplix.Services.AuthenticationService
         Task<bool> SignOutAsync(string username, string fingerprint);
 
         Task<bool> SignOutOfAllAsync(string username);
+
     }
 }
