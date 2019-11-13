@@ -49,12 +49,13 @@ export class ResetPasswordComponent implements OnInit {
         const sub = this.auth.createFingerprint().subscribe(value => {
           this.auth.verifyPasswordResetCode(this.userId, this.code, value).subscribe(res => {
             this.isValid = true;
-            this.loading = false;
             this.auth.setTokens(res);
+            this.loading = false;
+            this.cdRef.detectChanges();
+            sub.unsubscribe();
           }, error  => {
             this.isValid = false;
             this.loading = false;
-          }, () => {
             this.cdRef.detectChanges();
             sub.unsubscribe();
           });
