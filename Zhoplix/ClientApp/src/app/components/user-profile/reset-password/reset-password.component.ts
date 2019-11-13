@@ -11,7 +11,7 @@ import { TouchSequence } from 'selenium-webdriver';
   templateUrl: './reset-password.component.html',
   styleUrls: ['./reset-password.component.scss']
 })
-export class ResetPasswordComponent implements OnInit, AfterViewInit {
+export class ResetPasswordComponent implements OnInit {
 
   newPasswordForm = this.formBuilder.group({
     password: [null, [Validators.required, Validators.pattern('((?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{6,30})')]],
@@ -29,7 +29,7 @@ export class ResetPasswordComponent implements OnInit, AfterViewInit {
               private readonly profile: ProfileService,
               private readonly route: ActivatedRoute,
               private readonly formBuilder:FormBuilder,
-              private readonly cdRef:ChangeDetectorRef,
+              private cdRef:ChangeDetectorRef,
               private readonly ngZone: NgZone,
               private readonly router: Router) { 
                 
@@ -46,23 +46,21 @@ export class ResetPasswordComponent implements OnInit, AfterViewInit {
       this.isValid = false;
       } 
     else {
-        this.auth.createFingerprint().subscribe(value => {
+        const sub = this.auth.createFingerprint().subscribe(value => {
           this.auth.verifyPasswordResetCode(this.userId, this.code, value).subscribe(res => {
             this.isValid = true;
             this.loading = false;
             this.auth.setTokens(res);
-            this.cdRef.detectChanges();
           }, error  => {
             this.isValid = false;
             this.loading = false;
+          }, () => {
             this.cdRef.detectChanges();
+            sub.unsubscribe();
           });
         });
       }
 
-  }
-
-  ngAfterViewInit() {
   }
 
   isEmptyOrSpaces(str: string){
