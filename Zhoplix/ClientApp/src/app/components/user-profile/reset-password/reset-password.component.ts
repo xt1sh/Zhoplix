@@ -1,8 +1,10 @@
-import { Component, OnInit, AfterViewInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ChangeDetectorRef, NgZone } from '@angular/core';
 import { AuthenticationService } from 'src/app/services/authentication/authentication.service';
 import { ProfileService } from 'src/app/services/profile/profile.service';
-import { ActivatedRoute } from '@angular/router';
-import { FormBuilder, Validators, FormGroup, ValidationErrors } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+import { FormBuilder, Validators, FormGroup, ValidationErrors, FormControl, AbstractControl } from '@angular/forms';
+import { TokenPasswordReset } from 'src/app/models/token-password-reset';
+import { TouchSequence } from 'selenium-webdriver';
 
 @Component({
   selector: 'app-reset-password',
@@ -12,10 +14,10 @@ import { FormBuilder, Validators, FormGroup, ValidationErrors } from '@angular/f
 export class ResetPasswordComponent implements OnInit, AfterViewInit {
 
   newPasswordForm = this.formBuilder.group({
-    password: [undefined, [Validators.required, Validators.pattern('((?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{6,30})')]],
-    passwordConfirmation: [undefined, [Validators.required, this.passwordMismatch]],
+    password: [null, [Validators.required, Validators.pattern('((?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{6,30})')]],
+    passwordConfirmation: [null, [Validators.required]],
     signOutOfAll: [false]
-  });
+  }, {validator: this.passwordMismatch});
 
   code: string;
   userId: string;
@@ -27,7 +29,9 @@ export class ResetPasswordComponent implements OnInit, AfterViewInit {
               private readonly profile: ProfileService,
               private readonly route: ActivatedRoute,
               private readonly formBuilder:FormBuilder,
-              private readonly cdRef:ChangeDetectorRef) { 
+              private readonly cdRef:ChangeDetectorRef,
+              private readonly ngZone: NgZone,
+              private readonly router: Router) { 
                 
               }
 
@@ -55,6 +59,7 @@ export class ResetPasswordComponent implements OnInit, AfterViewInit {
           });
         });
       }
+
   }
 
   ngAfterViewInit() {
@@ -64,11 +69,26 @@ export class ResetPasswordComponent implements OnInit, AfterViewInit {
     return str === null || str.match(/^ *$/) !== null;
   }
 
-  passwordMismatch(control: FormGroup): ValidationErrors | null {
+  passwordMismatch(control: AbstractControl): ValidationErrors | null {
     const password = control.get('password');
     const passwordConfirmation = control.get('passwordConfirmation');
-    return password == passwordConfirmation ? {'passwordMismatch': true} : null; 
+    if (!password || !passwordConfirmation) return null;
+    return password.value === passwordConfirmation.value ? null : {'passwordMismatch': true}; 
   } 
 
+  onSubmit() {
+    let model = Object.assign( new TokenPasswordReset(), {
+      token: this.token,
+      password: this.newPasswordForm.controls['password'].value,
+      userId: this.userId,
+      fingerprint: this.auth.fingerPrint,
+      signOutOfAll: this.newPasswordForm.controls['signOutOfAll'].value
+    });
+    this.profile.changePasswordWithToken(model).subscribe(res => {
+      this.ngZone.run(() => this.router.navigate(['profile']));
+    }, error => {
+      this.newPasswordForm.reset();
+    });
+  }
 
 }

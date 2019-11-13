@@ -3,6 +3,7 @@ import { AuthenticationService } from '../authentication/authentication.service'
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { Observable } from 'rxjs';
 import { HttpResponse, HttpClient } from '@angular/common/http';
+import { TokenPasswordReset } from 'src/app/models/token-password-reset';
 
 @Injectable({
   providedIn: 'root'
@@ -24,4 +25,8 @@ export class ProfileService {
     return this.http.get<any>(`${this.originUrl}YourAccount`, {observe: 'response'});
   }
 
+  changePasswordWithToken(model: TokenPasswordReset): Observable<HttpResponse<any>> {
+    console.log(model);
+      return this.http.post<any>(`${this.originUrl}ChangePasswordWithToken`, model, {observe: 'response'});
+  }
 }

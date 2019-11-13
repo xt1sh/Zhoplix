@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,19 +9,26 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Zhoplix.Models.Identity;
 using Zhoplix.ViewModels.Authentication;
+using Zhoplix.ViewModels.ChangeCredentials;
 
 namespace Zhoplix.Services.RecoveryService
 {
     public class RecoveryService: IRecoveryService
     {
+        private readonly ApplicationDbContext _context;
+        private readonly DbSet<Session> _sessionContext;
         private readonly UserManager<User> _userManager;
         private readonly IUrlHelper _url;
         private readonly IEmailSender _emailSender;
 
-        public RecoveryService(UserManager<User> userManager,
-                                IUrlHelper url, 
-                                IEmailSender emailSender)
+        public RecoveryService(
+            UserManager<User> userManager,
+            IUrlHelper url, 
+            IEmailSender emailSender,
+            ApplicationDbContext context)
         {
+            _context = context;
+            _sessionContext = context.Sessions;
             _userManager = userManager;
             _url = url;
             _emailSender = emailSender;
@@ -83,5 +91,36 @@ namespace Zhoplix.Services.RecoveryService
 
             return null;
         }
+
+        public async Task<IEnumerable<IdentityError>> ChangePasswordWithToken(TokenResetViewModel model)
+        {
+            var user = await _userManager.FindByIdAsync(model.UserId);
+
+            if (user is null)
+            {
+                return new List<IdentityError>
+                {
+                    new IdentityError { Code = "IncorrectUser", Description = $"User {model.UserId} does not exist." }
+                };
+            }
+
+            var result = await _userManager.ResetPasswordAsync(user, model.Token, model.Password);
+
+            if (result.Succeeded)
+            {
+                if (model.SignOutOfAll)
+                {
+                    var sessions = _sessionContext.Where(s => s.UserId == int.Parse(model.UserId) && s.Fingerprint != model.Fingerprint).ToList();
+                    _sessionContext.RemoveRange(sessions);
+
+                    await _context.SaveChangesAsync();
+
+                }
+
+                return null;
+            }
+
+            return result.Errors;
+        }   
     }
 }
