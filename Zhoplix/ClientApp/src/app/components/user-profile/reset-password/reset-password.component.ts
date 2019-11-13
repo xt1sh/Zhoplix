@@ -5,6 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, Validators, FormGroup, ValidationErrors, FormControl, AbstractControl } from '@angular/forms';
 import { TokenPasswordReset } from 'src/app/models/token-password-reset';
 import { TouchSequence } from 'selenium-webdriver';
+import { MatSnackBar } from '@angular/material';
 
 @Component({
   selector: 'app-reset-password',
@@ -31,7 +32,8 @@ export class ResetPasswordComponent implements OnInit {
               private readonly formBuilder:FormBuilder,
               private cdRef:ChangeDetectorRef,
               private readonly ngZone: NgZone,
-              private readonly router: Router) { 
+              private readonly router: Router,
+              private readonly snack: MatSnackBar) { 
                 
               }
 
@@ -85,8 +87,13 @@ export class ResetPasswordComponent implements OnInit {
     });
     this.profile.changePasswordWithToken(model).subscribe(res => {
       this.ngZone.run(() => this.router.navigate(['profile']));
+      this.snack.open(`Password was successfully changed`,
+        'OK', {duration: 3000, panelClass: ['snack-success']});
     }, error => {
-      this.newPasswordForm.reset();
+      this.snack.open(error.error[0].description,
+        'OK', {duration: 3000, panelClass: ['snack-error']});
+      this.newPasswordForm.controls['password'].reset();
+      this.newPasswordForm.controls['passwordConfirmation'].reset();
     });
   }
 

@@ -63,7 +63,7 @@ namespace Zhoplix.Controllers
             if (result is null)
                 return Ok();
 
-            return BadRequest();
+            return BadRequest(result);
         }
 
     }

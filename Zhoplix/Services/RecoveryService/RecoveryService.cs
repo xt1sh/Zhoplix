@@ -103,6 +103,13 @@ namespace Zhoplix.Services.RecoveryService
                     new IdentityError { Code = "IncorrectUser", Description = $"User {model.UserId} does not exist." }
                 };
             }
+            if (await _userManager.CheckPasswordAsync(user, model.Password))
+            {
+                return new List<IdentityError>
+                {
+                    new IdentityError { Code = "OldNewPassword", Description = $"This password is currently used on this account" }
+                };
+            }
 
             var result = await _userManager.ResetPasswordAsync(user, model.Token, model.Password);
 
