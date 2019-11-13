@@ -26,7 +26,6 @@ export class ProfileService {
   }
 
   changePasswordWithToken(model: TokenPasswordReset): Observable<HttpResponse<any>> {
-    console.log(model);
-      return this.http.post<any>(`${this.originUrl}ChangePasswordWithToken`, model, {observe: 'response'});
+    return this.http.post<any>(`${this.originUrl}ChangePasswordWithToken`, model, {observe: 'response'});
   }
 }
