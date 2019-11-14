@@ -35,6 +35,10 @@ a:not([href]):not([tabindex]):hover {
   font-size: 1rem;
   float: right;
 }
+
+.sign-in-button:hover {
+  color: white;
+}
 /* Profile */
 
 .avatar-img {

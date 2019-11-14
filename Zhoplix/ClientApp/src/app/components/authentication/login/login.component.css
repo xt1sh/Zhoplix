@@ -100,3 +100,44 @@ h1 {
 }
 
 
+.login-footer {
+    display: flex;
+    justify-content: space-between;
+}
+
+.need-help {
+    font-size:15px;
+    color: white;
+}
+
+.need-help:hover {
+    text-decoration: underline;
+}
+
+
+.opportunities-footer {
+    display:flex;
+    height: 100%;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: flex-start;
+    color: #737373;
+    font-size: 16px;
+}
+
+.sign-up {
+    display: flex;
+}
+
+.sign-up-link {
+    margin-left: 6px;
+    color: white;
+}
+
+.sign-up-link:hover {
+    text-decoration: underline;
+} 
+
+::ng-deep .mat-checkbox-checked.mat-accent .mat-checkbox-background, .mat-checkbox-indeterminate.mat-accent .mat-checkbox-background {
+    background-color: white;
+  }

@@ -22,9 +22,18 @@
         <button type="submit" mat-raised-button class="login-button" color="primary" >Sign In</button>
       </mat-card-actions>
       <mat-card-footer>
-        <mat-checkbox formControlName="rememberMe">Remember me</mat-checkbox>
+        <div class="login-footer">
+          <mat-checkbox formControlName="rememberMe">Remember me</mat-checkbox>
+          <a class="need-help" [routerLink]="['/help']">Need help?</a>
+        </div>
       </mat-card-footer>
       </form>
+      <div class="opportunities-footer">
+        <div class="sign-up">
+          New to Zhoplix?
+          <a [routerLink]="['']" class="sign-up-link">Sign up now.</a>
+        </div>
+      </div>
     </mat-card>
     <div *ngIf="loginSpinner" class="login-spinner-field" fxFlix="500px" fxFlex.xs="100%">
       <mat-spinner class="login-spinner"></mat-spinner>

@@ -1,0 +1,40 @@
+<div class="login-help-background">
+  <img [src]="backgroundSrc">
+</div>
+<mdb-carousel class="carousel slide" [isControls]="false" [animation]="'slide'" [interval]="'0'" [noWrap]="true">
+  <mdb-carousel-item>
+    <div class="login-body">
+      <div class="login-body-container">
+        <div>
+          <h1>Forgot Email/Password</h1>
+          <mat-error class="incorrect" *ngIf="error">Sorry, something went wrong. Please try again later.</mat-error>
+          <label id="radio-group-label">How would you like to reset your password?</label>
+          <mat-radio-group aria-labelledby="radio-group-label" class="radio-group" [(ngModel)]="sender">
+            <mat-radio-button *ngFor="let type of sendTypes"  [value]="type">{{type}}</mat-radio-button>
+          </mat-radio-group>
+          <form [formGroup]="sendForm" autocomplete="off" (ngSubmit)="onSubmit()">
+            <div class="input-field">
+              <label for="email">We will send you an email with instructions on how to reset your password</label>
+              <input id="email" class="email-field" type="text" placeholder="name@example.com" formControlName="email"> 
+              <mat-error *ngIf="sendForm.controls['email'].hasError('email')">Please enter a valid email.</mat-error>
+            </div>
+            <button type="submit" [disabled]="sendForm.controls['email'].hasError('email')" class="email-button">Email Me</button>
+          </form>
+          <a href="#" class="forgot-login">I don't remember my email or phone.</a>
+        </div>
+      </div>
+    </div>
+  </mdb-carousel-item>
+  <mdb-carousel-item>
+    <div class="login-body">
+      <div class="login-body-container">
+        <div>
+          <h1>Email Sent</h1>
+          <p>An email with instructions on how to reset your password has been sent to <b>{{sendForm.controls['email'].value}}</b>.
+             Check your spam or junk folder if you don’t see the email in your inbox.</p>
+          <br>
+          <p>If you no longer have access to this email account, please <a href="#">contact us</a>.</p>
+        </div>
+      </div>
+    </div>
+  </mdb-carousel-item>

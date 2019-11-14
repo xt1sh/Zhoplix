@@ -12,7 +12,7 @@ import { MatAutocompleteModule, MatBadgeModule, MatButtonModule, MatButtonToggle
   MatInputModule, MatListModule, MatMenuModule, MatNativeDateModule,
   MatPaginatorModule, MatProgressSpinnerModule, MatRadioModule, MatSelectModule,
   MatSidenavModule, MatSlideToggleModule, MatSnackBarModule, MatSortModule, MatStepperModule,
-  MatTableModule, MatTabsModule, MatToolbarModule, MatTooltipModule } from '@angular/material';
+  MatTableModule, MatTabsModule, MatToolbarModule, MatTooltipModule, MAT_RADIO_DEFAULT_OPTIONS } from '@angular/material';
 import { TokenInterceptor } from './services/authentication/token.interceptor';
 import { VgCoreModule } from 'videogular2/compiled/core';
 import { VgControlsModule } from 'videogular2/compiled/controls';
@@ -39,6 +39,8 @@ import { LimitToPipe } from './pipes/limit-to/limit-to.pipe';
 import { SelectDropDownComponent } from './components/dropdown/select-dropdown.component';
 import { ProfileSettingsComponent } from './components/user-profile/profile-settings/profile-settings.component';
 import { EpisodeComponent } from './components/admin/create/episode/episode.component';
+import { LoginHelpComponent } from './components/authentication/login-help/login-help.component';
+import { ResetPasswordComponent } from './components/user-profile/reset-password/reset-password.component';
 
 @NgModule({
   declarations: [
@@ -57,6 +59,8 @@ import { EpisodeComponent } from './components/admin/create/episode/episode.comp
     SelectDropDownComponent,
     LimitToPipe,
     ProfileSettingsComponent,
+    LoginHelpComponent,
+    ResetPasswordComponent,
     ArrayFilterPipe
   ],
   imports: [
