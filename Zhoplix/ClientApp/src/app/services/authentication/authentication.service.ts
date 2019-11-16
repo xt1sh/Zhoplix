@@ -107,7 +107,7 @@ export class AuthenticationService {
   createFingerprint(): Observable<string> {
     return new Observable(observer => {
       fingerprint.get((result) => {
-        const print = fingerprint.x64hash128(result.join(''));
+        const print = fingerprint.x64hash128(result.map(function (pair) { return pair.value }).join(), 31);
         if(!print) {
           observer.error();
         } else {
