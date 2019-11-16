@@ -32,7 +32,7 @@ export class NavMenuComponent implements OnInit {
 
   ngOnInit() {
     this.isBlackBackground = false;
-    if (this.router.url.includes('profile')) {
+    if (this.router.url.includes('/profile')) {
       this.isBlackBackground = true;
     }
     this.toShowSignIn$ = this.getToShowSignInValue;
@@ -43,7 +43,7 @@ export class NavMenuComponent implements OnInit {
       .subscribe(() => {
         this.toShowSignIn$ = this.getToShowSignInValue;
         this.toShowProfileMenu$ = this.getToShowProfileMenu;
-        if (this.router.url.includes('profile')) {
+        if (this.router.url.includes('/profile')) {
           this.isBlackBackground = true;
         } else {
           this.isBlackBackground = false;
