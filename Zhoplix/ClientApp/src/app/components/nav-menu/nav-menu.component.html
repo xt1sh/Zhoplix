@@ -1,5 +1,5 @@
-<header>
-  <div class="navbar" *ngIf="toShow$ | async as toShow">
+<header [style.background-color]="isBlackBackground ? 'black' : 'transparent'">
+  <div class="navbar">
     <nav class="navbar-main">
       <div class="navbar-logo">
         <a class="home-link" [routerLink]="['']">

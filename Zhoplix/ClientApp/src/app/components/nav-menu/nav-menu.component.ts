@@ -17,8 +17,7 @@ export class NavMenuComponent implements OnInit {
   zhoplixLogoSrcMedium = "Logos/zhoplix_empty_134.png";
   zhoplixLogoSrcSmall = "Logos/zhoplix_empty_108.png";
   isExpanded = false;
-  toShow$: Observable<boolean>;
-  toShow: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  isBlackBackground: boolean;
   toShowSignIn$: Observable<boolean>;
   toShowSignIn: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   toShowProfileMenu$: Observable<boolean>;
@@ -32,29 +31,31 @@ export class NavMenuComponent implements OnInit {
               }
 
   ngOnInit() {
-    this.toShow$ = this.getToShowValue;
+    this.isBlackBackground = false;
+    if (this.router.url.includes('profile')) {
+      this.isBlackBackground = true;
+    }
     this.toShowSignIn$ = this.getToShowSignInValue;
     this.toShowProfileMenu$ = this.getToShowProfileMenu;
     this.avatar = this.profile.getProfileImage();
     const event = this.router.events
       .pipe(filter(event => event instanceof NavigationEnd))
       .subscribe(() => {
-        this.toShow$ = this.getToShowValue;
         this.toShowSignIn$ = this.getToShowSignInValue;
         this.toShowProfileMenu$ = this.getToShowProfileMenu;
+        if (this.router.url.includes('profile')) {
+          this.isBlackBackground = true;
+        } else {
+          this.isBlackBackground = false;
+        }
       });
-  }
-
-  get getToShowValue() {
-    this.toShow.next(!routes.includes(this.router.url.slice(1)));
-    return this.toShow.asObservable();
   }
 
   get getToShowSignInValue() {
     if(this.auth.isLoggedIn) {
       this.toShowSignIn.next(false);
     } else {
-      this.toShowSignIn.next(!this.router.url.includes("login"));
+      this.toShowSignIn.next(!this.router.url.includes('login'));
     }
     return this.toShowSignIn.asObservable();
   }
@@ -65,15 +66,15 @@ export class NavMenuComponent implements OnInit {
     }
     else {
       this.toShowProfileMenu.next(true);
-    } 
+    }
     return this.toShowProfileMenu.asObservable();
   }
   signOut() {
       this.auth.signOut(this.auth.fingerPrint);
       this.auth.deleteTokens();
       this.ngZone.run(() => this.router.navigate(['']));
-      
-  
+
+
   }
 
   collapse() {
