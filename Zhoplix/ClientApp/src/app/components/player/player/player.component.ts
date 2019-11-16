@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { EpisodesService } from './../../../services/CRUD/episodes.service';
+import { Component, OnInit, Input, ElementRef } from '@angular/core';
 import { VgAPI, VgStates } from 'videogular2/compiled/core';
-import { PlayerMedia } from 'src/app/models/player-media';
-import { Observable, BehaviorSubject } from 'rxjs';
+import { EpisodeForPlayerModel } from 'src/app/models/episode/episode-for-player-model';
 
 @Component({
   selector: 'app-player',
@@ -10,35 +10,41 @@ import { Observable, BehaviorSubject } from 'rxjs';
 })
 export class PlayerComponent implements OnInit {
 
-  api: VgAPI
-  video: PlayerMedia;
+  @Input() episodeId: number;
+
+  currentVideoSrc: string;
+  api: VgAPI;
+  episode: EpisodeForPlayerModel;
   isSingleClick: boolean;
   thumbSrc: string;
-  thumbs = 'http://localhost:5000/Videos/Uploaded/ElCamino/Thumbnails';
+  thumbLocation: string;
   scrubWidth: number;
   isMouseOver: boolean;
   thumbnail: HTMLElement;
 
-  constructor() { }
+  constructor(private readonly episodeService: EpisodesService,
+    private elRef: ElementRef) { }
 
   ngOnInit() {
+    this.episodeService.getEpisodeById(this.episodeId).subscribe(result => {
+      this.episode = result.body;
+      this.thumbLocation = this.episode.thumbnailLocation;
+      this.currentVideoSrc = this.episode.videos[0].location;
+      this.api.play();
+      console.log(result)
+      const player = this.elRef.nativeElement.querySelector("video");
+      player.load();
+    });
     this.isMouseOver = false;
     this.isSingleClick = true;
-    this.video = {
-      title: "El Camino",
-      src: "http://localhost:5000/Videos/Uploaded/ElCamino/ElCamino.mp4",
-      type: "video/mp4"
-    };
   }
 
   onPlayerReady(api: VgAPI) {
     this.thumbnail = document.getElementById('thumbnail');
-    console.log(this.thumbnail);
     this.api = api;
     this.api.getDefaultMedia().subscriptions.ended.subscribe(() => {
       this.api.getDefaultMedia().currentTime = 0;
     });
-    // this.api.play(); доебало
   }
 
   onVideoClick() {
@@ -74,16 +80,15 @@ export class PlayerComponent implements OnInit {
   }
 
   onMouseOver(event) {
-    console.log(event)
     this.changeThumbPosition(event.offsetX + 132);
     this.isMouseOver = true;
-    this.thumbSrc = this.thumbs + '/' + (Math.floor((event.offsetX + 2) / (event.target.clientWidth / 126)) + 1) + '.png';
+    this.thumbSrc = this.thumbLocation + '/' + (Math.floor((event.offsetX + 2) / (event.target.clientWidth / 126)) + 1) + '.png';
   }
 
   onMouseMove(event) {
     if(this.isMouseOver) {
       this.changeThumbPosition(event.offsetX + 132);
-      this.thumbSrc = this.thumbs + '/' + (Math.floor((event.offsetX + 2) / (event.target.clientWidth / 126)) + 1) + '.png';
+      this.thumbSrc = this.thumbLocation + '/' + (Math.floor((event.offsetX + 2) / (event.target.clientWidth / 126)) + 1) + '.png';
     }
   }
 

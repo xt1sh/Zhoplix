@@ -52,7 +52,7 @@ namespace Zhoplix.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(LoginViewModel model)
         {
-
+  
             var response = await _authentication.AuthenticateAsync(model);
 
             if (response != null)
@@ -151,6 +151,26 @@ namespace Zhoplix.Controllers
                 return Ok(response);
 
             return BadRequest();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> VerifySession(IDictionary<string, string> data)
+        {
+            if (!data.Keys.Contains("fingerprint"))
+                return BadRequest();
+
+            bool result = await _authentication.VerifySessionAsync(
+                HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value,
+                data["fingerprint"]
+                );
+
+            if (result)
+            {
+                return Ok();
+            }
+
+            return NotFound();
+
         }
     }
  
