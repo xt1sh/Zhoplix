@@ -64,8 +64,12 @@ namespace Zhoplix.Services.AuthenticationService
 
         public async Task<AccessTokenResponse> AuthenticateAsync(LoginViewModel model)
         {
-            var regex = new Regex(@"^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$");
 
+            if (model.Login is null)
+                return null;
+
+            var regex = new Regex(@"^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$");
+            
             var user = regex.IsMatch(model.Login)
                 ? await _userManager.FindByEmailAsync(model.Login)
                 : await _userManager.FindByNameAsync(model.Login);
@@ -285,5 +289,17 @@ namespace Zhoplix.Services.AuthenticationService
             return await _tokenHandler.GenerateAccessTokenAsync(user, claims);
         }
 
+        public async Task<bool> VerifySessionAsync(string username, string fingerprint)
+        {
+            var user = await _userManager.FindByNameAsync(username);
+            if (user is null)
+                return false;
+
+            var session = await _sessionContext.FirstOrDefaultAsync(s => s.UserId == user.Id && s.Fingerprint == fingerprint);
+            if (session is null)
+                return false;
+
+            return true;
+        }
     }
 }

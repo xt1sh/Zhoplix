@@ -61,6 +61,10 @@ export class AuthenticationService {
     return this.http.post<any>(`${this.originUrl}Authentication/VerifyPaswordResetCode`, {userId:userId, code:code, fingerprint:fingerprint});
   }
 
+  verifySession(fingerprint: string) {
+    return this.http.post<any>(`${this.originUrl}Authentication/VerifySession`, {fingerprint:fingerprint});
+  }
+  
   getCurrentUser(): CurrentUser {
     let user: CurrentUser;
     const tokenPayload = decode(localStorage.getItem('access_token'));

@@ -27,5 +27,7 @@ namespace Zhoplix.Services.AuthenticationService
 
         Task<bool> SignOutOfAllAsync(string username);
 
+        Task<bool> VerifySessionAsync(string username, string fingerprint);
+
     }
 }
