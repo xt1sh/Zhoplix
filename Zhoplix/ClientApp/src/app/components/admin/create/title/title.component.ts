@@ -39,9 +39,7 @@ export class TitleComponent implements OnInit {
   }
 
   removeGenre(index: number) {
-    console.log(index)
     this.form.get('genres').removeAt(index);
-    console.log(this.form.get('genres').value);
   }
 
   uploadPhoto(files) {
