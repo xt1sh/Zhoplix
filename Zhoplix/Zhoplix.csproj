@@ -100,7 +100,6 @@
 
   <ItemGroup>
     <Folder Include="Services\Repository\" />
-    <Folder Include="ViewModels\Media\" />
     <Folder Include="wwwroot\background\" />
     <Folder Include="wwwroot\Images\Avatars\f5a08080-e0ee-4b9e-97f5-95a07618f2b5\" />
   </ItemGroup>

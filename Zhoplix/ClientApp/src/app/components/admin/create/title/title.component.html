@@ -8,6 +8,7 @@
     <div formArrayName="genres" *ngFor="let genre of form.get('genres').controls; let i = index;">
       <div [formGroupName]="i">
         <input formControlName="name" placeholder="Genre">
+        <button (click)="removeGenre(i)">Remove</button>
       </div>
     </div>
     <button (click)="addGenre()">Add genre</button>

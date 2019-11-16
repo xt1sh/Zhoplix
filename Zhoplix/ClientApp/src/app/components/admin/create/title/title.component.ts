@@ -1,6 +1,6 @@
 import { AdminService } from './../../../../services/admin/admin.service';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 import { MediaUploadService } from 'src/app/services/media/media-upload.service';
 import { MatSnackBar } from '@angular/material';
 import { Router } from '@angular/router';
@@ -25,7 +25,7 @@ export class TitleComponent implements OnInit {
   ngOnInit() {
     this.uploading = false;
     this.form = this.fb.group({
-      name: '',
+      name: ['', Validators.required],
       description: '',
       genres: this.fb.array([]),
       ageRestriction: 0,
@@ -36,6 +36,12 @@ export class TitleComponent implements OnInit {
 
   addGenre() {
     this.form.get('genres').push(this.fb.group({name: ''}));
+  }
+
+  removeGenre(index: number) {
+    console.log(index)
+    this.form.get('genres').removeAt(index);
+    console.log(this.form.get('genres').value);
   }
 
   uploadPhoto(files) {
