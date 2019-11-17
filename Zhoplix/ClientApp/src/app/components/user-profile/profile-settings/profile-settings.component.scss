@@ -207,8 +207,3 @@ a:not([href]):not([tabindex]), a:not([href]):not([tabindex]):focus, a:not([href]
     flex-direction: column;
     align-items: flex-start;
 }
-
-::ng-deep header {
-    background-color: black;
-}
-

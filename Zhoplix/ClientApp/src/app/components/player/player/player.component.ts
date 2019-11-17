@@ -31,7 +31,6 @@ export class PlayerComponent implements OnInit {
       this.thumbLocation = this.episode.thumbnailLocation;
       this.currentVideoSrc = this.episode.videos[0].location;
       this.api.play();
-      console.log(result)
       const player = this.elRef.nativeElement.querySelector("video");
       player.load();
     });
