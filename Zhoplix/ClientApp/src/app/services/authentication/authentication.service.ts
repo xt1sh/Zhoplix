@@ -111,6 +111,5 @@ export class AuthenticationService {
   async createFingerprint() {
     const result = await fingerprint.getPromise(null);
     this.fingerPrint = await fingerprint.x64hash128(result.map(function (pair) { return pair.value }).join(), 31);
-    console.log(this.fingerPrint);
   }
 }
