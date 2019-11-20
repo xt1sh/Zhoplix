@@ -22,7 +22,6 @@ export class AppComponent implements OnInit {
       this.auth.createFingerprint().subscribe(value => {
         this.auth.fingerPrint = value;
         this.auth.verifySession(this.auth.fingerPrint).subscribe(res => {
-          this.ngZone.run(() => this.router.navigate(['profile']));
         }, error => {
           this.auth.deleteTokens();
           this.ngZone.run(() => this.router.navigate(['']));
