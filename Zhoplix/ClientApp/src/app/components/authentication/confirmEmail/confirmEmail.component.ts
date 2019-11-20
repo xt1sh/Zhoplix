@@ -22,12 +22,10 @@ export class ConfirmEmailComponent implements OnInit {
 }
 
   ngOnInit() {
-    this.auth.createFingerprint().subscribe(value => {
-      this.auth.confirmEmail(this.userId, this.token, value)
-        .subscribe(res => {
-          this.auth.setTokens(res.body as Tokens);
-        });
-      this.router.navigate(['']);
-    })
+    this.auth.confirmEmail(this.userId, this.token, this.auth.fingerPrint)
+      .subscribe(res => {
+        this.auth.setTokens(res.body as Tokens);
+      });
+    this.router.navigate(['']);
   }
 }

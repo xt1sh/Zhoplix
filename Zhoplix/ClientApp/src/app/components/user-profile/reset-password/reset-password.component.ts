@@ -33,8 +33,8 @@ export class ResetPasswordComponent implements OnInit {
               private cdRef:ChangeDetectorRef,
               private readonly ngZone: NgZone,
               private readonly router: Router,
-              private readonly snack: MatSnackBar) { 
-                
+              private readonly snack: MatSnackBar) {
+
               }
 
   ngOnInit() {
@@ -46,22 +46,18 @@ export class ResetPasswordComponent implements OnInit {
       });
     if (this.isEmptyOrSpaces(this.userId) || this.isEmptyOrSpaces(this.code) || this.isEmptyOrSpaces(this.token)) {
       this.isValid = false;
-      } 
+      }
     else {
-        const sub = this.auth.createFingerprint().subscribe(value => {
-          this.auth.verifyPasswordResetCode(this.userId, this.code, value).subscribe(res => {
+          this.auth.verifyPasswordResetCode(this.userId, this.code, this.auth.fingerPrint).subscribe(res => {
             this.isValid = true;
             this.auth.setTokens(res);
             this.loading = false;
             this.cdRef.detectChanges();
-            sub.unsubscribe();
           }, error  => {
             this.isValid = false;
             this.loading = false;
             this.cdRef.detectChanges();
-            sub.unsubscribe();
           });
-        });
       }
 
   }
@@ -74,8 +70,8 @@ export class ResetPasswordComponent implements OnInit {
     const password = control.get('password');
     const passwordConfirmation = control.get('passwordConfirmation');
     if (!password || !passwordConfirmation) return null;
-    return password.value === passwordConfirmation.value ? null : {'passwordMismatch': true}; 
-  } 
+    return password.value === passwordConfirmation.value ? null : {'passwordMismatch': true};
+  }
 
   onSubmit() {
     let model = Object.assign( new TokenPasswordReset(), {

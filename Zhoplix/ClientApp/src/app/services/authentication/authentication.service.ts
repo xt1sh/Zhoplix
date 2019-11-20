@@ -64,7 +64,7 @@ export class AuthenticationService {
   verifySession(fingerprint: string) {
     return this.http.post<any>(`${this.originUrl}Authentication/VerifySession`, {fingerprint:fingerprint});
   }
-  
+
   getCurrentUser(): CurrentUser {
     let user: CurrentUser;
     const tokenPayload = decode(localStorage.getItem('access_token'));
@@ -108,17 +108,9 @@ export class AuthenticationService {
     return !!this.getAccessToken();
   }
 
-  createFingerprint(): Observable<string> {
-    return new Observable(observer => {
-      fingerprint.get((result) => {
-        const print = fingerprint.x64hash128(result.map(function (pair) { return pair.value }).join(), 31);
-        if(!print) {
-          observer.error();
-        } else {
-          observer.next(print);
-        }
-        observer.complete();
-      });
-    });
+  async createFingerprint() {
+    const result = await fingerprint.getPromise(null);
+    this.fingerPrint = await fingerprint.x64hash128(result.map(function (pair) { return pair.value }).join(), 31);
+    console.log(this.fingerPrint);
   }
 }
