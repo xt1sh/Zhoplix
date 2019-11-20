@@ -30,14 +30,11 @@ export class ResetPasswordComponent implements OnInit {
               private readonly profile: ProfileService,
               private readonly route: ActivatedRoute,
               private readonly formBuilder:FormBuilder,
-              private cdRef:ChangeDetectorRef,
               private readonly ngZone: NgZone,
               private readonly router: Router,
-              private readonly snack: MatSnackBar) {
+              private readonly snack: MatSnackBar) {}
 
-              }
-
-  ngOnInit() {
+  async ngOnInit() {
     this.loading = true;
     this.route.queryParams.subscribe(params => {
       this.userId = params['userId'];
@@ -48,18 +45,18 @@ export class ResetPasswordComponent implements OnInit {
       this.isValid = false;
       }
     else {
-          this.auth.verifyPasswordResetCode(this.userId, this.code, this.auth.fingerPrint).subscribe(res => {
-            this.isValid = true;
-            this.auth.setTokens(res);
-            this.loading = false;
-            this.cdRef.detectChanges();
-          }, error  => {
-            this.isValid = false;
-            this.loading = false;
-            this.cdRef.detectChanges();
-          });
+      if (!this.auth.fingerPrint) {
+        await this.auth.createFingerprint();
       }
-
+      this.auth.verifyPasswordResetCode(this.userId, this.code, this.auth.fingerPrint).subscribe(res => {
+        this.isValid = true;
+        this.auth.setTokens(res);
+        this.loading = false;
+      }, error  => {
+        this.isValid = false;
+        this.loading = false;
+      });
+    }
   }
 
   isEmptyOrSpaces(str: string){
