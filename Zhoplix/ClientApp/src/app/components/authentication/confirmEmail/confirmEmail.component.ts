@@ -25,7 +25,7 @@ export class ConfirmEmailComponent implements OnInit {
     if (!this.auth.fingerPrint) {
       await this.auth.createFingerprint();
     }
-    this.auth.confirmEmail(this.userId, this.token, this.auth.fingerPrint)
+    this.auth.confirmEmail(this.userId, this.token)
       .subscribe(res => {
         this.auth.setTokens(res.body as Tokens);
       });

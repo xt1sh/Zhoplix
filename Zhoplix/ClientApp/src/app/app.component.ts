@@ -16,7 +16,7 @@ export class AppComponent implements OnInit {
   async ngOnInit() {
     await this.auth.createFingerprint();
     if (this.auth.isLoggedIn) {
-      this.auth.verifySession(this.auth.fingerPrint).subscribe(res => {
+      this.auth.verifySession().subscribe(res => {
       }, () => {
         this.auth.deleteTokens();
         this.ngZone.run(() => this.router.navigate(['']));

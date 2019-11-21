@@ -48,7 +48,7 @@ export class ResetPasswordComponent implements OnInit {
       if (!this.auth.fingerPrint) {
         await this.auth.createFingerprint();
       }
-      this.auth.verifyPasswordResetCode(this.userId, this.code, this.auth.fingerPrint).subscribe(res => {
+      this.auth.verifyPasswordResetCode(this.userId, this.code).subscribe(res => {
         this.isValid = true;
         this.auth.setTokens(res);
         this.loading = false;
