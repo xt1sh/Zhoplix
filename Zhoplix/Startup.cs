@@ -36,6 +36,13 @@ using Microsoft.AspNetCore.Mvc.Authorization;
 using Zhoplix.Data;
 using Zhoplix.Services.ProfileManager;
 using Zhoplix.Services.RecoveryService;
+using Quartz.Spi;
+using Zhoplix.Jobs;
+using Quartz;
+using Quartz.Impl;
+using Zhoplix.Quartz;
+using System.Collections.Generic;
+using System.Reflection;
 
 namespace Zhoplix
 {
@@ -45,13 +52,14 @@ namespace Zhoplix
 
         private readonly PasswordConfiguration PasswordConfiguration;
 
-
+        private readonly Dictionary<string, JobConfiguration> Jobs;
 
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
             JwtConfiguration = Configuration.GetSection("Bearer").Get<JwtConfiguration>();
             PasswordConfiguration = Configuration.GetSection("Password").Get<PasswordConfiguration>();
+            Jobs = Configuration.GetSection("Schedules").Get<Dictionary<string, JobConfiguration>>();
         }
 
 
@@ -112,11 +120,24 @@ namespace Zhoplix
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Zhoplix", Version = "v1" });
             });
             services.AddAutoMapper(typeof(Startup));
+            services.AddHostedService<QuartzHostedService>();
 
             services.AddSingleton<ITokenHandler, TokenHandler>();
             services.AddSingleton<IEmailSender, EmailSender>();
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
+            services.AddSingleton<IJobFactory, JobsFactory>();
+            services.AddSingleton<ISchedulerFactory, StdSchedulerFactory>();
+
+            // Jobs
+            services.AddTransient<RemoveExpiredSessions>();
+            foreach (var job in  Jobs)
+            {
+                services.AddSingleton(new JobSchedule(
+                    jobType: Type.GetType($"Zhoplix.Jobs.{job.Key}", false, true),
+                    cronExpression: job.Value.CronExpression));
+
+            }
 
             services.AddTransient<ITitleService, TitleService>();
             services.AddTransient<ISeasonService, SeasonService>();
