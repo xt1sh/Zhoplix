@@ -36,6 +36,11 @@ using Microsoft.AspNetCore.Mvc.Authorization;
 using Zhoplix.Data;
 using Zhoplix.Services.ProfileManager;
 using Zhoplix.Services.RecoveryService;
+using Quartz.Spi;
+using Zhoplix.Jobs;
+using Quartz;
+using Quartz.Impl;
+using Zhoplix.Quartz;
 
 namespace Zhoplix
 {
@@ -112,11 +117,18 @@ namespace Zhoplix
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Zhoplix", Version = "v1" });
             });
             services.AddAutoMapper(typeof(Startup));
+            services.AddHostedService<QuartzHostedService>();
 
             services.AddSingleton<ITokenHandler, TokenHandler>();
             services.AddSingleton<IEmailSender, EmailSender>();
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
+            services.AddSingleton<IJobFactory, JobsFactory>();
+            services.AddSingleton<ISchedulerFactory, StdSchedulerFactory>();
+            services.AddSingleton<RemoveExpiredSessions>();
+            services.AddSingleton(new JobSchedule(
+                jobType: typeof(RemoveExpiredSessions),
+                cronExpression: "0/5 * * * * ?"));
 
             services.AddTransient<ITitleService, TitleService>();
             services.AddTransient<ISeasonService, SeasonService>();
