@@ -1,19 +1,21 @@
-<div class="player">
+<div class="player" id="player" (mouseenter)="onMouseEnter()" (mouseleave)="onMouseLeave()" (mousemove)="onMouseMove()">
   <vg-player (onPlayerReady)="onPlayerReady($event)">
     <vg-buffering></vg-buffering>
-    <vg-controls>
-      <vg-play-pause class="play-button"></vg-play-pause>
-      <button class="donate-button">Donate</button>
-      <vg-time-display vgProperty="current" vgFormat="hh:mm:ss"></vg-time-display>
-      <vg-scrub-bar (mouseover)="onMouseOver($event)" (mouseleave)="onMouseLeave()" (document:mousemove)="onMouseMove($event)">
-        <vg-scrub-bar-current-time></vg-scrub-bar-current-time>
-        <vg-scrub-bar-buffering-time></vg-scrub-bar-buffering-time>
-      </vg-scrub-bar>
-      <vg-time-display vgProperty="total" vgFormat="hh:mm:ss"></vg-time-display>
-      <vg-mute></vg-mute>
-      <vg-volume></vg-volume>
-      <vg-fullscreen></vg-fullscreen>
-    </vg-controls>
+    <div id="controls" [@shade]=currentState [style.z-index]="999">
+      <vg-controls (mouseenter)="mouseOnControls = true" (mouseleave)="mouseOnControls = false">
+        <vg-play-pause class="play-button"></vg-play-pause>
+        <button class="donate-button">Donate</button>
+        <vg-time-display vgProperty="current" vgFormat="hh:mm:ss"></vg-time-display>
+        <vg-scrub-bar (mouseover)="onMouseOverScrub($event)" (mouseleave)="onMouseLeaveScrub()" (document:mousemove)="onMouseMoveScrub($event)">
+          <vg-scrub-bar-current-time></vg-scrub-bar-current-time>
+          <vg-scrub-bar-buffering-time></vg-scrub-bar-buffering-time>
+        </vg-scrub-bar>
+        <vg-time-display vgProperty="total" vgFormat="hh:mm:ss"></vg-time-display>
+        <vg-mute></vg-mute>
+        <vg-volume></vg-volume>
+        <vg-fullscreen></vg-fullscreen>
+      </vg-controls>
+    </div>
     <div class="video-player">
       <video #media (click)="onVideoClick()" (dblclick)="onVideoDclick()" [vgMedia]="media" id="singleVideo" preload="auto" crossorigin>
         <source [src]="currentVideoSrc" type="video/mp4"/>
@@ -24,4 +26,3 @@
     </div>
   </vg-player>
 </div>
-

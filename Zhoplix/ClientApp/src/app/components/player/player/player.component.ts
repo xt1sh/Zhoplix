@@ -2,11 +2,16 @@ import { EpisodesService } from './../../../services/CRUD/episodes.service';
 import { Component, OnInit, Input, ElementRef } from '@angular/core';
 import { VgAPI, VgStates } from 'videogular2/compiled/core';
 import { EpisodeForPlayerModel } from 'src/app/models/episode/episode-for-player-model';
+import { ShadeAnimation } from 'src/app/animations/shade-animation';
+import { fromEvent } from 'rxjs';
 
 @Component({
   selector: 'app-player',
   templateUrl: './player.component.html',
-  styleUrls: ['./player.component.scss']
+  styleUrls: ['./player.component.scss'],
+  animations: [
+    ShadeAnimation
+  ]
 })
 export class PlayerComponent implements OnInit {
 
@@ -19,13 +24,20 @@ export class PlayerComponent implements OnInit {
   thumbSrc: string;
   thumbLocation: string;
   scrubWidth: number;
-  isMouseOver: boolean;
+  isMouseOverScrub: boolean;
   thumbnail: HTMLElement;
+  currentState: string;
+  mouseOnControls: boolean;
+  mouseOverPlayer: boolean;
+  timeout: any;
 
   constructor(private readonly episodeService: EpisodesService,
     private elRef: ElementRef) { }
 
   ngOnInit() {
+    this.mouseOverPlayer = false;
+    this.mouseOnControls = false;
+    this.currentState = 'visible';
     this.episodeService.getEpisodeById(this.episodeId).subscribe(result => {
       this.episode = result.body;
       this.thumbLocation = this.episode.thumbnailLocation;
@@ -34,7 +46,7 @@ export class PlayerComponent implements OnInit {
       const player = this.elRef.nativeElement.querySelector("video");
       player.load();
     });
-    this.isMouseOver = false;
+    this.isMouseOverScrub = false;
     this.isSingleClick = true;
   }
 
@@ -47,6 +59,7 @@ export class PlayerComponent implements OnInit {
   }
 
   onVideoClick() {
+    this.controlsVisible();
     this.isSingleClick = true;
     setTimeout(() => {
       if(this.isSingleClick) {
@@ -78,24 +91,58 @@ export class PlayerComponent implements OnInit {
     this.api.fsAPI.toggleFullscreen();
   }
 
-  onMouseOver(event) {
+  onMouseOverScrub(event) {
     this.changeThumbPosition(event.offsetX + 132);
-    this.isMouseOver = true;
+    this.isMouseOverScrub = true;
     this.thumbSrc = this.thumbLocation + '/' + (Math.min((Math.floor((event.offsetX + 2) / (event.target.clientWidth / this.episode.thumbnailsAmount)) + 1), this.episode.thumbnailsAmount)) + '.png';
   }
 
-  onMouseMove(event) {
-    if(this.isMouseOver) {
+  onMouseMoveScrub(event) {
+    if(this.isMouseOverScrub) {
       this.changeThumbPosition(event.offsetX + 132);
       this.thumbSrc = this.thumbLocation + '/' + (Math.min((Math.floor((event.offsetX + 2) / (event.target.clientWidth / this.episode.thumbnailsAmount)) + 1), this.episode.thumbnailsAmount)) + '.png';
     }
   }
 
+  onMouseLeaveScrub() {
+    this.isMouseOverScrub = false;
+  }
+
+  onMouseMove() {
+    this.controlsVisible();
+    if(!this.mouseOnControls) {
+      clearTimeout(this.timeout);
+      this.timeout = setTimeout(() => {
+        this.controlsInvisible();
+      }, 2000);
+    }
+  }
+
+  onMouseEnter() {
+    this.mouseOverPlayer = true;
+    this.controlsVisible();
+  }
+
   onMouseLeave() {
-    this.isMouseOver = false;
+    this.mouseOverPlayer = false;
+    this.controlsInvisible();
   }
 
   changeThumbPosition(x: number) {
     this.thumbnail.style.left = `${x}px`;
+  }
+
+  controlsVisible() {
+    document.body.style.cursor = 'auto';
+    this.currentState = 'visible';
+  }
+
+  controlsInvisible() {
+    if(!this.mouseOnControls) {
+      this.currentState = 'invisible';
+      if(this.mouseOverPlayer) {
+        document.body.style.cursor = 'none';
+      }
+    }
   }
 }

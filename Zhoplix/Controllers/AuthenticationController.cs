@@ -154,6 +154,7 @@ namespace Zhoplix.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> VerifySession(IDictionary<string, string> data)
         {
             if (!data.Keys.Contains("fingerprint"))
