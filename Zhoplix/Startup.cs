@@ -41,6 +41,8 @@ using Zhoplix.Jobs;
 using Quartz;
 using Quartz.Impl;
 using Zhoplix.Quartz;
+using System.Collections.Generic;
+using System.Reflection;
 
 namespace Zhoplix
 {
@@ -50,13 +52,14 @@ namespace Zhoplix
 
         private readonly PasswordConfiguration PasswordConfiguration;
 
-
+        private readonly Dictionary<string, JobConfiguration> Jobs;
 
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
             JwtConfiguration = Configuration.GetSection("Bearer").Get<JwtConfiguration>();
             PasswordConfiguration = Configuration.GetSection("Password").Get<PasswordConfiguration>();
+            Jobs = Configuration.GetSection("Schedules").Get<Dictionary<string, JobConfiguration>>();
         }
 
 
@@ -125,10 +128,16 @@ namespace Zhoplix
             services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
             services.AddSingleton<IJobFactory, JobsFactory>();
             services.AddSingleton<ISchedulerFactory, StdSchedulerFactory>();
-            services.AddSingleton<RemoveExpiredSessions>();
-            services.AddSingleton(new JobSchedule(
-                jobType: typeof(RemoveExpiredSessions),
-                cronExpression: "0/5 * * * * ?"));
+
+            // Jobs
+            services.AddTransient<RemoveExpiredSessions>();
+            foreach (var job in  Jobs)
+            {
+                services.AddSingleton(new JobSchedule(
+                    jobType: Type.GetType($"Zhoplix.Jobs.{job.Key}", false, true),
+                    cronExpression: job.Value.CronExpression));
+
+            }
 
             services.AddTransient<ITitleService, TitleService>();
             services.AddTransient<ISeasonService, SeasonService>();
