@@ -1,6 +1,6 @@
 import { Component, OnInit, NgZone } from '@angular/core';
 import { Observable, BehaviorSubject } from 'rxjs';
-import { Router, NavigationEnd } from '@angular/router';
+import { Router, NavigationEnd, NavigationStart } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import { AuthenticationService } from 'src/app/services/authentication/authentication.service';
 import { ProfileService } from 'src/app/services/profile/profile.service';
@@ -17,11 +17,9 @@ export class NavMenuComponent implements OnInit {
   zhoplixLogoSrcMedium = "Logos/zhoplix_empty_134.png";
   zhoplixLogoSrcSmall = "Logos/zhoplix_empty_108.png";
   isExpanded = false;
-  isBlackBackground: boolean;
-  toShowSignIn$: Observable<boolean>;
-  toShowSignIn: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-  toShowProfileMenu$: Observable<boolean>;
-  toShowProfileMenu: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  toShowSignIn$ = new BehaviorSubject<boolean>(false);
+  toShowProfileMenu$ = new BehaviorSubject<boolean>(false);
+  isBackgroundBlack: boolean;
   avatar: string;
 
   constructor(private readonly router: Router,
@@ -31,50 +29,49 @@ export class NavMenuComponent implements OnInit {
               }
 
   ngOnInit() {
-    this.isBlackBackground = false;
-    if (this.router.url.includes('/profile')) {
-      this.isBlackBackground = true;
-    }
-    this.toShowSignIn$ = this.getToShowSignInValue;
-    this.toShowProfileMenu$ = this.getToShowProfileMenu;
+    this.getBackgroundBlack();
+    this.toShowProfileMenu();
+    this.toShowSignIn();
     this.avatar = this.profile.getProfileImage();
-    const event = this.router.events
+    this.router.events
       .pipe(filter(event => event instanceof NavigationEnd))
       .subscribe(() => {
-        this.toShowSignIn$ = this.getToShowSignInValue;
-        this.toShowProfileMenu$ = this.getToShowProfileMenu;
-        if (this.router.url.includes('/profile')) {
-          this.isBlackBackground = true;
-        } else {
-          this.isBlackBackground = false;
-        }
+        this.getBackgroundBlack();
+        this.ngOnInit();
       });
+    this.auth.avatarChange$.subscribe(() => {
+      this.ngOnInit();
+    })
   }
 
-  get getToShowSignInValue() {
+  toShowSignIn() {
     if(this.auth.isLoggedIn) {
-      this.toShowSignIn.next(false);
+      this.toShowSignIn$.next(false);
     } else {
-      this.toShowSignIn.next(!this.router.url.includes('login'));
+      this.toShowSignIn$.next(!this.router.url.includes('/login'));
     }
-    return this.toShowSignIn.asObservable();
   }
 
-  get getToShowProfileMenu() {
+  toShowProfileMenu() {
     if(!this.auth.isLoggedIn) {
-      this.toShowProfileMenu.next(false);
+      this.toShowProfileMenu$.next(false);
     }
     else {
-      this.toShowProfileMenu.next(true);
+      this.toShowProfileMenu$.next(true);
     }
-    return this.toShowProfileMenu.asObservable();
   }
+
+  getBackgroundBlack() {
+    if(this.router.url.includes('/profile')) {
+      this.isBackgroundBlack = true;
+    }
+    this.isBackgroundBlack = false;
+  }
+
   signOut() {
-      this.auth.signOut(this.auth.fingerPrint);
+      this.auth.signOut();
       this.auth.deleteTokens();
       this.ngZone.run(() => this.router.navigate(['']));
-
-
   }
 
   collapse() {
