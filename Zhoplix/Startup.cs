@@ -43,6 +43,7 @@ using Quartz.Impl;
 using Zhoplix.Quartz;
 using System.Collections.Generic;
 using System.Reflection;
+using Zhoplix.Services.Rating;
 
 namespace Zhoplix
 {
@@ -142,6 +143,7 @@ namespace Zhoplix
             services.AddTransient<ITitleService, TitleService>();
             services.AddTransient<ISeasonService, SeasonService>();
             services.AddTransient<IEpisodeService, EpisodeService>();
+            services.AddTransient<IRatingService, RatingService>();
             services.AddTransient<IFfMpegProvider, FfMpegProvider>();
 
             services.AddScoped<IAuthenticationService, AuthenticationService>();
