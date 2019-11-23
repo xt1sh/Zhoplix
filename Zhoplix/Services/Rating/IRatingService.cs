@@ -4,6 +4,11 @@ namespace Zhoplix.Services.Rating
 {
     public interface IRatingService
     {
-        Task RateTitle(int titleId, bool score);
+        Task<bool> RateTitleAsync(int titleId, bool score);
+        /// <summary>
+        /// Percent of positive scores
+        /// </summary>
+        /// <returns>0-100%</returns>
+        Task<float> GetTitleScoreAsync(int titleId);
     }
 }

@@ -12,13 +12,13 @@ using Zhoplix.ViewModels.Rating;
 
 namespace Zhoplix.Controllers
 {
-    [Route("[controller]")]
+    [Route("[controller]/[action]")]
     [ApiController]
     public class TitleController : ControllerBase
     {
-        private readonly RatingService _ratingService;
+        private readonly IRatingService _ratingService;
 
-        public TitleController(RatingService ratingService)
+        public TitleController(IRatingService ratingService)
         {
             _ratingService = ratingService;
         }
@@ -26,7 +26,15 @@ namespace Zhoplix.Controllers
         [HttpPost]
         public async Task<IActionResult> RateTitle(PostRatingViewModel score)
         {
-            return Ok();
+            var result = await _ratingService.RateTitleAsync(score.TitleId, score.Score);
+            return Ok(result);
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetTitleScore(int id)
+        {
+            var result = await _ratingService.GetTitleScoreAsync(id);
+            return Ok(result);
         }
     }
 }
