@@ -1,4 +1,26 @@
 <div class="home-background"></div>
-<div>
-    <app-player [episodeId]="2"></app-player>
+<div class="card first-card">
+  <div class="card-container">
+    <div class="card-text">
+      <h1 class="card-title">
+        Enjoy on your TV.
+      </h1>
+      <h2 class="card-subtitle">
+        Watch on Smart TVs, Playstation, Xbox, Chromecast, Apple TV, Blu-ray players, and more.
+      </h2>
+      <div class="signup-button-container">
+        <button class="signup-button" (click)="navigateSignUp()">
+          <span class="signup-button-text">
+            TRY 30 DAYS FREE
+          </span>
+          <span class="chevron-right">
+            <svg class="chevron-right-svg" viewBox="0 0 6 12" xmlns="http://www.w3.org/2000/svg">
+              <desc>chevron</desc>
+              <path d="M.61 1.312l.78-.624L5.64 6l-4.25 5.312-.78-.624L4.36 6z" fill="#fff"></path>
+            </svg>
+          </span>
+        </button>
+      </div>
+    </div>
+  </div>
 </div>

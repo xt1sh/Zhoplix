@@ -34,9 +34,8 @@ export class NavMenuComponent implements OnInit {
     this.toShowSignIn();
     this.avatar = this.profile.getProfileImage();
     this.router.events
-      .pipe(filter(event => event instanceof NavigationEnd))
+      .pipe(filter(event => event instanceof (NavigationEnd || NavigationStart)))
       .subscribe(() => {
-        this.getBackgroundBlack();
         this.ngOnInit();
       });
     this.auth.avatarChange$.subscribe(() => {
@@ -65,7 +64,9 @@ export class NavMenuComponent implements OnInit {
     if(this.router.url.includes('/profile')) {
       this.isBackgroundBlack = true;
     }
-    this.isBackgroundBlack = false;
+    else {
+      this.isBackgroundBlack = false;
+    }
   }
 
   signOut() {
