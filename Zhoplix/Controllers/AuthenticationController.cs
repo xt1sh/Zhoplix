@@ -94,7 +94,6 @@ namespace Zhoplix.Controllers
         }
 
         [HttpPost]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<IActionResult> SignOut(IDictionary<string, string> data)
         {
             if (!data.Keys.Contains("fingerprint"))
@@ -114,7 +113,6 @@ namespace Zhoplix.Controllers
         }
 
         [HttpPost]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<IActionResult> SignOutOfAll()
         {
             var result = await _authentication.SignOutOfAllAsync(HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
@@ -160,7 +158,6 @@ namespace Zhoplix.Controllers
         }
 
         [HttpPost]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<IActionResult> VerifySession(IDictionary<string, string> data)
         {
             if (!data.Keys.Contains("fingerprint"))

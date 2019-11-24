@@ -24,7 +24,6 @@ namespace Zhoplix.Controllers
 {
     [Route("[controller]/[action]")]
     [ApiController]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class AdminController : ControllerBase
     {
         private readonly ITitleService _titleService;
