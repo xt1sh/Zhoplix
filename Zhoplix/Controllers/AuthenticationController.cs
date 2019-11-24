@@ -13,12 +13,12 @@ using Zhoplix.Services.AuthenticationService;
 using Microsoft.AspNetCore.Authorization;
 using System.Text.Json;
 using Zhoplix.Services.RecoveryService;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace Zhoplix.Controllers
 {
     [Route("[controller]/[action]")]
     [ApiController]
-    [AllowAnonymous]
     public class AuthenticationController : ControllerBase
     {
         private readonly IAuthenticationService _authentication;
@@ -32,6 +32,7 @@ namespace Zhoplix.Controllers
         }
 
         [HttpPost]
+        [AllowAnonymous]
         public async Task<IActionResult> Registration(RegistrationViewModel model)
         {
             
@@ -50,6 +51,7 @@ namespace Zhoplix.Controllers
         }
 
         [HttpPost]
+        [AllowAnonymous]
         public async Task<IActionResult> Login(LoginViewModel model)
         {
   
@@ -64,6 +66,7 @@ namespace Zhoplix.Controllers
         }
 
         [HttpPost]
+        [AllowAnonymous]
         public async Task<IActionResult> ConfirmEmail(EmailConfirmationViewModel model)
         {
             var response = await _authentication.ConfirmUserAsync(model);
@@ -77,6 +80,7 @@ namespace Zhoplix.Controllers
         }
 
         [HttpPost]
+        [AllowAnonymous]
         public async Task<IActionResult> RefreshTokens(RefreshViewModel model)
         {
             var response = await _authentication.RefreshTokensAsync(model);
@@ -90,7 +94,7 @@ namespace Zhoplix.Controllers
         }
 
         [HttpPost]
-        [Authorize]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<IActionResult> SignOut(IDictionary<string, string> data)
         {
             if (!data.Keys.Contains("fingerprint"))
@@ -110,7 +114,7 @@ namespace Zhoplix.Controllers
         }
 
         [HttpPost]
-        [Authorize]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<IActionResult> SignOutOfAll()
         {
             var result = await _authentication.SignOutOfAllAsync(HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
@@ -124,6 +128,7 @@ namespace Zhoplix.Controllers
         }
 
         [HttpPost]
+        [AllowAnonymous]
         public async Task<IActionResult> ResetPassword(IDictionary<string, string> data)
         {
             if (!data.Keys.Contains("identifier"))
@@ -138,6 +143,7 @@ namespace Zhoplix.Controllers
         }
 
         [HttpPost]
+        [AllowAnonymous]
         public async Task<IActionResult> VerifyPaswordResetCode(ResetCodeViewModel model)
         {
             var user = await _recovery.VerifyPasswordResetCodeAsync(model);
@@ -154,6 +160,7 @@ namespace Zhoplix.Controllers
         }
 
         [HttpPost]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<IActionResult> VerifySession(IDictionary<string, string> data)
         {
             if (!data.Keys.Contains("fingerprint"))

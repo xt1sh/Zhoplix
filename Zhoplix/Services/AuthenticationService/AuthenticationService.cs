@@ -223,6 +223,7 @@ namespace Zhoplix.Services.AuthenticationService
 
             session.RefreshToken = refreshToken;
             session.UpdatedAt = DateTime.Now;
+            session.ExpiresAt = DateTime.Now.AddSeconds(_jwtConfig.RefreshExpirationTime);
             _sessionContext.Update(session);
 
             if (await _context.SaveChangesAsync() > 0)
