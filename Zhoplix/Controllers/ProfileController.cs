@@ -18,7 +18,6 @@ namespace Zhoplix.Controllers
 {
     [Route("[action]")]
     [ApiController]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class ProfileController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
@@ -59,6 +58,7 @@ namespace Zhoplix.Controllers
         }
 
         [HttpPost]
+        [AllowAnonymous]
         public async Task<IActionResult> ChangePasswordWithToken(TokenResetViewModel model)
         {
             var result = await _recovery.ChangePasswordWithToken(model);
