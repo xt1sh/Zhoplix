@@ -1,16 +1,20 @@
-import { Component, OnInit, NgZone } from '@angular/core';
+import { Component, OnInit, NgZone, HostListener } from '@angular/core';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { Router, NavigationEnd, NavigationStart } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import { AuthenticationService } from 'src/app/services/authentication/authentication.service';
 import { ProfileService } from 'src/app/services/profile/profile.service';
+import { NavbarAnimation } from 'src/app/animations/navbar-animation';
 
 const routes: string[] = [];
 
 @Component({
   selector: "app-nav-menu",
   templateUrl: "./nav-menu.component.html",
-  styleUrls: ["./nav-menu.component.scss"]
+  styleUrls: ["./nav-menu.component.scss"],
+  animations: [
+    NavbarAnimation
+  ]
 })
 export class NavMenuComponent implements OnInit {
   zhoplixLogoSrcLarge = "Logos/zhoplix_empty_167.png";
@@ -21,6 +25,7 @@ export class NavMenuComponent implements OnInit {
   toShowProfileMenu$ = new BehaviorSubject<boolean>(false);
   isBackgroundBlack: boolean;
   avatar: string;
+  animationState: string;
 
   constructor(private readonly router: Router,
               private readonly auth: AuthenticationService,
@@ -29,6 +34,7 @@ export class NavMenuComponent implements OnInit {
               }
 
   ngOnInit() {
+    this.animationState = 'transparent';
     this.getBackgroundBlack();
     this.toShowProfileMenu();
     this.toShowSignIn();
@@ -41,6 +47,15 @@ export class NavMenuComponent implements OnInit {
     this.auth.avatarChange$.subscribe(() => {
       this.ngOnInit();
     })
+  }
+
+  @HostListener('window:scroll', ['$event']) // for window scroll events
+  onScroll(event) {
+    if(window.scrollY) {
+      this.animationState = 'black';
+    } else {
+      this.animationState = 'transparent';
+    }
   }
 
   toShowSignIn() {
