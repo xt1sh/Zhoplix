@@ -6,7 +6,8 @@
         Enjoy on your TV.
       </h1>
       <h2 class="card-subtitle">
-        Watch on Smart TVs, Playstation, Xbox, Chromecast, Apple TV, Blu-ray players, and more.
+        Watch on Smart TVs, Playstation, Xbox, Chromecast, Apple TV, Blu-ray
+        players, and more.
       </h2>
       <div class="signup-button-container">
         <button class="signup-button" (click)="navigateSignUp()">
@@ -14,12 +15,121 @@
             TRY 30 DAYS FREE
           </span>
           <span class="chevron-right">
-            <svg class="chevron-right-svg" viewBox="0 0 6 12" xmlns="http://www.w3.org/2000/svg">
+            <svg
+              class="chevron-right-svg"
+              viewBox="0 0 6 12"
+              xmlns="http://www.w3.org/2000/svg"
+            >
               <desc>chevron</desc>
-              <path d="M.61 1.312l.78-.624L5.64 6l-4.25 5.312-.78-.624L4.36 6z" fill="#fff"></path>
+              <path
+                d="M.61 1.312l.78-.624L5.64 6l-4.25 5.312-.78-.624L4.36 6z"
+                fill="#fff"
+              ></path>
             </svg>
           </span>
         </button>
+      </div>
+    </div>
+    <div class="card-image-container">
+      <div class="card-animation-container">
+        <img class="card-image" [src]="tvSrc" />
+        <div class="card-animation">
+          <video id="video" class="card-video" autoplay loop>
+            <source [src]="tvVideo" type="video/mp4" />
+          </video>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="card">
+  <div class="card-container card-reverse">
+    <div class="card-text card-text-reverse">
+      <h1 class="card-title">
+        Download your shows to watch on the go.
+      </h1>
+      <h2 class="card-subtitle">
+        Save your data and watch all your favorites offline.
+      </h2>
+      <div class="signup-button-container">
+        <button class="signup-button" (click)="navigateSignUp()">
+          <span class="signup-button-text">
+            TRY 30 DAYS FREE
+          </span>
+          <span class="chevron-right">
+            <svg
+              class="chevron-right-svg"
+              viewBox="0 0 6 12"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <desc>chevron</desc>
+              <path
+                d="M.61 1.312l.78-.624L5.64 6l-4.25 5.312-.78-.624L4.36 6z"
+                fill="#fff"
+              ></path>
+            </svg>
+          </span>
+        </button>
+      </div>
+    </div>
+    <div class="card-image-container card-image-container-reverse">
+      <div class="card-animation-container">
+        <img class="card-image mobile-image" [src]="mobileSrc" />
+        <div class="card-animation-snack">
+          <div class="card-image">
+            <img class="mobile2-image" [src]="mobile2Src" />
+          </div>
+          <div class="card-animation-text">
+            <div class="text-0">Kimetsu no Yaiba</div>
+            <div class="text-1">Downloading...</div>
+          </div>
+          <div class="donwload-image">
+            <img id="download-icon" [src]="downloadSrc" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="card first-card">
+  <div class="card-container">
+    <div class="card-text">
+      <h1 class="card-title">
+        Watch everywhere.
+      </h1>
+      <h2 class="card-subtitle">
+        Stream unlimited movies and TV shows on your phone, tablet, laptop, and
+        TV without paying more.
+      </h2>
+      <div class="signup-button-container">
+        <button class="signup-button" (click)="navigateSignUp()">
+          <span class="signup-button-text">
+            TRY 30 DAYS FREE
+          </span>
+          <span class="chevron-right">
+            <svg
+              class="chevron-right-svg"
+              viewBox="0 0 6 12"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <desc>chevron</desc>
+              <path
+                d="M.61 1.312l.78-.624L5.64 6l-4.25 5.312-.78-.624L4.36 6z"
+                fill="#fff"
+              ></path>
+            </svg>
+          </span>
+        </button>
+      </div>
+    </div>
+    <div class="card-image-container">
+      <div class="card-animation-container">
+        <img class="card-image" [src]="devicesSrc" />
+        <div class="card-animation video2">
+          <video id="video2" class="card-video" autoplay loop>
+            <source [src]="devicesVideo" type="video/mp4" />
+          </video>
+        </div>
       </div>
     </div>
   </div>
