@@ -96,15 +96,17 @@ namespace Zhoplix
 
             });
 
+            
             services.AddAuthentication(x =>
-                {
+            {
                     x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                     x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-                })
-                .AddJwtBearer(x =>
-                {
+                    x.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(x =>
+            {
                     x.RequireHttpsMetadata = false;
-                    x.SaveToken = true;
+                    x.SaveToken = false;
                     x.TokenValidationParameters = new TokenValidationParameters
                     {
                         ValidateIssuerSigningKey = true,
@@ -114,7 +116,17 @@ namespace Zhoplix
                         ValidIssuer = JwtConfiguration.ValidateIssuer ? JwtConfiguration.Issuer : null,
                         ValidAudience = JwtConfiguration.ValidateAudience ? JwtConfiguration.Audience : null
                     };
-                });
+            });
+
+            services.AddAuthorization(options =>
+            {
+                var defaultAuthorizationPolicyBuilder = new AuthorizationPolicyBuilder(
+                    JwtBearerDefaults.AuthenticationScheme,
+                    "Bearer");
+                defaultAuthorizationPolicyBuilder =
+                    defaultAuthorizationPolicyBuilder.RequireAuthenticatedUser();
+                options.DefaultPolicy = defaultAuthorizationPolicyBuilder.Build();
+            });
 
             services.AddSwaggerGen(c =>
             {
@@ -201,7 +213,6 @@ namespace Zhoplix
             {
                 app.UseSpaStaticFiles();
             }
-
 
             app.UseSwagger();
             app.UseSwaggerUI(c =>
