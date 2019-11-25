@@ -91,7 +91,7 @@
     </div>
   </div>
 </div>
-<div class="card first-card">
+<div class="card">
   <div class="card-container">
     <div class="card-text">
       <h1 class="card-title">
@@ -131,6 +131,269 @@
           </video>
         </div>
       </div>
+    </div>
+  </div>
+</div>
+<div class="card faq-card">
+  <div class="card-text faq-card-text">
+    <h1 class="card-title">
+      Frequently Asked Questions
+    </h1>
+    <ul class="faq-list">
+      <li class="faq-list-item">
+        <button (click)="toggle(0)" class="faq-question">
+          What is Zhoplix?
+          <svg
+            [ngClass]="{
+              'svg-closed': closedStates[0],
+              'svg-open': !closedStates[0]
+            }"
+            class="svg-icon"
+          >
+            <path
+              d="M10.5 9.3L1.8 0.5 0.5 1.8 9.3 10.5 0.5 19.3 1.8 20.5 10.5 11.8 19.3 20.5 20.5 19.3 11.8 10.5 20.5 1.8 19.3 0.5 10.5 9.3Z"
+            ></path>
+          </svg>
+        </button>
+        <div
+          [ngClass]="{ closed: closedStates[0], open: !closedStates[0] }"
+          class="faq-answer"
+        >
+          <span class="faq-answer-text">
+            Zhoplix is a streaming service that offers a wide variety of
+            award-winning TV shows, movies, anime, documentaries, and more on
+            thousands of internet-connected devices.
+            <br /><br />
+            You can watch as much as you want, whenever you want without a
+            single commercial – all for one low monthly price. There's always
+            something new to discover and new TV shows and movies are added
+            every week!
+          </span>
+        </div>
+      </li>
+      <li class="faq-list-item">
+        <button (click)="toggle(1)" class="faq-question">
+          How much does Zhoplix cost?
+          <svg
+            [ngClass]="{
+              'svg-closed': closedStates[1],
+              'svg-open': !closedStates[1]
+            }"
+            class="svg-icon"
+          >
+            <path
+              d="M10.5 9.3L1.8 0.5 0.5 1.8 9.3 10.5 0.5 19.3 1.8 20.5 10.5 11.8 19.3 20.5 20.5 19.3 11.8 10.5 20.5 1.8 19.3 0.5 10.5 9.3Z"
+            ></path>
+          </svg>
+        </button>
+        <div
+          [ngClass]="{ closed: closedStates[1], open: !closedStates[1] }"
+          class="faq-answer"
+        >
+          <span class="faq-answer-text">
+            Watch Zhoplix on your smartphone, tablet, Smart TV, laptop, or
+            streaming device, all for one low fixed monthly fee. Plans start
+            from bottle of beer a month. No extra costs or contracts.
+          </span>
+        </div>
+      </li>
+      <li class="faq-list-item">
+        <button (click)="toggle(2)" class="faq-question">
+          Where can I watch?
+          <svg
+            [ngClass]="{
+              'svg-closed': closedStates[2],
+              'svg-open': !closedStates[2]
+            }"
+            class="svg-icon"
+          >
+            <path
+              d="M10.5 9.3L1.8 0.5 0.5 1.8 9.3 10.5 0.5 19.3 1.8 20.5 10.5 11.8 19.3 20.5 20.5 19.3 11.8 10.5 20.5 1.8 19.3 0.5 10.5 9.3Z"
+            ></path>
+          </svg>
+        </button>
+        <div
+          [ngClass]="{ closed: closedStates[2], open: !closedStates[2] }"
+          class="faq-answer"
+        >
+          <span class="faq-answer-text">
+            Watch anywhere, anytime, on an unlimited number of devices. Sign in
+            with your Netflix account to watch instantly on the web at
+            netflix.com from your personal computer or on any internet-connected
+            device that offers the Netflix app, including smart TVs,
+            smartphones, tablets, streaming media players and game consoles.<br /><br />You
+            can also download your favorite shows with the iOS, Android, or
+            Windows 10 app. Use downloads to watch while you're on the go and
+            without an internet connection. Take Netflix with you anywhere.
+          </span>
+        </div>
+      </li>
+      <li class="faq-list-item">
+        <button (click)="toggle(3)" class="faq-question">
+          How do I cancel?
+          <svg
+            [ngClass]="{
+              'svg-closed': closedStates[3],
+              'svg-open': !closedStates[3]
+            }"
+            class="svg-icon"
+          >
+            <path
+              d="M10.5 9.3L1.8 0.5 0.5 1.8 9.3 10.5 0.5 19.3 1.8 20.5 10.5 11.8 19.3 20.5 20.5 19.3 11.8 10.5 20.5 1.8 19.3 0.5 10.5 9.3Z"
+            ></path>
+          </svg>
+        </button>
+        <div
+          [ngClass]="{ closed: closedStates[3], open: !closedStates[3] }"
+          class="faq-answer"
+        >
+          <span class="faq-answer-text">
+            Netflix is flexible. There are no pesky contracts and no
+            commitments. You can easily cancel your account online in two
+            clicks. There are no cancellation fees – start or stop your account
+            anytime.
+          </span>
+        </div>
+      </li>
+      <li class="faq-list-item">
+        <button (click)="toggle(4)" class="faq-question">
+          What can I watch on Zhoplix?
+          <svg
+            [ngClass]="{
+              'svg-closed': closedStates[4],
+              'svg-open': !closedStates[4]
+            }"
+            class="svg-icon"
+          >
+            <path
+              d="M10.5 9.3L1.8 0.5 0.5 1.8 9.3 10.5 0.5 19.3 1.8 20.5 10.5 11.8 19.3 20.5 20.5 19.3 11.8 10.5 20.5 1.8 19.3 0.5 10.5 9.3Z"
+            ></path>
+          </svg>
+        </button>
+        <div
+          [ngClass]="{ closed: closedStates[4], open: !closedStates[4] }"
+          class="faq-answer"
+        >
+          <span class="faq-answer-text">
+            Netflix has an extensive library of feature films, documentaries, TV
+            shows, anime, award-winning Netflix originals, and more. Watch as
+            much as you want, anytime you want. Join free for 30 days to see
+            everything Netflix has to offer.
+          </span>
+        </div>
+      </li>
+      <li class="faq-list-item">
+        <button (click)="toggle(5)" class="faq-question">
+          How does the free trial work?
+          <svg
+            [ngClass]="{
+              'svg-closed': closedStates[5],
+              'svg-open': !closedStates[5]
+            }"
+            class="svg-icon"
+          >
+            <path
+              d="M10.5 9.3L1.8 0.5 0.5 1.8 9.3 10.5 0.5 19.3 1.8 20.5 10.5 11.8 19.3 20.5 20.5 19.3 11.8 10.5 20.5 1.8 19.3 0.5 10.5 9.3Z"
+            ></path>
+          </svg>
+        </button>
+        <div
+          [ngClass]="{ closed: closedStates[5], open: !closedStates[5] }"
+          class="faq-answer"
+        >
+          <span class="faq-answer-text">
+            Try us free for 30 days! If you enjoy your Netflix trial, do nothing
+            and your membership will automatically continue for as long as you
+            choose to remain a member. Cancel anytime before your trial ends and
+            you won’t be charged. There’s no complicated contract, no
+            cancellation fees, and no commitment. Cancel online anytime, 24
+            hours a day.
+          </span>
+        </div>
+      </li>
+    </ul>
+    <div class="signup-button-container">
+      <button
+        class="signup-button signup-button-red"
+        (click)="navigateSignUp()"
+      >
+        <span class="signup-button-text signup-button-text-red">
+          TRY 30 DAYS FREE
+        </span>
+        <span class="chevron-right">
+          <svg
+            class="chevron-right-svg chevron-right-red"
+            viewBox="0 0 6 12"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <desc>chevron</desc>
+            <path
+              d="M.61 1.312l.78-.624L5.64 6l-4.25 5.312-.78-.624L4.36 6z"
+              fill="#fff"
+            ></path>
+          </svg>
+        </span>
+      </button>
+    </div>
+  </div>
+</div>
+<div class="footer">
+  <div class="footer-wrapper">
+    <div class="footer-text">
+      <div>
+      <p class="footer-top">
+        <a>Questions? Contact us.</a>
+      </p>
+    </div>
+    <div>
+      <ul class="footer-links">
+        <li class="footer-link">
+          <a>FAQ</a>
+        </li>
+        <li class="footer-link">
+          <a>Help Center</a>
+        </li>
+        <li class="footer-link">
+          <a>Account</a>
+        </li>
+        <li class="footer-link">
+          <a>Media Center</a>
+        </li>
+        <li class="footer-link">
+          <a>Investor Relations</a>
+        </li>
+        <li class="footer-link">
+          <a>Jobs</a>
+        </li>
+        <li class="footer-link">
+          <a>Ways to Watch</a>
+        </li>
+        <li class="footer-link">
+          <a>Terms of Use</a>
+        </li>
+        <li class="footer-link">
+          <a>Privacy</a>
+        </li>
+        <li class="footer-link">
+          <a>Coockie Preferences</a>
+        </li>
+        <li class="footer-link">
+          <a>Corporate Information</a>
+        </li>
+        <li class="footer-link">
+          <a>Contact Us</a>
+        </li>
+        <li class="footer-link">
+          <a href="https://fast.com">Speed Test</a>
+        </li>
+        <li class="footer-link">
+          <a>Legal Notices</a>
+        </li>
+        <li class="footer-link">
+          <a>Netflix Originals</a>
+        </li>
+      </ul>
+    </div>
     </div>
   </div>
 </div>

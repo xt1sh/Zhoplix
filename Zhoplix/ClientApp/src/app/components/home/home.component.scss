@@ -6,6 +6,10 @@ div {
   display: block;
 }
 
+a {
+  color: #a6a6a6;
+}
+
 .home-background {
     background-size: cover;
     overflow: hidden;
@@ -23,6 +27,11 @@ div {
   margin-bottom: 0;
   background: transparent;
   color: white;
+}
+
+.faq-card {
+  text-align: center;
+  padding: 70px 45px;
 }
 
 .first-card {
@@ -57,10 +66,6 @@ div {
   line-height: 1.1;
   margin-bottom: 0.5rem;
   margin: 0 0 .4rem;
-  margin-block-start: 0.67em;
-  margin-block-end: 0.67em;
-  margin-inline-start: 0px;
-  margin-inline-end: 0px;
   font-weight: bold;
 }
 
@@ -105,10 +110,21 @@ div {
   font: inherit;
 }
 
+.signup-button-red {
+  background-color: #e50914;
+  border: none;
+  font-size: 1.625rem;
+  min-height: 60px;
+}
+
 .signup-button-text {
   display: inline-block;
   font-size: 1.25rem;
   color: #fff;
+}
+
+.signup-button-text-red {
+  font-size: 1.625rem;
 }
 
 .chevron-right-svg {
@@ -118,6 +134,11 @@ div {
   width: 1rem;
   height: 1.2rem;
   overflow: hidden;
+}
+
+.chevron-right-red {
+  height: 1.4rem;
+  vertical-align: -2px;
 }
 
 .card-image-container {
@@ -212,9 +233,140 @@ div {
   z-index: 5;
 }
 
+.faq-card-text {
+  padding: 70px 45px;
+  width: 100%;
+}
+
+.faq-list {
+  width: 75%;
+  margin: 2em auto;
+  max-width: 815px;
+  display: block;
+  list-style-type: disc;
+  margin-block-start: 1em;
+  margin-block-end: 1em;
+  padding: 0;
+}
+
+.faq-list-item {
+  list-style-type: none;
+  margin-bottom: 8px;
+  display: list-item;
+  text-align: center;
+}
+
+.faq-question {
+  margin-bottom: 1px;
+  padding: 0.8em 2.2em 0.8em 1.2em;
+  font-weight: 400;
+  position: relative;
+  width: 100%;
+  display: block;
+  text-align: left;
+  color: #fff;
+  background: #303030;
+  overflow: visible;
+  border: none;
+  font-size: 1.625rem;
+  outline: none;
+}
+
+.faq-answer {
+  display: block;
+  text-align: left;
+  background: #303030;
+  overflow: hidden;
+}
+
+.faq-answer.closed {
+  max-height: 0;
+  transition: max-height 0.25s cubic-bezier(0.5, 0, 0.1, 1);
+}
+
+.faq-answer.open {
+  max-height: 700px;
+  transition: max-height 0.4s cubic-bezier(0.5, 0, 0.1, 1);
+}
+
+.faq-answer-text {
+  display: inline-block;
+  padding: 1.2em;
+  font-size: 1.265rem;
+}
+
+.svg-icon {
+  overflow: hidden;
+  color: #fff;
+  position: absolute;
+  right: 1em;
+  top: 50%;
+  height: 1em;
+  width: 1em;
+  fill: #fff;
+  transform: translateY(-50%);
+}
+
+.svg-closed {
+  transform: translateY(-50%) rotate(-45deg);
+  transition: transform 0.25s;
+}
+
+.svg-open {
+  transition: transform 0.4s;
+}
+
 .mobile2-image {
   height: 70px;
   margin-right: 10px;
+}
+
+.footer {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  padding: 70px 45px 0 45px;
+}
+
+.footer-wrapper {
+  min-width: 190px;
+  width: 100%;
+  max-width: 1000px;
+  float: left;
+  padding-bottom: 20px;
+  font-size: 1em;
+  color: #a6a6a6;
+  position: relative;
+  display: block;
+}
+
+.footer-text {
+  overflow: auto;
+  margin: 0 50px;
+  width: 90%;
+  display: block;
+}
+
+.footer-top {
+  margin-bottom: 30px;
+}
+
+.footer-links {
+  float: left;
+  max-width: 1000px;
+  font-size: 13px;
+  display: block;
+  padding: 0;
+}
+
+.footer-link {
+  list-style: none;
+  box-sizing: border-box;
+  margin-bottom: 16px;
+  display: inline-block;
+  width: 25%;
+  padding-right: 12px;
+  vertical-align: top;
 }
 
 #download-icon {

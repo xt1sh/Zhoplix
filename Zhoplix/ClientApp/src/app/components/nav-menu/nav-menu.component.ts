@@ -34,7 +34,7 @@ export class NavMenuComponent implements OnInit {
               }
 
   ngOnInit() {
-    this.animationState = 'transparent';
+    this.animationState = window.scrollY ? 'black' : 'transparent';
     this.getBackgroundBlack();
     this.toShowProfileMenu();
     this.toShowSignIn();
