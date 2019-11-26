@@ -96,15 +96,17 @@ namespace Zhoplix
 
             });
 
+            
             services.AddAuthentication(x =>
-                {
+            {
                     x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                     x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-                })
-                .AddJwtBearer(x =>
-                {
+                    x.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(x =>
+            {
                     x.RequireHttpsMetadata = false;
-                    x.SaveToken = true;
+                    x.SaveToken = false;
                     x.TokenValidationParameters = new TokenValidationParameters
                     {
                         ValidateIssuerSigningKey = true,
@@ -112,9 +114,12 @@ namespace Zhoplix
                         ValidateIssuer = JwtConfiguration.ValidateIssuer,
                         ValidateAudience = JwtConfiguration.ValidateAudience,
                         ValidIssuer = JwtConfiguration.ValidateIssuer ? JwtConfiguration.Issuer : null,
-                        ValidAudience = JwtConfiguration.ValidateAudience ? JwtConfiguration.Audience : null
+                        ValidAudience = JwtConfiguration.ValidateAudience ? JwtConfiguration.Audience : null,
+                        ValidateLifetime = JwtConfiguration.ValidateLifetime
                     };
-                });
+            });
+
+
 
             services.AddSwaggerGen(c =>
             {
@@ -167,7 +172,7 @@ namespace Zhoplix
 
             services.AddControllersWithViews(conf =>
             {
-                var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
+                var policy = new AuthorizationPolicyBuilder(JwtBearerDefaults.AuthenticationScheme).RequireAuthenticatedUser().Build();
                 conf.Filters.Add(new AuthorizeFilter(policy));
             });
 
@@ -201,7 +206,6 @@ namespace Zhoplix
             {
                 app.UseSpaStaticFiles();
             }
-
 
             app.UseSwagger();
             app.UseSwaggerUI(c =>

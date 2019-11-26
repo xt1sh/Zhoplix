@@ -21,6 +21,7 @@ namespace Zhoplix.Configurations
 
         public double RefreshExpirationTime { get; set; }
 
+        public bool ValidateLifetime { get; set; }
 
 
     }
