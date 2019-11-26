@@ -23,6 +23,11 @@ export class LoginComponent implements OnInit {
   loginSpinner: boolean;
   incorrect: boolean;
   imgSrc = 'background/background.jpg';
+
+  footerConfig = {
+    'Gift Card Terms': true, 'Terms of Use': true, 'Privacy Statement': true
+  }
+
   constructor(private formBuilder: FormBuilder,
      private auth: AuthenticationService,
      private router: Router,
