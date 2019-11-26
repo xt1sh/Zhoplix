@@ -41,6 +41,7 @@ import { ProfileSettingsComponent } from './components/user-profile/profile-sett
 import { EpisodeComponent } from './components/admin/create/episode/episode.component';
 import { LoginHelpComponent } from './components/authentication/login-help/login-help.component';
 import { ResetPasswordComponent } from './components/user-profile/reset-password/reset-password.component';
+import { FooterComponent } from './components/footer/footer.component';
 
 @NgModule({
   declarations: [
@@ -61,7 +62,8 @@ import { ResetPasswordComponent } from './components/user-profile/reset-password
     ProfileSettingsComponent,
     LoginHelpComponent,
     ResetPasswordComponent,
-    ArrayFilterPipe
+    ArrayFilterPipe,
+    FooterComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),

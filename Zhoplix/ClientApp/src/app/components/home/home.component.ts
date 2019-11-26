@@ -19,6 +19,10 @@ export class HomeComponent implements OnInit {
 
   closedStates: Array<boolean>;
 
+  footerConfig = {
+    'FAQ': true, 'Help Center': true, 'Account': true, 'Media Center': true, 'Investor Relations': true, 'Jobs': true, 'Ways to Watch': true, 'Terms of Use': true, 'Privacy': true, 'Cookie Preferences': true, 'Corporate Information': true, 'Contact Us': true, 'Speed Test': true, 'Legal Notices': true, 'Zhoplix Originals': true
+  }
+
   constructor(private readonly router: Router) {}
 
   ngOnInit() {
