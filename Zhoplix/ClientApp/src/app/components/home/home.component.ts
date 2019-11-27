@@ -20,10 +20,24 @@ export class HomeComponent implements OnInit {
   closedStates: Array<boolean>;
 
   footerConfig = {
-    'FAQ': true, 'Help Center': true, 'Account': true, 'Media Center': true, 'Investor Relations': true, 'Jobs': true, 'Ways to Watch': true, 'Terms of Use': true, 'Privacy': true, 'Cookie Preferences': true, 'Corporate Information': true, 'Contact Us': true, 'Speed Test': true, 'Legal Notices': true, 'Zhoplix Originals': true
+    'FAQ': true,
+    'Help Center': true,
+    'Account': true,
+    'Media Center': true,
+    'Investor Relations': true,
+    'Jobs': true,
+    'Ways to Watch': true,
+    'Terms of Use': true,
+    'Privacy': true,
+    'Cookie Preferences': true,
+    'Corporate Information': true,
+    'Contact Us': true,
+    'Speed Test': true,
+    'Legal Notices': true,
+    'Zhoplix Originals': true
   }
 
-  constructor(private readonly router: Router) {}
+  constructor(private readonly router: Router) { }
 
   ngOnInit() {
     let video = document.getElementById('video') as HTMLVideoElement;
@@ -31,7 +45,7 @@ export class HomeComponent implements OnInit {
     video = document.getElementById('video2') as HTMLVideoElement;
     video.muted = true;
     this.closedStates = new Array<boolean>();
-    for(let i = 0; i < 6; i++) {
+    for (let i = 0; i < 6; i++) {
       this.closedStates.push(false);
     }
     this.closeAll();
@@ -42,7 +56,7 @@ export class HomeComponent implements OnInit {
   }
 
   toggle(id) {
-    if(this.closedStates[+id]) {
+    if (this.closedStates[+id]) {
       this.closeAllExcept(+id);
     } else {
       this.closeAll();
