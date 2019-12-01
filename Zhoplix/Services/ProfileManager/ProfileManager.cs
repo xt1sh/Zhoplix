@@ -38,7 +38,6 @@ namespace Zhoplix.Services.ProfileManager
                 return profile;
 
             return null;
-
         }
 
         public async Task<Profile> GetProfileByIdAsync(int userId) =>

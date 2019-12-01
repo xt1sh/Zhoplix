@@ -35,7 +35,7 @@ namespace Zhoplix.Controllers
         public async Task<IActionResult> GetTitleById(int id)
         {
             var episode = await _episodeService.GetEpisodeAsync(id);
-            var videos = await _context.Video.Where<Video>(x => x.EpisodeId == episode.Id).ToListAsync();
+            var videos = await _context.Videos.Where<Video>(x => x.EpisodeId == episode.Id).ToListAsync();
             episode.Videos = videos;
             if (episode == null)
                 return BadRequest();

@@ -15,7 +15,8 @@ namespace Zhoplix
         public DbSet<Rating> Ratings { get; set; }
         public DbSet<Profile> Profiles { get; set; }
         public DbSet<Session> Sessions { get; set; }
-        public DbSet<Video> Video { get; set; }
+        public DbSet<Video> Videos { get; set; }
+        public DbSet<Movie> Movies { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
@@ -49,6 +50,9 @@ namespace Zhoplix
             builder.Entity<Genre>()
                 .HasIndex(x => x.Name)
                 .IsUnique();
+
+            builder.Entity<Movie>()
+                .HasKey(x => x.TitleId);
         }
     }
 }
