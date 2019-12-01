@@ -4,17 +4,17 @@
     min-height: 100%;
     background-color: rgba(0, 0, 0, 0.5);
   }
-  
+
    .login-background {
     background-size: cover;
     overflow: hidden;
-    position: absolute;
+    position: fixed;
     width: 100%;
     height: 100%;
     display: block;
     background-color: #141414;
   }
-  
+
   .login-background img {
     object-fit:cover;
     position: absolute;
@@ -23,121 +23,127 @@
   }
 
 .login-body {
-    display: flex;
-    justify-content: center;
-    margin-top: 95px;
+  display: flex;
+  justify-content: center;
+  margin-top: 95px;
 }
 
 .login-spinner-field {
-    min-width: 450px;
-    min-height: 660px;
-    flex-basis: 450px;
-    background-color: rgba(0, 0, 0, 0.75);
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: flex-start;
-    padding: 60px 68px 40px;
-    position: fixed;
+  min-width: 450px;
+  min-height: 660px;
+  flex-basis: 450px;
+  background-color: rgba(0, 0, 0, 0.75);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  padding: 60px 68px 40px;
+  position: fixed;
 }
 
 .login-spinner {
-    margin: 0 auto;
-    margin-top: 200px;
+  margin: 0 auto;
+  margin-top: 200px;
 }
 
 .incorrect {
-    text-align: center;
-    font-size: 16px;
-    padding-bottom: 16px;
+  text-align: center;
+  font-size: 16px;
+  padding-bottom: 16px;
 }
 
 .login-body-container {
-    min-height: 660px;
-    flex-basis: 450px;
-    background-color: rgba(0, 0, 0, 0.75);
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: flex-start;
-    padding: 60px 68px 40px;
-    position: relative;
+  min-height: 660px;
+  flex-basis: 450px;
+  background-color: rgba(0, 0, 0, 0.75);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  padding: 60px 68px 40px;
+  position: relative;
 }
 
 .login-form-body {
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
 }
 
 h1 {
-    font-weight: bold;
-    font-size: 32px;
-    color: white;
-    position: relative;
-    margin-bottom: 28px;
+  font-weight: bold;
+  font-size: 32px;
+  color: white;
+  position: relative;
+  margin-bottom: 28px;
 }
 
 .login-body-container .mat-form-field {
-    width: 100%;
-    padding-bottom: 25px;
+  width: 100%;
+  padding-bottom: 25px;
 }
 
 .mat-card-actions {
-    padding: 0px 8px 0px;
+  padding: 0px 8px 0px;
 }
 
 .mat-card-footer {
-    padding: 0px 16px 0px;
-    color: white;
+  padding: 0px 16px 0px;
+  color: white;
 }
 
 .login-button {
-    width: 100%;
-    background: #E50914;
-    font-size: 16px;
-    font-weight: bold;
-    height: 48px;
+  width: 100%;
+  background: #e50914;
+  font-size: 16px;
+  font-weight: bold;
+  height: 48px;
 }
 
-
 .login-footer {
-    display: flex;
-    justify-content: space-between;
+  display: flex;
+  justify-content: space-between;
 }
 
 .need-help {
-    font-size:15px;
-    color: white;
+  font-size: 15px;
+  color: white;
 }
 
 .need-help:hover {
-    text-decoration: underline;
+  text-decoration: underline;
 }
 
-
 .opportunities-footer {
-    display:flex;
-    height: 100%;
-    flex-direction: column;
-    justify-content: flex-end;
-    align-items: flex-start;
-    color: #737373;
-    font-size: 16px;
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: flex-start;
+  color: #737373;
+  font-size: 16px;
 }
 
 .sign-up {
-    display: flex;
+  display: flex;
 }
 
 .sign-up-link {
-    margin-left: 6px;
-    color: white;
+  margin-left: 6px;
+  color: white;
 }
 
 .sign-up-link:hover {
-    text-decoration: underline;
-} 
+  text-decoration: underline;
+}
 
-::ng-deep .mat-checkbox-checked.mat-accent .mat-checkbox-background, .mat-checkbox-indeterminate.mat-accent .mat-checkbox-background {
-    background-color: white;
-  }
+::ng-deep .mat-checkbox-checked.mat-accent .mat-checkbox-background,
+.mat-checkbox-indeterminate.mat-accent .mat-checkbox-background {
+  background-color: white;
+}
+
+.footer {
+  margin-top: 100px;
+  position: absolute;
+  width: 100%;
+  background-image: linear-gradient(0deg, rgba(0,0,0,1) 55%, rgba(255,255,255,0) 100%);
+}

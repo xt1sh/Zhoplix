@@ -21,13 +21,14 @@ export class ConfirmEmailComponent implements OnInit {
               });
 }
 
-  ngOnInit() {
-    this.auth.createFingerprint().subscribe(value => {
-      this.auth.confirmEmail(this.userId, this.token, value)
-        .subscribe(res => {
-          this.auth.setTokens(res.body as Tokens);
-        });
-      this.router.navigate(['']);
-    })
+  async ngOnInit() {
+    if (!this.auth.fingerPrint) {
+      await this.auth.createFingerprint();
+    }
+    this.auth.confirmEmail(this.userId, this.token)
+      .subscribe(res => {
+        this.auth.setTokens(res.body as Tokens);
+      });
+    this.router.navigate(['']);
   }
 }

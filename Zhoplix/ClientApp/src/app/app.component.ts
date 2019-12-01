@@ -1,4 +1,4 @@
-import { Component, OnChanges, OnInit } from '@angular/core';
+import { Component, OnChanges, OnInit, NgZone } from '@angular/core';
 import { Router, NavigationStart, NavigationEnd } from '@angular/router';
 import { AuthenticationService } from './services/authentication/authentication.service';
 
@@ -10,11 +10,17 @@ export class AppComponent implements OnInit {
 
   title = 'app';
   constructor(private readonly router: Router,
-              private readonly auth: AuthenticationService) {
-                this.auth.createFingerprint().subscribe(value => this.auth.fingerPrint = value);
-              }
+              private readonly auth: AuthenticationService,
+              private readonly ngZone: NgZone) {}
 
-  ngOnInit() {
+  async ngOnInit() {
+    await this.auth.createFingerprint();
+    if (this.auth.isLoggedIn) {
+      this.auth.verifySession().subscribe(res => {
+      }, () => {
+        this.auth.deleteTokens();
+        this.ngZone.run(() => this.router.navigate(['']));
+      });
+    }
   }
-
 }

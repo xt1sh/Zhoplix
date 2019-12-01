@@ -31,7 +31,6 @@ export class PlayerComponent implements OnInit {
       this.thumbLocation = this.episode.thumbnailLocation;
       this.currentVideoSrc = this.episode.videos[0].location;
       this.api.play();
-      console.log(result)
       const player = this.elRef.nativeElement.querySelector("video");
       player.load();
     });
@@ -82,13 +81,13 @@ export class PlayerComponent implements OnInit {
   onMouseOver(event) {
     this.changeThumbPosition(event.offsetX + 132);
     this.isMouseOver = true;
-    this.thumbSrc = this.thumbLocation + '/' + (Math.floor((event.offsetX + 2) / (event.target.clientWidth / 126)) + 1) + '.png';
+    this.thumbSrc = this.thumbLocation + '/' + (Math.min((Math.floor((event.offsetX + 2) / (event.target.clientWidth / this.episode.thumbnailsAmount)) + 1), this.episode.thumbnailsAmount)) + '.png';
   }
 
   onMouseMove(event) {
     if(this.isMouseOver) {
       this.changeThumbPosition(event.offsetX + 132);
-      this.thumbSrc = this.thumbLocation + '/' + (Math.floor((event.offsetX + 2) / (event.target.clientWidth / 126)) + 1) + '.png';
+      this.thumbSrc = this.thumbLocation + '/' + (Math.min((Math.floor((event.offsetX + 2) / (event.target.clientWidth / this.episode.thumbnailsAmount)) + 1), this.episode.thumbnailsAmount)) + '.png';
     }
   }
 

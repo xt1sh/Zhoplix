@@ -1,29 +1,31 @@
-import { Component, OnInit, NgZone } from '@angular/core';
+import { Component, OnInit, NgZone, HostListener } from '@angular/core';
 import { Observable, BehaviorSubject } from 'rxjs';
-import { Router, NavigationEnd } from '@angular/router';
+import { Router, NavigationEnd, NavigationStart } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import { AuthenticationService } from 'src/app/services/authentication/authentication.service';
 import { ProfileService } from 'src/app/services/profile/profile.service';
+import { NavbarAnimation } from 'src/app/animations/navbar-animation';
 
 const routes: string[] = [];
 
 @Component({
   selector: "app-nav-menu",
   templateUrl: "./nav-menu.component.html",
-  styleUrls: ["./nav-menu.component.scss"]
+  styleUrls: ["./nav-menu.component.scss"],
+  animations: [
+    NavbarAnimation
+  ]
 })
 export class NavMenuComponent implements OnInit {
   zhoplixLogoSrcLarge = "Logos/zhoplix_empty_167.png";
   zhoplixLogoSrcMedium = "Logos/zhoplix_empty_134.png";
   zhoplixLogoSrcSmall = "Logos/zhoplix_empty_108.png";
   isExpanded = false;
-  toShow$: Observable<boolean>;
-  toShow: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-  toShowSignIn$: Observable<boolean>;
-  toShowSignIn: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-  toShowProfileMenu$: Observable<boolean>;
-  toShowProfileMenu: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  toShowSignIn$ = new BehaviorSubject<boolean>(false);
+  toShowProfileMenu$ = new BehaviorSubject<boolean>(false);
+  isBackgroundBlack: boolean;
   avatar: string;
+  animationState: string;
 
   constructor(private readonly router: Router,
               private readonly auth: AuthenticationService,
@@ -32,48 +34,60 @@ export class NavMenuComponent implements OnInit {
               }
 
   ngOnInit() {
-    this.toShow$ = this.getToShowValue;
-    this.toShowSignIn$ = this.getToShowSignInValue;
-    this.toShowProfileMenu$ = this.getToShowProfileMenu;
+    this.animationState = window.scrollY ? 'black' : 'transparent';
+    this.getBackgroundBlack();
+    this.toShowProfileMenu();
+    this.toShowSignIn();
     this.avatar = this.profile.getProfileImage();
-    const event = this.router.events
-      .pipe(filter(event => event instanceof NavigationEnd))
+    this.router.events
+      .pipe(filter(event => event instanceof (NavigationEnd || NavigationStart)))
       .subscribe(() => {
-        this.toShow$ = this.getToShowValue;
-        this.toShowSignIn$ = this.getToShowSignInValue;
-        this.toShowProfileMenu$ = this.getToShowProfileMenu;
+        this.ngOnInit();
       });
+    this.auth.avatarChange$.subscribe(() => {
+      this.ngOnInit();
+    })
   }
 
-  get getToShowValue() {
-    this.toShow.next(!routes.includes(this.router.url.slice(1)));
-    return this.toShow.asObservable();
-  }
-
-  get getToShowSignInValue() {
-    if(this.auth.isLoggedIn) {
-      this.toShowSignIn.next(false);
+  @HostListener('window:scroll', ['$event']) // for window scroll events
+  onScroll(event) {
+    if(window.scrollY) {
+      this.animationState = 'black';
     } else {
-      this.toShowSignIn.next(!this.router.url.includes("login"));
+      this.animationState = 'transparent';
     }
-    return this.toShowSignIn.asObservable();
   }
 
-  get getToShowProfileMenu() {
+  toShowSignIn() {
+    if(this.auth.isLoggedIn) {
+      this.toShowSignIn$.next(false);
+    } else {
+      this.toShowSignIn$.next(!this.router.url.includes('/login'));
+    }
+  }
+
+  toShowProfileMenu() {
     if(!this.auth.isLoggedIn) {
-      this.toShowProfileMenu.next(false);
+      this.toShowProfileMenu$.next(false);
     }
     else {
-      this.toShowProfileMenu.next(true);
-    } 
-    return this.toShowProfileMenu.asObservable();
+      this.toShowProfileMenu$.next(true);
+    }
   }
+
+  getBackgroundBlack() {
+    if(this.router.url.includes('/profile')) {
+      this.isBackgroundBlack = true;
+    }
+    else {
+      this.isBackgroundBlack = false;
+    }
+  }
+
   signOut() {
-      this.auth.signOut(this.auth.fingerPrint);
+      this.auth.signOut();
       this.auth.deleteTokens();
       this.ngZone.run(() => this.router.navigate(['']));
-      
-  
   }
 
   collapse() {

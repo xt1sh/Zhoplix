@@ -1,13 +1,331 @@
+html, body {
+  overflow: auto;
+}
+
+div {
+  display: block;
+}
+
+a {
+  color: #a6a6a6;
+}
+
 .home-background {
     background-size: cover;
     overflow: hidden;
-    position: absolute;
+    position: fixed;
     width: 100%;
     height: 100%;
     display: block;
-    background-color: #141414;
+    background-color: #000000;
 }
 
-::ng-deep header {
-    background-color: transparent;
+.card {
+  padding: 70px 45px;
+  position: relative;
+  border-bottom: 8px solid #222;
+  margin-bottom: 0;
+  background: transparent;
+  color: white;
+}
+
+.faq-card {
+  text-align: center;
+  padding: 70px 45px;
+}
+
+.first-card {
+  margin-top: 95px;
+}
+
+.card-container {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.card-text {
+  margin: -5% 0;
+  width: 52%;
+  height: 100%;
+  flex: 0 1 auto;
+  padding: 0 3rem 0 0;
+  z-index: 3;
+  font-weight: normal;
+}
+
+.card-text-reverse {
+  padding: 0 0 0 3rem;
+}
+
+.card-title {
+  display: block;
+  font-size: 3.125rem;
+  line-height: 1.1;
+  margin-bottom: 0.5rem;
+  margin: 0 0 .4rem;
+  font-weight: bold;
+}
+
+.card-subtitle {
+  font-size: 1.625rem;
+  font-weight: normal;
+  margin: 0.75em 0 0.25em;
+  display: block;
+  margin-block-start: 0.83em;
+  margin-block-end: 0.83em;
+  margin-inline-start: 0px;
+  margin-inline-end: 0px;
+}
+
+.signup-button-container {
+  margin-top: 1rem;
+  font-size: 1.625rem;
+  font-weight: normal;
+}
+
+.signup-button {
+  padding-right: 2.5rem;
+  padding-left: 1.125rem;
+  font-weight: normal;
+  color: #fff;
+  font-size: 1.25rem;
+  min-height: 48px;
+  border: 1px solid #fff;
+  margin: 0.5em auto;
+  display: inline-block;
+  width: auto;
+  padding: 0.35rem 1rem;
+  line-height: initial;
+  background: transparent;
+  box-shadow: none;
+  vertical-align: middle;
+  border-radius: 2px;
+  text-align: center;
+  box-sizing: border-box;
+  text-transform: none;
+  overflow: visible;
+  font: inherit;
+}
+
+.signup-button-red {
+  background-color: #e50914;
+  border: none;
+  font-size: 1.625rem;
+  min-height: 60px;
+}
+
+.signup-button-text {
+  display: inline-block;
+  font-size: 1.25rem;
+  color: #fff;
+}
+
+.signup-button-text-red {
+  font-size: 1.625rem;
+}
+
+.chevron-right-svg {
+  top: 30%;
+  margin-left: 10px;
+  right: 1rem;
+  width: 1rem;
+  height: 1.2rem;
+  overflow: hidden;
+}
+
+.chevron-right-red {
+  height: 1.4rem;
+  vertical-align: -2px;
+}
+
+.card-image-container {
+  padding-left: 55px;
+  width: 48%;
+  height: 100%;
+  display: flex;
+  flex: 0 1 auto;
+  box-sizing: border-box;
+}
+
+.card-image-container-reverse {
+  padding-left: 0;
+}
+
+.card-animation-container {
+  margin: -8% 0 -4% -15%;
+  position: relative;
+  overflow: hidden;
+}
+
+.card-image {
+  position: relative;
+  z-index: 2;
+  max-width: 100%;
+  height: auto;
+  border: 0;
+}
+
+.card-animation {
+  width: 100%;
+  height: 100%;
+  max-width: 74%;
+  max-height: 55%;
+  position: absolute;
+  top: 48%;
+  left: 49.5%;
+  transform: translate(-50%, -50%);
+}
+
+.card-animation-text {
+  flex-grow: 1;
+  flex-shrink: 1;
+  margin: 0.3em 0;
+}
+
+.card-video {
+  width: 100%;
+  height: 100%;
+  display: inline-block;
+  vertical-align: baseline;
+  object-fit: contain;
+}
+
+.card-reverse {
+  flex-flow: row-reverse;
+}
+
+.mobile-image {
+  max-width: 100%;
+  height: auto;
+}
+
+.text-0 {
+  font-size: 1em;
+  color: white;
+  font-weight: 600;
+}
+
+.text-1 {
+  font-size: 0.9em;
+  color: #0071eb;
+  font-weight: normal;
+}
+
+.card-animation-snack {
+  padding: 0.5em 0.75em;
+  position: absolute;
+  left: 50%;
+  bottom: 8%;
+  transform: translateX(-50%);
+  margin: 0 auto;
+  background: #000000;
+  display: flex;
+  align-items: center;
+  width: 60%;
+  height: 5em;
+  min-width: 15em;
+  border: 2px solid rgba(255, 255, 255, 0.25);
+  box-shadow: 0 0 2em 0 #000000;
+  border-radius: 0.75em;
+  z-index: 5;
+}
+
+.faq-card-text {
+  padding: 70px 45px;
+  width: 100%;
+}
+
+.faq-list {
+  width: 75%;
+  margin: 2em auto;
+  max-width: 815px;
+  display: block;
+  list-style-type: disc;
+  margin-block-start: 1em;
+  margin-block-end: 1em;
+  padding: 0;
+}
+
+.faq-list-item {
+  list-style-type: none;
+  margin-bottom: 8px;
+  display: list-item;
+  text-align: center;
+}
+
+.faq-question {
+  margin-bottom: 1px;
+  padding: 0.8em 2.2em 0.8em 1.2em;
+  font-weight: 400;
+  position: relative;
+  width: 100%;
+  display: block;
+  text-align: left;
+  color: #fff;
+  background: #303030;
+  overflow: visible;
+  border: none;
+  font-size: 1.625rem;
+  outline: none;
+}
+
+.faq-answer {
+  display: block;
+  text-align: left;
+  background: #303030;
+  overflow: hidden;
+}
+
+.faq-answer.closed {
+  max-height: 0;
+  transition: max-height 0.25s cubic-bezier(0.5, 0, 0.1, 1);
+}
+
+.faq-answer.open {
+  max-height: 700px;
+  transition: max-height 0.4s cubic-bezier(0.5, 0, 0.1, 1);
+}
+
+.faq-answer-text {
+  display: inline-block;
+  padding: 1.2em;
+  font-size: 1.265rem;
+}
+
+.svg-icon {
+  overflow: hidden;
+  color: #fff;
+  position: absolute;
+  right: 1em;
+  top: 50%;
+  height: 1em;
+  width: 1em;
+  fill: #fff;
+  transform: translateY(-50%);
+}
+
+.svg-closed {
+  transform: translateY(-50%) rotate(-45deg);
+  transition: transform 0.25s;
+}
+
+.svg-open {
+  transition: transform 0.4s;
+}
+
+.mobile2-image {
+  height: 70px;
+  margin-right: 10px;
+}
+
+#download-icon {
+  height: 50px;
+}
+
+.video2 {
+  max-width: 62%;
+  top: 34%;
 }

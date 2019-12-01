@@ -11,7 +11,7 @@ svg {
 .profile-setting-background {
     background-size: cover;
     overflow: hidden;
-    position: absolute;
+    position: fixed;
     width: 100%;
     height: 100%;
     display: block;
@@ -207,8 +207,3 @@ a:not([href]):not([tabindex]), a:not([href]):not([tabindex]):focus, a:not([href]
     flex-direction: column;
     align-items: flex-start;
 }
-
-::ng-deep header {
-    background-color: black;
-}
-

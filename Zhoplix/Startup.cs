@@ -36,6 +36,14 @@ using Microsoft.AspNetCore.Mvc.Authorization;
 using Zhoplix.Data;
 using Zhoplix.Services.ProfileManager;
 using Zhoplix.Services.RecoveryService;
+using Quartz.Spi;
+using Zhoplix.Jobs;
+using Quartz;
+using Quartz.Impl;
+using Zhoplix.Quartz;
+using System.Collections.Generic;
+using System.Reflection;
+using Zhoplix.Services.Rating;
 
 namespace Zhoplix
 {
@@ -45,13 +53,14 @@ namespace Zhoplix
 
         private readonly PasswordConfiguration PasswordConfiguration;
 
-
+        private readonly Dictionary<string, JobConfiguration> Jobs;
 
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
             JwtConfiguration = Configuration.GetSection("Bearer").Get<JwtConfiguration>();
             PasswordConfiguration = Configuration.GetSection("Password").Get<PasswordConfiguration>();
+            Jobs = Configuration.GetSection("Schedules").Get<Dictionary<string, JobConfiguration>>();
         }
 
 
@@ -87,15 +96,17 @@ namespace Zhoplix
 
             });
 
+            
             services.AddAuthentication(x =>
-                {
+            {
                     x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                     x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-                })
-                .AddJwtBearer(x =>
-                {
+                    x.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(x =>
+            {
                     x.RequireHttpsMetadata = false;
-                    x.SaveToken = true;
+                    x.SaveToken = false;
                     x.TokenValidationParameters = new TokenValidationParameters
                     {
                         ValidateIssuerSigningKey = true,
@@ -103,24 +114,41 @@ namespace Zhoplix
                         ValidateIssuer = JwtConfiguration.ValidateIssuer,
                         ValidateAudience = JwtConfiguration.ValidateAudience,
                         ValidIssuer = JwtConfiguration.ValidateIssuer ? JwtConfiguration.Issuer : null,
-                        ValidAudience = JwtConfiguration.ValidateAudience ? JwtConfiguration.Audience : null
+                        ValidAudience = JwtConfiguration.ValidateAudience ? JwtConfiguration.Audience : null,
+                        ValidateLifetime = JwtConfiguration.ValidateLifetime
                     };
-                });
+            });
+
+
 
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Zhoplix", Version = "v1" });
             });
             services.AddAutoMapper(typeof(Startup));
+            services.AddHostedService<QuartzHostedService>();
 
             services.AddSingleton<ITokenHandler, TokenHandler>();
             services.AddSingleton<IEmailSender, EmailSender>();
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
+            services.AddSingleton<IJobFactory, JobsFactory>();
+            services.AddSingleton<ISchedulerFactory, StdSchedulerFactory>();
+
+            // Jobs
+            services.AddTransient<RemoveExpiredSessions>();
+            foreach (var job in  Jobs)
+            {
+                services.AddSingleton(new JobSchedule(
+                    jobType: Type.GetType($"Zhoplix.Jobs.{job.Key}", false, true),
+                    cronExpression: job.Value.CronExpression));
+
+            }
 
             services.AddTransient<ITitleService, TitleService>();
             services.AddTransient<ISeasonService, SeasonService>();
             services.AddTransient<IEpisodeService, EpisodeService>();
+            services.AddTransient<IRatingService, RatingService>();
             services.AddTransient<IFfMpegProvider, FfMpegProvider>();
 
             services.AddScoped<IAuthenticationService, AuthenticationService>();
@@ -144,7 +172,7 @@ namespace Zhoplix
 
             services.AddControllersWithViews(conf =>
             {
-                var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
+                var policy = new AuthorizationPolicyBuilder(JwtBearerDefaults.AuthenticationScheme).RequireAuthenticatedUser().Build();
                 conf.Filters.Add(new AuthorizeFilter(policy));
             });
 
@@ -178,7 +206,6 @@ namespace Zhoplix
             {
                 app.UseSpaStaticFiles();
             }
-
 
             app.UseSwagger();
             app.UseSwaggerUI(c =>

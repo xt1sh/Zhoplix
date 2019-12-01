@@ -49,7 +49,7 @@ export class TokenInterceptor implements HttpInterceptor {
     if (!this.isRefreshing) {
       this.isRefreshing = true;
       this.refreshTokenSubject.next(null);
-      return this.auth.refreshTokens(this.auth.getRefreshToken(), this.auth.fingerPrint).pipe(
+      return this.auth.refreshTokens(this.auth.getRefreshToken()).pipe(
         switchMap((token: Tokens) => {
           this.isRefreshing = false;
           this.refreshTokenSubject.next(token.accessToken);

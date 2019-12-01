@@ -1,5 +1,5 @@
-<header>
-  <div class="navbar" *ngIf="toShow$ | async as toShow">
+<header [style.background-color]="isBackgroundBlack ? 'black' : 'transparent'">
+  <div [@navbar]="animationState" class="navbar">
     <nav class="navbar-main">
       <div class="navbar-logo">
         <a class="home-link" [routerLink]="['']">
@@ -13,13 +13,13 @@
         </a>
       </div>
       <a [routerLink]="['login']" class="sign-in-link">
-        <div *ngIf="toShowSignIn$ | async as toShow" class="sign-in-button">
+        <div *ngIf="toShowSignIn$ | async" class="sign-in-button">
           Sign In
         </div>
       </a>
-      <div *ngIf="toShowProfileMenu$ | async as toShow" class="btn-group" mdbDropdown>
+      <div *ngIf="toShowProfileMenu$ | async" class="btn-group" mdbDropdown>
           <a mdbDropdownToggle  class="dropdown-toggle waves-light" mdbWavesEffect>
-              <img [src]="avatar" alt="" class="avatar">
+              <img id="avatar" [src]="avatar" alt="" class="avatar">
             </a>
         <div class="dropdown-menu ">
           <a class="dropdown-item" [routerLink]="['profile']" >Account</a>

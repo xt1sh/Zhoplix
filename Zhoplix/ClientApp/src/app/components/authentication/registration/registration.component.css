@@ -1,7 +1,7 @@
 .registration-background {
   background-size: cover;
   overflow: hidden;
-  position: absolute;
+  position: fixed;
   width: 100%;
   height: 100%;
   display: block;
@@ -87,6 +87,7 @@ ul > li {
 }
 
 .submit-btn-container {
+    max-height: 70px;
     display: flex;
     align-items: flex-start;
     flex-basis: 340px;
@@ -110,7 +111,7 @@ ul > li {
   display: flex;
   width: 100%;
   justify-content: center;
-} 
+}
 
 mat-card-content {
     display: flex;
@@ -161,66 +162,66 @@ mat-card-content {
     color: #333;
     height: 50px;
   }
-  
+
   ::ng-deep .mat-form-field-label-wrapper {
     font-size: 16px;
     color: #333;
   }
-  
+
   ::ng-deep .mat-form-field-label {
     padding: 3px 20px 2px;
     color: #333;
   }
-  
+
   ::ng-deep .mat-form-field.mat-form-field-invalid .mat-form-field-label {
     color: red;
   }
-  
+
   ::ng-deep .mat-form-field.mat-form-field-invalid .mat-form-field-ripple, .mat-form-field.mat-form-field-invalid .mat-form-field-ripple.mat-accent {
     background-color: red;
   }
-  
+
   ::ng-deep .mat-form-field-appearance-legacy .mat-form-field-label {
     color:  #333;
     position: initial;
   }
-  
+
   ::ng-deep .mat-form-field.mat-focused .mat-form-field-label {
     color: #8c8c8c;
   }
-  
+
   ::ng-deep .mat-form-field.mat-focused .mat-form-field-ripple {
     display: none;
   }
-  
+
   ::ng-deep .mat-error {
     padding: 6px 3px;
     font-size: 13px;
     color: red;
   }
-  
+
 ::ng-deep .mat-form-field-appearance-legacy.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-label {
     padding: 10px 25px 0px;
 }
-  
+
   ::ng-deep .mat-form-field-infix {
     font-size: 16px;
   }
-  
+
   ::ng-deep .mat-input-element {
     caret-color: #333;
     font-size: 16px;
   }
-  
+
   ::ng-deep .mat-form-field-invalid .mat-input-element, .mat-warn .mat-input-element {
     caret-color: #333;
   }
-  
+
   ::ng-deep .mat-form-field-appearance-legacy .mat-form-field-infix {
     caret-color: #333;
     padding: 3px 20px 0px;
   }
-  
+
   ::ng-deep .mat-progress-spinner circle, .mat-spinner circle {
     stroke: #a71b1b;
   }
