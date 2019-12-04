@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
@@ -6,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Zhoplix.Models;
+using Zhoplix.Models.Identity;
 using Zhoplix.ViewModels;
 using Zhoplix.ViewModels.Title;
 
@@ -29,16 +31,19 @@ namespace Zhoplix.Services.CRUD
     public class TitleService : ITitleService
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<User> _userManager;
         private readonly DbSet<Title> _titleContext;
         private readonly DbSet<Genre> _genreContext;
         private readonly ILogger<TitleService> _logger;
         private readonly IMapper _mapper;
 
         public TitleService(ApplicationDbContext context,
+            UserManager<User> userManager,
             ILogger<TitleService> logger,
             IMapper mapper)
         {
             _context = context;
+            _userManager = userManager;
             _titleContext = _context.Titles;
             _genreContext = _context.Genres;
             _logger = logger;
@@ -53,7 +58,7 @@ namespace Zhoplix.Services.CRUD
             foreach (var genre in model.Genres)
             {
                 var genreFromContext = await _genreContext.FirstOrDefaultAsync(x => x.Name == genre);
-                if (genreFromContext == null)
+                if (genreFromContext is null)
                     genreFromContext = new Genre { Name = genre };
 
                 titleGenres.Add(new TitleGenre
@@ -94,6 +99,18 @@ namespace Zhoplix.Services.CRUD
 
         public async Task<IEnumerable<Title>> GetTitlePageAsync(int pageNumber, int pageSize) =>
             await _titleContext.Skip(pageSize * (pageNumber - 1)).Take(pageSize).ToListAsync();
+
+        public async Task<IList<Title>> GetMyList(string username, int pageNumber, int pageSize)
+        {
+            var user = await _userManager.FindByNameAsync(username);
+            if (user is null)
+                return null;
+            return await _titleContext
+                .Where(t => t.ProfileTitles.Any(pt => pt.ProfileId == user.Id))
+                .Skip(pageSize * (pageNumber - 1))
+                .Take(pageSize)
+                .ToListAsync();
+        }
 
         public async Task<bool> UpdateTitleAsync(Title title)
         {
