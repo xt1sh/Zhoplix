@@ -26,6 +26,7 @@ namespace Zhoplix.Services.CRUD
         Task<IList<Title>> FindTitlesAsync(string name);
         Task<IEnumerable<Title>> GetTitlePageAsync(int pageNumber, int pageSize);
         Task<bool> UpdateTitleAsync(Title title);
+        Task<IList<Title>> GetMyList(string username, int pageNumber, int pageSize);
     }
 
     public class TitleService : ITitleService

@@ -44,7 +44,6 @@ using Zhoplix.Quartz;
 using System.Collections.Generic;
 using System.Reflection;
 using Zhoplix.Services.Rating;
-using Zhoplix.Services.BrowseServices;
 
 namespace Zhoplix
 {

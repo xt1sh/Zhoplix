@@ -3,5 +3,26 @@
     width: 100%;
     height: 100%;
     background-color: #141414;
+}
 
+.main-container {
+    position: fixed;
+    min-width: 100%;
+    min-height: 100%;
+}
+
+.my-list {
+    margin-top: 600px;
+}
+
+.titles-carousel {
+    display: flex;
+    justify-content: flex-start;
+    max-height: 200px;
+}
+
+.title {
+    margin-left: 15px;
+    max-width: 160px;
+    height: 90px;
 }
