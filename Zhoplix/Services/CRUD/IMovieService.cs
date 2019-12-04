@@ -59,7 +59,6 @@ namespace Zhoplix.Services.CRUD
                 TitleId = title.Id
             };
 
-            newMovie.Videos.Select(x => x.VideoInfo = new VideoInfo());
             newMovie.Videos = videos;
             newMovie.Location = Path.GetDirectoryName(videos.First().Location);
             newMovie.ThumbnailsAmount = Directory.GetFiles(Path.Combine(newMovie.Location, "Thumbnails"), "*", SearchOption.TopDirectoryOnly).Length;
