@@ -50,12 +50,11 @@ namespace Zhoplix.Services.CRUD
             var title = _mapper.Map<Title>(model);
             var titleGenres = new List<TitleGenre>();
 
-            foreach (var genrevm in model.Genres)
+            foreach (var genre in model.Genres)
             {
-                var genre = _mapper.Map<Genre>(genrevm);
-                var genreFromContext = await _genreContext.FirstOrDefaultAsync(x => x.Name == genre.Name);
+                var genreFromContext = await _genreContext.FirstOrDefaultAsync(x => x.Name == genre);
                 if (genreFromContext == null)
-                    genreFromContext = genre;
+                    genreFromContext = new Genre { Name = genre };
 
                 titleGenres.Add(new TitleGenre
                 {

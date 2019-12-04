@@ -2,17 +2,17 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Zhoplix.Models;
-using Zhoplix.ViewModels.Season;
 
-namespace Zhoplix.ViewModels.Title
+namespace Zhoplix.ViewModels.Movie
 {
-    public class CreateTitleViewModel
+    public class CreateMovieViewModel
     {
         public string Name { get; set; }
         public string Description { get; set; }
         public IList<string> Genres { get; set; }
         public int AgeRestriction { get; set; }
         public string ImageId { get; set; }
+        public TimeSpan? CreditsStart { get; set; }
+        public IList<string> VideoPaths { get; set; }
     }
 }

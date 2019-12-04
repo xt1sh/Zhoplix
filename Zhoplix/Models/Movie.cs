@@ -9,7 +9,7 @@ namespace Zhoplix.Models
     {
         public int TitleId { get; set; }
         public Title Title { get; set; }
-        public IList<Video> Videos { get; set; }
+        public IList<MovieVideo> Videos { get; set; }
         public string Location { get; set; }
         public int ThumbnailsAmount { get; set; }
         public TimeSpan? CreditsStart { get; set; }
