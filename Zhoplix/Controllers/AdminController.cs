@@ -17,6 +17,7 @@ using Zhoplix.Services.CRUD;
 using Zhoplix.Services.Media;
 using Zhoplix.ViewModels;
 using Zhoplix.ViewModels.Episode;
+using Zhoplix.ViewModels.Movie;
 using Zhoplix.ViewModels.Season;
 using Zhoplix.ViewModels.Title;
 
@@ -29,6 +30,7 @@ namespace Zhoplix.Controllers
         private readonly ITitleService _titleService;
         private readonly ISeasonService _seasonService;
         private readonly IEpisodeService _episodeService;
+        private readonly IMovieService _movieService;
         private readonly IMapper _mapper;
         private readonly ILogger<AdminController> _logger;
         private readonly IMediaService _mediaService;
@@ -37,6 +39,7 @@ namespace Zhoplix.Controllers
         public AdminController(ITitleService titleService,
             ISeasonService seasonService,
             IEpisodeService episodeService,
+            IMovieService movieService,
             IMapper mapper,
             ILogger<AdminController> logger,
             IMediaService mediaService,
@@ -45,6 +48,7 @@ namespace Zhoplix.Controllers
             _titleService = titleService;
             _seasonService = seasonService;
             _episodeService = episodeService;
+            _movieService = movieService;
             _mapper = mapper;
             _logger = logger;
             _mediaService = mediaService;
@@ -140,6 +144,13 @@ namespace Zhoplix.Controllers
             //await _mediaService.CreateResizedPhoto(photo, 0.1f, "small");
             //await _mediaService.CreateResizedPhoto(photo, 0.5f, "medium");
             return Ok(new { photo.PhotoId });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateMovie(CreateMovieViewModel model)
+        {
+            var movie = await _movieService.CreateMovieFromCreateViewModelAsync(model);
+            return Ok();
         }
     }
 }

@@ -137,7 +137,7 @@ namespace Zhoplix
 
             // Jobs
             services.AddTransient<RemoveExpiredSessions>();
-            foreach (var job in  Jobs)
+            foreach (var job in Jobs)
             {
                 services.AddSingleton(new JobSchedule(
                     jobType: Type.GetType($"Zhoplix.Jobs.{job.Key}", false, true),
@@ -148,6 +148,7 @@ namespace Zhoplix
             services.AddTransient<ITitleService, TitleService>();
             services.AddTransient<ISeasonService, SeasonService>();
             services.AddTransient<IEpisodeService, EpisodeService>();
+            services.AddTransient<IMovieService, MovieService>();
             services.AddTransient<IRatingService, RatingService>();
             services.AddTransient<IFfMpegProvider, FfMpegProvider>();
 

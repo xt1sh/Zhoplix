@@ -8,6 +8,7 @@ using Zhoplix.Models.Identity;
 using Zhoplix.ViewModels;
 using Zhoplix.ViewModels.Episode;
 using Zhoplix.ViewModels.Media;
+using Zhoplix.ViewModels.Movie;
 using Zhoplix.ViewModels.Season;
 using Zhoplix.ViewModels.Title;
 
@@ -21,7 +22,8 @@ namespace Zhoplix.Profiles
             CreateMap<CreateTitleViewModel, Title>().ForMember(x => x.Genres, t => t.Ignore());
             CreateMap<CreateSeasonViewModel, Season>();
             CreateMap<CreateEpisodeViewModel, Episode>();
-            CreateMap<CreateGenreViewModel, Genre>().ReverseMap();
+            CreateMap<CreateMovieViewModel, Movie>();
+            CreateMap<CreateMovieViewModel, CreateTitleViewModel>();
 
             // ViewModels
             CreateMap<RegistrationViewModel, User>();
@@ -31,7 +33,7 @@ namespace Zhoplix.Profiles
             CreateMap<Season, SeasonIdName>();
             CreateMap<Episode, EpisodeViewModel>();
             CreateMap<Episode, EpisodeForPlayerViewModel>();
-            CreateMap<Video, VideoForPlayerViewModel>();
+            CreateMap<EpisodeVideo, VideoForPlayerViewModel>();
 
             // ChangeViewModels
 

@@ -18,6 +18,15 @@
     <div>
         <input #file type="file" (change)="uploadPhoto(file.files)">
     </div>
+    <div>
+      <input formControlName="isMovie" type="checkbox">
+      Is movie
+    </div>
+    <div *ngIf="form.controls['isMovie'].value">
+      <div>
+        <input #file type="file" (change)="uploadVideo(file.files)">
+      </div>
+    </div>
     <div *ngIf="!uploading">
       <button (click)="onSubmit()">Submit</button>
     </div>

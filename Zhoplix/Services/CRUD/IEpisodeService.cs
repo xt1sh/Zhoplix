@@ -52,7 +52,7 @@ namespace Zhoplix.Services.CRUD
             episode.Season = season;
             var videoInfo = new VideoInfo();
 
-            var videos = model.VideoPaths.Select(path => new Video()
+            var videos = model.VideoPaths.Select(path => new EpisodeVideo()
             {
                 Id = Path.GetFileNameWithoutExtension(path),
                 Location = path,

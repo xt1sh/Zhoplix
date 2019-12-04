@@ -7,11 +7,11 @@ using Zhoplix.Models.Media;
 
 namespace Zhoplix.Models
 {
-    public class Video
+    public class MovieVideo
     {
         public string Id { get; set; }
-        public int EpisodeId { get; set; }
-        public Episode Episode { get; set; }
+        public int MovieId { get; set; }
+        public Movie Movie { get; set; }
         public int VideoInfoId { get; set; }
         public VideoInfo VideoInfo { get; set; }
         public string Location { get; set; }
@@ -19,7 +19,6 @@ namespace Zhoplix.Models
         public string Resolution => $"{Width}x{Height}";
         public int Width { get; set; }
         public int Height { get; set; }
-        [NotMapped]
         public long Size { get; set; }
         [NotMapped]
         public float SizeInMb => Size / 1048576;

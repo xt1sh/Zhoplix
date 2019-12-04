@@ -4,6 +4,7 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { MediaUploadService } from 'src/app/services/media/media-upload.service';
 import { MatSnackBar } from '@angular/material';
 import { Router } from '@angular/router';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-title',
@@ -15,6 +16,8 @@ export class TitleComponent implements OnInit {
   form: any;
   message: string;
   uploading: boolean;
+  progress: number;
+  videoPaths: Array<string>;
 
   constructor(private readonly fb: FormBuilder,
               private readonly media: MediaUploadService,
@@ -23,6 +26,8 @@ export class TitleComponent implements OnInit {
               private readonly router: Router) { }
 
   ngOnInit() {
+    this.videoPaths = new Array<string>();
+    this.progress = 0;
     this.uploading = false;
     this.form = this.fb.group({
       name: ['', Validators.required],
@@ -30,6 +35,8 @@ export class TitleComponent implements OnInit {
       genres: this.fb.array([]),
       ageRestriction: 0,
       imageId: '',
+      isMovie: false,
+      videoPaths: []
     });
     this.addGenre();
   }
@@ -53,8 +60,38 @@ export class TitleComponent implements OnInit {
     });
   }
 
+  uploadVideo(files) {
+    this.uploading = true;
+    this.media.uploadVideo(files[0]);
+    this.media.getProgress().subscribe(value => {
+      if (value < 99) {
+        this.progress = value;
+      } else {
+        this.progress = 99;
+      }
+    });
+    this.media.getBody().subscribe(value => {
+      if (value) {
+        this.form.controls['videoPaths'].setValue(value);
+        this.progress = 100;
+        this.uploading = false;
+      }
+    }, null, () => {
+      this.progress = 0;
+    });
+  }
+
   onSubmit() {
-    this.admin.createTitle(this.form.value).subscribe(() => {
+    const genres = _.map(this.form.controls['genres'].value, 'name');
+    const title = this.form.value;
+    title.genres = genres;
+    let obs;
+    if(this.form.controls['isMovie'].value) {
+      obs = this.admin.createMovie(title);
+    } else {
+      obs = this.admin.createTitle(title);
+    }
+    obs.subscribe(() => {
       this.message = 'Created';
       this.snack.open(`Title "${this.form.controls['name'].value}" was successfully created`,
         'OK', {duration: 3000, panelClass: ['snack-success']});

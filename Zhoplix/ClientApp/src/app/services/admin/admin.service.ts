@@ -24,6 +24,10 @@ export class AdminService {
     return this.http.post<any>(`${this.originUrl}Admin/CreateEpisode`, episode, { observe: 'response' });
   }
 
+  createMovie(movie: any): Observable<HttpResponse<any>> {
+    return this.http.post<any>(`${this.originUrl}Admin/CreateMovie`, movie, { observe: 'response' });
+  }
+
   getTitleViewByName(name: string): Observable<HttpResponse<string>> {
     return this.http.get<string>(`${this.originUrl}Admin/GetTitle/${name}`, { observe: 'response'});
   }

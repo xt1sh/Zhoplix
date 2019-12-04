@@ -8,7 +8,8 @@ namespace Zhoplix.Models.Media
     public class VideoInfo
     {
         public int Id { get; set; }
-        public List<Video> Videos { get; set; }
+        public IList<EpisodeVideo> EpisodeVideos { get; set; }
+        public IList<MovieVideo> MovieVideos { get; set; }
         public TimeSpan Duration { get; set; }
         public IList<Subtitles> Subtitles { get; set; }
         public IList<Audio> Audios { get; set; }
