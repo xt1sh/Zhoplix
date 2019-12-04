@@ -14,6 +14,6 @@ namespace Zhoplix.Models
         public string ImageId { get; set; }
         public int TitleId { get; set; }
         public Title Title { get; set; }
-        public List<Episode> Episodes { get; set; }
+        public IList<Episode> Episodes { get; set; }
     }
 }

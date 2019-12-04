@@ -19,6 +19,6 @@ namespace Zhoplix.Models
         public string Location { get; set; }
         public int ThumbnailsAmount { get; set; }
         public TimeSpan? CreditsStart { get; set; }
-        public IList<Video> Videos { get; set; }
+        public IList<EpisodeVideo> Videos { get; set; }
     }
 }

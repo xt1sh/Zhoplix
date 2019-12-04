@@ -18,5 +18,7 @@ namespace Zhoplix.Models
         public int AgeRestriction { get; set; }
         public string ImageId { get; set; }
         public IList<Rating> Ratings { get; set; }
+        public bool IsMovie => Movie != null;
+        public Movie Movie { get; set; }
     }
 }
