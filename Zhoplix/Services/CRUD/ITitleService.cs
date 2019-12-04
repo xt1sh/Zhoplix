@@ -1,10 +1,12 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Zhoplix.Models;
 using Zhoplix.Models.Identity;
@@ -26,6 +28,7 @@ namespace Zhoplix.Services.CRUD
         Task<IList<Title>> FindTitlesAsync(string name);
         Task<IEnumerable<Title>> GetTitlePageAsync(int pageNumber, int pageSize);
         Task<bool> UpdateTitleAsync(Title title);
+        Task<IList<Title>> GetMyList(string username, int pageNumber, int pageSize);
     }
 
     public class TitleService : ITitleService
@@ -34,20 +37,27 @@ namespace Zhoplix.Services.CRUD
         private readonly UserManager<User> _userManager;
         private readonly DbSet<Title> _titleContext;
         private readonly DbSet<Genre> _genreContext;
+        private readonly DbSet<ProfileTitle> _profileTitleContext;
+        private readonly DbSet<Models.Identity.Profile> _profileContext;
         private readonly ILogger<TitleService> _logger;
         private readonly IMapper _mapper;
+        private readonly HttpContext _httpContext;
 
         public TitleService(ApplicationDbContext context,
             UserManager<User> userManager,
             ILogger<TitleService> logger,
+            IHttpContextAccessor httpContextAccessor,
             IMapper mapper)
         {
             _context = context;
             _userManager = userManager;
             _titleContext = _context.Titles;
             _genreContext = _context.Genres;
+            _profileTitleContext = _context.ProfileTitles;
+            _profileContext = _context.Profiles;
             _logger = logger;
             _mapper = mapper;
+            _httpContext = httpContextAccessor.HttpContext;
         }
 
         public async Task<Title> CreateTitleFromCreateViewModelAsync(CreateTitleViewModel model)
@@ -99,6 +109,34 @@ namespace Zhoplix.Services.CRUD
 
         public async Task<IEnumerable<Title>> GetTitlePageAsync(int pageNumber, int pageSize) =>
             await _titleContext.Skip(pageSize * (pageNumber - 1)).Take(pageSize).ToListAsync();
+
+        public async Task<bool> AddTitleToMyListAsync(int titleId)
+        {
+            var user = await _userManager.FindByNameAsync(
+                _httpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+
+            var profile = await _profileContext.FirstOrDefaultAsync(x => x.Id == user.Id);
+            var title = await _titleContext.FirstOrDefaultAsync(x => x.Id == titleId);
+
+            if (title is null)
+                return false;
+
+            _profileTitleContext.Add(new ProfileTitle { ProfileId = profile.Id, TitleId = title.Id });
+
+            return await SaveChangesAsync();
+        }
+
+        public async Task<bool> RemoveTitleFromMyListAsync(int titleId)
+        {
+            var user = await _userManager.FindByNameAsync(
+                _httpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+
+            var profile = await _profileContext.FirstOrDefaultAsync(x => x.Id == user.Id);
+
+            _profileTitleContext.Remove(new ProfileTitle { ProfileId = profile.Id, TitleId = titleId });
+
+            return await SaveChangesAsync();
+        }
 
         public async Task<IList<Title>> GetMyList(string username, int pageNumber, int pageSize)
         {
