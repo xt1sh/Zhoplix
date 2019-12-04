@@ -42,6 +42,7 @@ import { EpisodeComponent } from './components/admin/create/episode/episode.comp
 import { LoginHelpComponent } from './components/authentication/login-help/login-help.component';
 import { ResetPasswordComponent } from './components/user-profile/reset-password/reset-password.component';
 import { FooterComponent } from './components/footer/footer.component';
+import { MainComponent } from './components/browse/main/main.component';
 
 @NgModule({
   declarations: [
@@ -63,7 +64,8 @@ import { FooterComponent } from './components/footer/footer.component';
     LoginHelpComponent,
     ResetPasswordComponent,
     ArrayFilterPipe,
-    FooterComponent
+    FooterComponent,
+    MainComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),

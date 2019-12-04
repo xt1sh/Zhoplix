@@ -15,6 +15,7 @@ import { ProfileSettingsComponent } from "src/app/components/user-profile/profil
 import { EpisodeComponent } from "src/app/components/admin/create/episode/episode.component";
 import { LoginHelpComponent } from "src/app/components/authentication/login-help/login-help.component";
 import { ResetPasswordComponent } from "src/app/components/user-profile/reset-password/reset-password.component";
+import { MainComponent } from "src/app/components/browse/main/main.component";
 
 export const ROUTES: Routes = [
   { path: '', component: HomeComponent, pathMatch: 'full'},
@@ -26,6 +27,7 @@ export const ROUTES: Routes = [
   { path: 'help', component: LoginHelpComponent},
   { path: 'profile', component: ProfileSettingsComponent, canActivate:[AuthGuardService], pathMatch: 'full'},
   { path: 'profile/resetPassword', component: ResetPasswordComponent},
+  { path: 'browse', component: MainComponent},
   {
     path: 'admin',
     component: AdminComponent,
