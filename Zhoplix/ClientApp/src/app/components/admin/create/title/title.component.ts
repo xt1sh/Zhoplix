@@ -34,7 +34,7 @@ export class TitleComponent implements OnInit {
       description: '',
       genres: this.fb.array([]),
       ageRestriction: 0,
-      imageId: '',
+      imageLocation: '',
       isMovie: false,
       videoPaths: []
     });
@@ -54,7 +54,7 @@ export class TitleComponent implements OnInit {
     this.media.uploadPhoto(files[0]);
     this.media.getMessage().subscribe(value => {
       if(value) {
-        this.form.controls['imageId'].setValue(value);
+        this.form.controls['imageLocation'].setValue(value);
         this.uploading = false;
       }
     });

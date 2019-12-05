@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -25,16 +26,19 @@ namespace Zhoplix.Services.CRUD
         private readonly IMapper _mapper;
         private readonly DbSet<Movie> _movieContext;
         private readonly DbSet<MovieVideo> _movieVideoContext;
+        private readonly string wwwRoot;
 
         public MovieService(ITitleService titleService,
             ApplicationDbContext context,
-            IMapper mapper)
+            IMapper mapper,
+            IWebHostEnvironment hostingEnvironment)
         {
             _titleService = titleService;
             _context = context;
             _mapper = mapper;
             _movieContext = _context.Movies;
             _movieVideoContext = _context.MovieVideos;
+            wwwRoot = hostingEnvironment.WebRootPath;
         }
 
         public async Task<Movie> CreateMovieFromCreateViewModelAsync(CreateMovieViewModel model)
@@ -61,7 +65,7 @@ namespace Zhoplix.Services.CRUD
 
             newMovie.Videos = videos;
             newMovie.Location = Path.GetDirectoryName(videos.First().Location);
-            newMovie.ThumbnailsAmount = Directory.GetFiles(Path.Combine(newMovie.Location, "Thumbnails"), "*", SearchOption.TopDirectoryOnly).Length;
+            newMovie.ThumbnailsAmount = Directory.GetFiles(Path.Combine(wwwRoot, newMovie.Location, "Thumbnails"), "*", SearchOption.TopDirectoryOnly).Length;
 
             if (await CreateMovieAsync(newMovie))
                 return newMovie;

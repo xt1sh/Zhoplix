@@ -12,5 +12,6 @@ namespace Zhoplix.ViewModels.Title
         public string Description { get; set; }
         public float Rating { get; set; }
         public int AgeRestriction { get; set; }
+        public string ImageLocation { get; set; }
     }
 }

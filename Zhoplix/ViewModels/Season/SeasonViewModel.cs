@@ -11,5 +11,6 @@ namespace Zhoplix.ViewModels.Season
         public int Id { get; set; }
         public string Name { get; set; }
         public List<EpisodeViewModel> Episodes { get; set; }
+        public string ImageLocation { get; set; }
     }
 }

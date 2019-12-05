@@ -473,7 +473,7 @@ namespace Zhoplix.Migrations
 
                     b.HasIndex("EpisodeId");
 
-                    b.ToTable("ProfileEpisode");
+                    b.ToTable("ProfileEpisodes");
                 });
 
             modelBuilder.Entity("Zhoplix.Models.ProfileTitle", b =>
@@ -488,7 +488,7 @@ namespace Zhoplix.Migrations
 
                     b.HasIndex("TitleId");
 
-                    b.ToTable("ProfileTitle");
+                    b.ToTable("ProfileTitles");
                 });
 
             modelBuilder.Entity("Zhoplix.Models.Rating", b =>
@@ -520,6 +520,9 @@ namespace Zhoplix.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ImageId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ImageLocation")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
@@ -569,6 +572,9 @@ namespace Zhoplix.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ImageId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ImageLocation")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
