@@ -23,7 +23,7 @@ export class MainComponent implements OnInit {
     const observer = {
       next: (response) =>{
         response.body.forEach(element => {
-          this.myListArray.push({ Id:element['id'], ImagePath: `Images\\Uploaded\\${element['imageId']}\\${element['imageId']}.png`})
+          this.myListArray.push({ Id:element['id'], ImagePath: element['imageLocation']});
         });
         this.loading = false;
         console.log(this.myListArray);

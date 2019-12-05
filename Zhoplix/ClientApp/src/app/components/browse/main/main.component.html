@@ -2,8 +2,8 @@
 <div class="main-container" >
     <div class="my-list">
         <mdb-carousel [isControls]="true" [animation]="'slide'" [interval]="'0'" >
-            <mdb-carousel-item class="titles-carousel" *ngFor="let i of slidesCount | counter">
-                <div class="titles" *ngFor="let title of myListArray">
+            <mdb-carousel-item class="titles-carousel" *ngFor="let i of slidesCount | counter; index as idx">
+                <div class="titles" *ngFor="let title of myListArray | slice:idx*6:(idx+1)*6">
                     <img class="title" [src]="title.ImagePath">
                 </div>
             </mdb-carousel-item>

@@ -31,6 +31,8 @@ namespace Zhoplix.Services.CRUD
         Task<IList<Title>> GetMyList(string username, int pageNumber, int pageSize);
         Task<bool> AddTitleToMyListAsync(int titleId);
         Task<bool> RemoveTitleFromMyListAsync(int titleId);
+        Task<int> GetMyListSize();
+
     }
 
     public class TitleService : ITitleService
@@ -146,7 +148,7 @@ namespace Zhoplix.Services.CRUD
             if (user is null)
                 return null;
             return await _titleContext
-                .Where(t => t.ProfileTitles.Any(pt => pt.ProfileId == user.Id))
+                .Where(t => t.ProfileTitle.Any(pt => pt.ProfileId == user.Id))
                 .Skip(pageSize * (pageNumber - 1))
                 .Take(pageSize)
                 .ToListAsync();
@@ -172,5 +174,11 @@ namespace Zhoplix.Services.CRUD
 
         private async Task<bool> SaveChangesAsync() =>
             await _context.SaveChangesAsync() > 0;
+
+        public async Task<int> GetMyListSize()
+        {
+            var user = await _userManager.FindByNameAsync(_httpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+            return await _titleContext.Where(t => t.ProfileTitle.Any(pt => pt.ProfileId == user.Id)).CountAsync();
+        }
     }
 }

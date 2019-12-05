@@ -750,7 +750,7 @@ namespace Zhoplix.Migrations
                         .IsRequired();
 
                     b.HasOne("Zhoplix.Models.Title", "Title")
-                        .WithMany("ProfileTitles")
+                        .WithMany("ProfileTitle")
                         .HasForeignKey("TitleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
