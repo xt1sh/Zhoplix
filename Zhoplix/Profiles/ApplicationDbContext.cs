@@ -18,7 +18,8 @@ namespace Zhoplix
         public DbSet<EpisodeVideo> EpisodeVideos { get; set; }
         public DbSet<MovieVideo> MovieVideos { get; set; }
         public DbSet<Movie> Movies { get; set; }
-        public DbSet<ProfileTitle> ProfileTitle { get; set; }
+        public DbSet<ProfileTitle> ProfileTitles { get; set; }
+        public DbSet<ProfileEpisode> ProfileEpisodes { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {

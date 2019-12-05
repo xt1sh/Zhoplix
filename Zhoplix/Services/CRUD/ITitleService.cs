@@ -29,7 +29,8 @@ namespace Zhoplix.Services.CRUD
         Task<IEnumerable<Title>> GetTitlePageAsync(int pageNumber, int pageSize);
         Task<bool> UpdateTitleAsync(Title title);
         Task<IList<Title>> GetMyList(string username, int pageNumber, int pageSize);
-        Task<int> GetMyListSize();
+        Task<bool> AddTitleToMyListAsync(int titleId);
+        Task<bool> RemoveTitleFromMyListAsync(int titleId);
     }
 
     public class TitleService : ITitleService
@@ -54,7 +55,7 @@ namespace Zhoplix.Services.CRUD
             _userManager = userManager;
             _titleContext = _context.Titles;
             _genreContext = _context.Genres;
-            _profileTitleContext = _context.ProfileTitle;
+            _profileTitleContext = _context.ProfileTitles;
             _profileContext = _context.Profiles;
             _logger = logger;
             _mapper = mapper;
@@ -145,7 +146,7 @@ namespace Zhoplix.Services.CRUD
             if (user is null)
                 return null;
             return await _titleContext
-                .Where(t => t.ProfileTitle.Any(pt => pt.ProfileId == user.Id))
+                .Where(t => t.ProfileTitles.Any(pt => pt.ProfileId == user.Id))
                 .Skip(pageSize * (pageNumber - 1))
                 .Take(pageSize)
                 .ToListAsync();
@@ -171,11 +172,5 @@ namespace Zhoplix.Services.CRUD
 
         private async Task<bool> SaveChangesAsync() =>
             await _context.SaveChangesAsync() > 0;
-
-        public async Task<int> GetMyListSize()
-        {
-            var user = await _userManager.FindByNameAsync(_httpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
-            return  await _titleContext.Where(t => t.ProfileTitle.Any(pt => pt.ProfileId == user.Id)).CountAsync();
-        }
     }
 }

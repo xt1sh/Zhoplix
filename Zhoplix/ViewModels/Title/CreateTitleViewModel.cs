@@ -14,5 +14,6 @@ namespace Zhoplix.ViewModels.Title
         public IList<string> Genres { get; set; }
         public int AgeRestriction { get; set; }
         public string ImageId { get; set; }
+        public string ImageLocation { get; set; }
     }
 }

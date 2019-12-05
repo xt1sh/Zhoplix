@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
@@ -32,17 +33,20 @@ namespace Zhoplix.Services.CRUD
         private readonly ISeasonService _seasonService;
         private readonly IMapper _mapper;
         private readonly ILogger<EpisodeService> _logger;
+        private readonly string wwwRoot;
 
         public EpisodeService(ApplicationDbContext context,
             ISeasonService seasonService,
             IMapper mapper,
-            ILogger<EpisodeService> logger)
+            ILogger<EpisodeService> logger,
+            IWebHostEnvironment hostingEnvironment)
         {
             _context = context;
             _episodeContext = _context.Episodes;
             _seasonService = seasonService;
             _mapper = mapper;
             _logger = logger;
+            wwwRoot = hostingEnvironment.WebRootPath;
         }
 
         public async Task<Episode> CreateEpisodeFromCreateViewModelAsync(CreateEpisodeViewModel model)
@@ -61,7 +65,7 @@ namespace Zhoplix.Services.CRUD
 
             episode.Location = Path.GetDirectoryName(videos.First().Location);
 
-            var filesCount = Directory.GetFiles(Path.Combine(episode.Location, "Thumbnails"), "*", SearchOption.TopDirectoryOnly).Length;
+            var filesCount = Directory.GetFiles(Path.Combine(wwwRoot, episode.Location, "Thumbnails"), "*", SearchOption.TopDirectoryOnly).Length;
 
             episode.ThumbnailsAmount = filesCount;
             episode.Videos = videos;

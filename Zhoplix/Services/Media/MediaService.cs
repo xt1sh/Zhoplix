@@ -16,6 +16,8 @@ namespace Zhoplix.Services
 {
     public interface IMediaService
     {
+        string UploadImagesFullPath { get; }
+        string UploadVideosFullPath { get; }
         string UploadImagesPath { get; }
         string UploadVideosPath { get; }
 
@@ -29,6 +31,8 @@ namespace Zhoplix.Services
 
     public class MediaService : IMediaService
     {
+        public string UploadImagesFullPath { get; }
+        public string UploadVideosFullPath { get; }
         public string UploadImagesPath { get; }
         public string UploadVideosPath { get; }
 
@@ -38,14 +42,16 @@ namespace Zhoplix.Services
             IWebHostEnvironment hostingEnvironment)
         {
             _logger = logger;
-            UploadImagesPath = Path.Combine(hostingEnvironment.WebRootPath, "Images", "Uploaded");
-            UploadVideosPath = Path.Combine(hostingEnvironment.WebRootPath, "Videos", "Uploaded");
+            UploadImagesPath = Path.Combine("Images", "Uploaded");
+            UploadImagesFullPath = Path.Combine(hostingEnvironment.WebRootPath, UploadImagesPath);
+            UploadVideosPath = Path.Combine("Videos", "Uploaded");
+            UploadVideosFullPath = Path.Combine(hostingEnvironment.WebRootPath, UploadVideosPath);
         }
 
         public async Task CreatePhoto(UploadPhoto photo)
         {
             using var image = Image.Load<Rgba32>(photo.Photo);
-            var folder = Path.Combine(UploadImagesPath, photo.PhotoId);
+            var folder = Path.Combine(UploadImagesFullPath, photo.PhotoId);
             Directory.CreateDirectory(folder);
             var path = Path.ChangeExtension(Path.Combine(folder, photo.PhotoId), "png");
             await Task.Run(() => image.Save(path));
@@ -53,8 +59,8 @@ namespace Zhoplix.Services
 
         public async Task CreateResizedPhoto(UploadPhoto photo, float percent, string addToName)
         {
-            Directory.CreateDirectory(Path.Combine(UploadImagesPath, photo.PhotoId));
-            var folder = Path.Combine(UploadImagesPath, photo.PhotoId);
+            Directory.CreateDirectory(Path.Combine(UploadImagesFullPath, photo.PhotoId));
+            var folder = Path.Combine(UploadImagesFullPath, photo.PhotoId);
             using var image = Image.Load<Rgba32>(photo.Photo);
             var path = Path.ChangeExtension(Path.Combine(folder, $"{photo.PhotoId}_{addToName}"), "png");
             await Task.Run(() =>
@@ -77,7 +83,7 @@ namespace Zhoplix.Services
 
         public void DeleteAllPhotosWithId(string id)
         {
-            var di = new DirectoryInfo(Path.Combine(UploadImagesPath, id));
+            var di = new DirectoryInfo(Path.Combine(UploadImagesFullPath, id));
 
             foreach (FileInfo file in di.GetFiles())
             {
@@ -89,7 +95,7 @@ namespace Zhoplix.Services
         public void DeletePhoto(string name)
         {
             var id = name.Split('_')[0];
-            File.Delete(Path.Combine(UploadImagesPath, id, name));
+            File.Delete(Path.Combine(UploadImagesFullPath, id, name));
         }
 
         public async Task<bool> UploadVideo(IFormFile file, string id)
@@ -98,8 +104,8 @@ namespace Zhoplix.Services
             {
                 if (file.Length > 0)
                 {
-                    var fullPath = Path.Combine(UploadVideosPath, id, id + ".mp4");
-                    Directory.CreateDirectory(Path.Combine(UploadVideosPath, id));
+                    var fullPath = Path.Combine(UploadVideosFullPath, id, id + ".mp4");
+                    Directory.CreateDirectory(Path.Combine(UploadVideosFullPath, id));
                     using var stream = new FileStream(fullPath, FileMode.Create);
                     await Task.Run(() => { file.CopyTo(stream); });
                 }
@@ -122,7 +128,7 @@ namespace Zhoplix.Services
 
         public void RenameUploadedVideo(string name, string newName)
         {
-            var path = Path.Combine(UploadVideosPath, name);
+            var path = Path.Combine(UploadVideosFullPath, name);
             var info = new FileInfo(path);
             RenameVideo(info.FullName, newName);
         }

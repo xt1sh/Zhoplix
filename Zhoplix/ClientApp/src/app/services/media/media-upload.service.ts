@@ -1,6 +1,7 @@
 import { Injectable, Inject, OnInit } from '@angular/core';
 import { HttpRequest, HttpClient, HttpEventType, HttpHeaders } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { filter, map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -64,11 +65,8 @@ export class MediaUploadService {
         reportProgress: true,
       });
       this.http.request(uploadReq).subscribe(event => {
-        if (event.type === HttpEventType.UploadProgress)
-          this.progress.next(Math.round(100 * event.loaded / event.total));
-        else if (event.type === HttpEventType.Response) {
-          this.progress.next(-1);
-          this.message.next(event.body['photoId'].toString());
+        if (event.type === HttpEventType.Response) {
+          this.message.next(event.body['photoLocation'].toString());
         }
       });
     }
