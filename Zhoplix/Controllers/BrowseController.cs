@@ -32,5 +32,16 @@ namespace Zhoplix.Controllers
 
             return Ok(titles);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> GetMyListSize()
+        {
+            var username = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrWhiteSpace(username))
+                return BadRequest();
+            var titlesLenght = await _titleRepository.GetMyListSize();
+
+            return Ok(new { length = titlesLenght });
+        }
     }
 }

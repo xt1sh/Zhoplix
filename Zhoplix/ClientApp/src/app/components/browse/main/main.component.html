@@ -1,16 +1,11 @@
 <div class="main-background"></div>
-<div class="main-container">
+<div class="main-container" >
     <div class="my-list">
-        <mdb-carousel [animation]="'slide'" [interval]="'0'" >
-            <div class="my-list-title" *ngFor="let title of myListArray">
-            <mdb-carousel-item class="titles-carousel">
-                
+        <mdb-carousel [isControls]="true" [animation]="'slide'" [interval]="'0'" >
+            <mdb-carousel-item class="titles-carousel" *ngFor="let i of slidesCount | counter">
+                <div class="titles" *ngFor="let title of myListArray">
                     <img class="title" [src]="title.ImagePath">
-                
-            </mdb-carousel-item>
-            </div>
-            <mdb-carousel-item class="titles-carousel">
-
+                </div>
             </mdb-carousel-item>
         </mdb-carousel>
     </div>

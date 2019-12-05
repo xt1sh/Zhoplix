@@ -43,6 +43,7 @@ import { LoginHelpComponent } from './components/authentication/login-help/login
 import { ResetPasswordComponent } from './components/user-profile/reset-password/reset-password.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { MainComponent } from './components/browse/main/main.component';
+import { CounterPipe } from './pipes/counter/counter.pipe';
 
 @NgModule({
   declarations: [
@@ -64,6 +65,7 @@ import { MainComponent } from './components/browse/main/main.component';
     LoginHelpComponent,
     ResetPasswordComponent,
     ArrayFilterPipe,
+    CounterPipe,
     FooterComponent,
     MainComponent
   ],
