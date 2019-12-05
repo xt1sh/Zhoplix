@@ -55,7 +55,7 @@ export class SeasonComponent implements OnInit {
       name: '',
       description: '',
       title: [],
-      imageId: ''
+      imageLocation: ''
     });
     this.searchChange.pipe(
       debounceTime(500),
@@ -86,7 +86,7 @@ export class SeasonComponent implements OnInit {
     this.media.uploadPhoto(files[0]);
     this.media.getMessage().subscribe(value => {
       if(value) {
-        this.form.controls['imageId'].setValue(value);
+        this.form.controls['imageLocation'].setValue(value);
         this.uploading = false;
       }
     });

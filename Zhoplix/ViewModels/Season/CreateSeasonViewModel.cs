@@ -10,7 +10,7 @@ namespace Zhoplix.ViewModels.Season
     {
         public string Name { get; set; }
         public string Description { get; set; }
-        public string ImageId { get; set; }
+        public string ImageLocation { get; set; }
         public int TitleId { get; set; }
     }
 }

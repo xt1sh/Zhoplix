@@ -122,16 +122,17 @@ namespace Zhoplix.Controllers
         {
             var file = Request.Form.Files[0];
             var id = Guid.NewGuid().ToString();
+            var fullVideoPath = Path.Combine(_mediaService.UploadVideosFullPath, id);
             var videoPath = Path.Combine(_mediaService.UploadVideosPath, id);
             var paths = new List<string>() { Path.Combine(videoPath, $"{id}.mp4") };
             if (!await _mediaService.UploadVideo(file, id))
                 return BadRequest();
 
-            var resizedVideoPath = await Task.FromResult(_ffMpeg.ResizeVideo(Path.Combine(videoPath, id + ".mp4"), 120));
+            var resizedVideoPath = await Task.FromResult(_ffMpeg.ResizeVideo(Path.Combine(fullVideoPath, id + ".mp4"), 120));
 
-            paths.Add(resizedVideoPath);
+            paths.Add(resizedVideoPath.Split("wwwroot\\")[1]);
 
-            await Task.Run(() => _ffMpeg.CreateThumbnails(Path.Combine(_mediaService.UploadVideosPath, id, resizedVideoPath)));
+            await Task.Run(() => _ffMpeg.CreateThumbnails(Path.Combine(_mediaService.UploadVideosFullPath, id, resizedVideoPath)));
 
             return Ok(paths);
         }
@@ -140,10 +141,11 @@ namespace Zhoplix.Controllers
         public async Task<IActionResult> UploadPhoto(UploadPhoto photo)
         {
             photo.PhotoId = Guid.NewGuid().ToString();
+            photo.PhotoLocation = Path.Combine(_mediaService.UploadImagesPath, photo.PhotoId, $"{photo.PhotoId}.png");
             await _mediaService.CreatePhoto(photo);
             //await _mediaService.CreateResizedPhoto(photo, 0.1f, "small");
             //await _mediaService.CreateResizedPhoto(photo, 0.5f, "medium");
-            return Ok(new { photo.PhotoId });
+            return Ok(new { photo.PhotoLocation });
         }
 
         [HttpPost]
